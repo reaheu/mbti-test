@@ -1,1 +1,930 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <title>اختبار الوظائف الإدراكية - نمطك الشخصي</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+        --primary-color: #3498db; /* أزرق */
+        --secondary-color: #2980b9; /* أزرق أغمق */
+        --accent-color: #e74c3c; /* أحمر للتنبيهات */
+        --text-color: #333;
+        --light-gray: #f4f4f4;
+        --dark-gray: #555;
+        --box-bg: #fff;
+        --border-radius: 15px;
+        --shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+        --transition-speed: 0.3s;
+    }
 
+    body {
+      font-family: 'Cairo', sans-serif;
+      background: linear-gradient(135deg, #f0f8ff 0%, #e0f2f7 100%); /* تدرج ألوان أزرق فاتح وثلجي */
+      text-align: center;
+      padding: 20px;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      font-weight: 400; /* خط أخف للراحة */
+      color: var(--text-color);
+    }
+    .container {
+      max-width: 900px; /* زيادة العرض قليلاً */
+      margin: auto;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+    }
+    .box {
+      background: var(--box-bg);
+      padding: 40px; /* زيادة المسافة الداخلية */
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      transition: transform var(--transition-speed) ease;
+      width: 100%;
+      box-sizing: border-box; /* لضمان عدم تجاوز العرض المحدد */
+    }
+    .box:hover {
+      transform: translateY(-5px); /* تأثير رفع خفيف عند التمرير */
+    }
+    h1 {
+      font-size: 32px; /* حجم أكبر للعنوان */
+      margin-bottom: 25px;
+      color: var(--primary-color);
+      font-weight: 700;
+      letter-spacing: 0.5px; /* تباعد بين الحروف */
+    }
+    #question {
+      font-size: 22px; /* حجم أكبر للسؤال */
+      margin: 25px 0;
+      color: var(--dark-gray);
+      min-height: 100px; /* مساحة أكبر للسؤال */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 1;
+      transition: opacity var(--transition-speed) ease-in-out;
+      font-weight: 500;
+      line-height: 1.6; /* تباعد الأسطر */
+    }
+    #progress {
+      font-size: 17px;
+      color: var(--dark-gray);
+      margin-bottom: 20px;
+      font-weight: 500;
+    }
+    button {
+      margin: 10px 15px; /* زيادة الهامش الأفقي */
+      padding: 15px 30px; /* حجم أكبر للأزرار */
+      font-size: 18px; /* خط أكبر للأزرار */
+      border: none;
+      border-radius: 10px;
+      background-color: var(--primary-color);
+      color: white;
+      cursor: pointer;
+      transition: background-color var(--transition-speed) ease, transform 0.1s ease;
+      min-width: 120px; /* عرض أدنى للأزرار */
+      font-weight: 700;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* ظل للأزرار */
+    }
+    button:hover {
+      background-color: var(--secondary-color);
+      transform: translateY(-2px); /* تأثير رفع خفيف عند التمرير */
+    }
+    button:active {
+        transform: translateY(0);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    button:disabled {
+      background-color: #cccccc;
+      cursor: not-allowed;
+      box-shadow: none;
+      transform: none;
+    }
+    .footer {
+      margin-top: 40px;
+      font-size: 15px;
+      color: var(--dark-gray);
+      background: var(--light-gray);
+      padding: 25px;
+      border-radius: var(--border-radius);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+      max-width: 900px;
+      margin-left: auto;
+      margin-right: auto;
+      text-align: right;
+      direction: rtl;
+      width: 100%;
+      font-weight: 400;
+    }
+    .footer p {
+        margin-bottom: 10px;
+    }
+    a {
+      color: var(--primary-color);
+      text-decoration: none;
+      font-weight: 700;
+      transition: color var(--transition-speed) ease;
+    }
+    a:hover {
+      color: var(--secondary-color);
+      text-decoration: underline;
+    }
+    #warning-box {
+      background: #fff3cd;
+      color: #856404;
+      border: 1px solid #ffeeba;
+      padding: 20px;
+      border-radius: var(--border-radius);
+      max-width: 800px;
+      margin: 25px auto;
+      text-align: right;
+      direction: rtl;
+      display: none;
+      font-weight: 500;
+      box-shadow: 0 5px 10px rgba(0,0,0,0.05);
+    }
+    .result-box-container {
+      margin-top: 30px;
+      padding: 30px;
+      text-align: right;
+      direction: rtl;
+      display: none;
+      width: 100%; /* تأكد من شغل المساحة المتاحة */
+    }
+    #result-box h2 {
+        font-size: 34px; /* حجم أكبر لنتيجة النمط */
+        margin-bottom: 20px;
+        color: var(--primary-color);
+        font-weight: 700;
+        border-bottom: 2px solid var(--primary-color);
+        padding-bottom: 15px;
+        display: inline-block; /* لجعل الخط تحت النص فقط */
+        margin-bottom: 30px;
+    }
+    .result-section {
+        margin-bottom: 30px; /* مسافة بين الأقسام */
+        padding: 20px;
+        background: var(--light-gray);
+        border-radius: var(--border-radius);
+        box-shadow: inset 0 2px 5px rgba(0,0,0,0.05); /* ظل داخلي */
+    }
+    .result-section h3 {
+        font-size: 24px;
+        color: var(--secondary-color);
+        margin-top: 0;
+        margin-bottom: 15px;
+        font-weight: 700;
+        border-bottom: 1px dashed rgba(0,0,0,0.1);
+        padding-bottom: 10px;
+    }
+    .result-section p, .result-section ul, .result-section li {
+        font-size: 18px;
+        color: var(--dark-gray);
+        line-height: 1.7;
+        margin-bottom: 8px;
+        padding-right: 0;
+    }
+    .result-section ul {
+        list-style-type: none;
+        padding-right: 0;
+    }
+    .result-section ul li {
+        margin-bottom: 10px;
+        padding-right: 30px; /* مسافة أكبر لعلامة القائمة */
+        position: relative;
+    }
+    .result-section ul li::before {
+        content: '✓'; /* علامة صح بدلاً من النقطة */
+        color: #28a745; /* لون أخضر */
+        font-weight: bold;
+        display: inline-block;
+        width: 1.2em;
+        margin-right: 5px;
+        position: absolute;
+        right: 0;
+        text-align: left;
+    }
+
+    .compare-box {
+      background: #eef7fc; /* لون أزرق فاتح جداً */
+      padding: 20px;
+      border-radius: var(--border-radius);
+      margin-top: 25px;
+      text-align: right;
+      direction: rtl;
+      color: var(--dark-gray);
+      font-size: 17px;
+      font-weight: 500;
+      border: 1px solid #d0e8f2;
+    }
+    .compare-box p {
+        font-size: 19px;
+        font-weight: 700;
+        margin-bottom: 15px;
+        color: var(--secondary-color);
+    }
+    .compare-box ul {
+        list-style-type: none;
+        padding: 0;
+    }
+    .compare-box li {
+        margin-bottom: 10px;
+        padding-right: 25px;
+        position: relative;
+    }
+    .compare-box li::before {
+        content: '💡'; /* لمبة كرمز */
+        font-weight: bold;
+        display: inline-block;
+        width: 1.2em;
+        margin-right: 5px;
+        position: absolute;
+        right: 0;
+        text-align: left;
+    }
+
+    /* تحسينات لصفحة المقدمة */
+    .intro p {
+        font-size: 19px;
+        color: var(--dark-gray);
+        line-height: 1.7;
+        margin-bottom: 15px;
+    }
+    .intro .tiktok-link {
+        margin-top: 20px;
+        font-size: 19px;
+        font-weight: 700;
+    }
+    .intro .tiktok-link a {
+        color: #0077cc; /* لون التيك توك */
+        text-decoration: none;
+    }
+    .intro .tiktok-link a:hover {
+        text-decoration: underline;
+    }
+
+    /* تحسين زر الرجوع */
+    #goBackButton {
+        background-color: #95a5a6; /* لون رمادي مختلف */
+        margin-left: 20px; /* مسافة عن زر نعم/لا */
+    }
+    #goBackButton:hover {
+        background-color: #7f8c8d;
+    }
+
+    /* زر إعادة الاختبار في صفحة النتائج */
+    #restartTestButton {
+        background-color: #2ecc71; /* أخضر */
+        margin-top: 30px; /* مسافة عن باقي المحتوى */
+        padding: 15px 40px;
+        font-size: 20px;
+    }
+    #restartTestButton:hover {
+        background-color: #27ae60;
+    }
+
+    /* تنسيق لدرجات الوظائف التفصيلية */
+    .detailed-scores ul {
+        list-style-type: none; /* إزالة النقاط الافتراضية */
+        padding-right: 0;
+        display: grid; /* استخدام شبكة لتوزيع العناصر */
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* عمودين أو أكثر حسب الشاشة */
+        gap: 10px; /* مسافة بين العناصر */
+    }
+    .detailed-scores ul li {
+        background: #fdfdfd;
+        padding: 12px 20px;
+        border-radius: 8px;
+        border: 1px solid #eee;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+        margin-bottom: 0; /* إلغاء الهامش السفلي الافتراضي */
+        position: static; /* إلغاء أي تأثير للـ ::before */
+        padding-right: 20px; /* إعادة ضبط البادينغ */
+    }
+    .detailed-scores ul li::before {
+        content: none; /* إزالة علامة الصح */
+    }
+    .detailed-scores strong {
+        color: var(--secondary-color);
+    }
+    .detailed-scores span {
+        font-weight: 700;
+        color: var(--primary-color);
+    }
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="box intro">
+      <h1>اختبار الوظائف الإدراكية</h1>
+      <p>مرحباً بك في اختبار الوظائف الإدراكية! هذا الاختبار مصمم لمساعدتك على فهم نمطك الشخصي (MBTI) بطريقة أعمق.</p>
+      <p>تذكر دائماً أن لا يوجد نمط أفضل أو أسوأ من الآخر، فكل نمط يمتلك نقاط قوة فريدة وطرق مميزة في التفكير والشعور.</p>
+      <p>لتحصل على أدق النتائج، نرجو منك الإجابة بصدق وعفوية على جميع الأسئلة. إذا وجدت سؤالاً لا ينطبق عليك تماماً، اختر "لا".</p>
+      <p class="tiktok-link">لمزيد من المحتوى التعليمي والترفيهي حول الأنماط، تابعونا على TikTok:</p>
+      <p><a href="https://www.tiktok.com/@reatwiy?_t=ZS-8xeuozu76z2&_r=1" target="_blank">@reatwiy</a></p>
+      <button id="startButton">ابدأ الاختبار</button>
+    </div>
+
+    <div class="box quiz" style="display:none">
+      <h1>اختبار الوظائف الإدراكية</h1>
+      <div id="progress"></div>
+      <div id="question"></div>
+      <div>
+        <button onclick="answer('A')">نعم</button>
+        <button onclick="answer('B')">لا</button>
+      </div>
+      <button id="goBackButton" onclick="goBack()" style="margin-top: 20px;">رجوع</button>
+    </div>
+
+    <div class="box result-box-container" style="display: none;">
+      <div id="result-box">
+      </div>
+      <button id="restartTestButton">أعد الاختبار</button>
+    </div>
+
+    <div id="warning-box" style="display: none;">
+      <h2>تنويه مهم:</h2>
+      <p>النمط الظاهر أمامك ليس الأفضل ولا الأسوأ، بل هو مجرد أداة لزيادة الوعي الذاتي وفهم الفروقات الفردية.</p>
+      <p>لكل نمط تحدياته ونقاط قوته. استخدم هذه النتيجة للانطلاق في رحلة اكتشاف الذات وليس للتصنيف النهائي.</p>
+      <p>لو عندك أي سؤال أو حاب تتواصل معنا، راسلنا على تيك توك: <a href='https://www.tiktok.com/@reatwiy?_t=ZS-8xeuozu76z2&_r=1' target='_blank'>@reatwiy</a></p>
+    </div>
+  </div> <div class="footer" id="final-footer" style="display: none;">
+    <p><strong>تم بناء هذا الاختبار استنادًا إلى فهمنا للوظائف الإدراكية من المصادر التالية:</strong></p>
+    <ul style="list-style: none; padding: 0;">
+      <li><a href="https://boo.world/ar/16-personality-test" target="_blank">اختبار الأنماط على Boo</a></li>
+      <li><a href="https://boo.world/ar/16-personality-types" target="_blank">شرح الأنماط</a></li>
+      <li><a href="https://boo.world/ar/cognitive-functions" target="_blank">الوظائف الإدراكية</a></li>
+    </ul>
+    <p>تابعونا على TikTok لمحتوى مبسط عن الأنماط:
+      <a href="https://www.tiktok.com/@reatwiy?_t=ZS-8xeuozu76z2&_r=1" target="_blank">@reatwiy</a>
+    </p>
+  </div>
+
+<script>
+  const introBox = document.querySelector(".intro");
+  const quizBox = document.querySelector(".quiz");
+  const questionEl = document.getElementById("question");
+  const progressEl = document.getElementById("progress");
+  const resultBoxContainer = document.querySelector(".result-box-container");
+  const resultBox = document.getElementById("result-box");
+  const warningBox = document.getElementById("warning-box");
+  const finalFooter = document.getElementById("final-footer");
+  const restartTestButton = document.getElementById("restartTestButton");
+  const startButton = document.getElementById("startButton");
+  const goBackButton = document.getElementById("goBackButton"); // زر الرجوع
+
+  const originalQuestionsPairs = [
+    // Fi vs Fe (الشعور الداخلي مقابل الشعور الخارجي) - 20 سؤالاً
+    { text: "هل تفضل أن تعيش وفقاً لقيمك ومبادئك الشخصية، حتى لو أدى ذلك لبعض الاختلاف مع الآخرين؟", pair: ["Fi", "Fe"] },
+    { text: "هل من السهل عليك أن تعرف مشاعرك الخاصة وتفهم سببها بعمق؟", pair: ["Fi", "Fe"] },
+    { text: "هل تشعر بانزعاج داخلي إذا تصرفت بطريقة تخالف معتقداتك الشخصية الأساسية؟", pair: ["Fi", "Fe"] },
+    { text: "عندما تقدم المساعدة، هل تفضل أن تكون المساعدة شخصية وموجهة لاحتياجات الفرد تحديدًا؟", pair: ["Fi", "Fe"] },
+    { text: "هل قيمك الداخلية هي بوصلتك الأساسية في اتخاذ القرارات، حتى لو كانت صعبة؟", pair: ["Fi", "Fe"] },
+    { text: "هل تفضل الانسجام الداخلي على الموافقة الخارجية؟", pair: ["Fi", "Fe"] },
+    { text: "هل تولي أهمية كبيرة لكونك أصيلاً ووفياً لذاتك الحقيقية؟", pair: ["Fi", "Fe"] },
+    { text: "هل تميل للاحتفاظ بمشاعرك العميقة لنفسك ولا تشاركها إلا مع قلة قليلة من المقربين؟", pair: ["Fi", "Fe"] },
+    { text: "هل تشعر بالحاجة للتعبير عن فرديتك وتميزك؟", pair: ["Fi", "Fe"] },
+    { text: "هل ترى أن تحديد الصواب والخطأ ينبع أولاً من قناعاتك الشخصية؟", pair: ["Fi", "Fe"] },
+
+    { text: "هل تميل لأن تتأثر بمشاعر الناس من حولك وتسعى لخلق جو من الانسجام بينهم؟", pair: ["Fe", "Fi"] },
+    { text: "هل من المهم بالنسبة لك أن تكون مقبولاً ومحبوباً من مجموعتك الاجتماعية؟", pair: ["Fe", "Fi"] },
+    { text: "هل تعدل سلوكك أو كلامك أحيانًا لتناسب الأجواء الاجتماعية وتجنب التوتر؟", pair: ["Fe", "Fi"] },
+    { text: "هل تشعر بمسؤولية تجاه رفاهية ومشاعر الآخرين في محيطك؟", pair: ["Fe", "Fi"] },
+    { text: "هل تجيد قراءة تعابير وجوه الناس ونبرة أصواتهم لتفهم مشاعرهم غير المعلنة؟", pair: ["Fe", "Fi"] },
+    { text: "هل تسعى بنشاط لدعم الآخرين عاطفياً ومساعدتهم على الشعور بالراحة؟", pair: ["Fe", "Fi"] },
+    { text: "هل تجد سهولة في التعبير عن مشاعرك للآخرين لدعمهم أو الاحتفال معهم؟", pair: ["Fe", "Fi"] },
+    { text: "هل تميل للموافقة على آراء المجموعة للحفاظ على السلام، حتى لو كان لديك رأي مختلف؟", pair: ["Fe", "Fi"] },
+    { text: "هل تتأثر بسهولة بالحالة العاطفية للغرفة أو للمجموعة التي تتواجد فيها؟", pair: ["Fe", "Fi"] },
+    { text: "هل تسعى لتقديم المساعدة التي تخدم احتياجات المجموعة ككل؟", pair: ["Fe", "Fi"] },
+
+    // Ti vs Te (التفكير الداخلي مقابل التفكير الخارجي) - 20 سؤالاً
+    { text: "هل تحب تحليل المشكلات بعمق لفهم كيفية عملها من الداخل، حتى لو لم يكن هناك تطبيق فوري؟", pair: ["Ti", "Te"] },
+    { text: "هل المنطق الشخصي الخاص بك هو مرجعك الأول عند تقييم الأفكار والمعلومات؟", pair: ["Ti", "Te"] },
+    { text: "هل تستمتع بتصنيف المعلومات وفهم المبادئ الأساسية التي تربطها ببعضها منطقياً؟", pair: ["Ti", "Te"] },
+    { text: "هل تشعر بالرضا عندما تجد تناقضاً منطقياً في نظام أو فكرة ما؟", pair: ["Ti", "Te"] },
+    { text: "هل تميل إلى قضاء وقت طويل في التفكير لتطوير فهمك الخاص قبل مشاركة أفكارك؟", pair: ["Ti", "Te"] },
+    { text: "هل تهتم بدقة المفاهيم والتصنيفات أكثر من سرعتها في تحقيق النتائج؟", pair: ["Ti", "Te"] },
+    { text: "هل تبحث دائمًا عن الاتساق الداخلي في الأفكار والأنظمة؟", pair: ["Ti", "Te"] },
+    { text: "هل أنت شخص يميل إلى التشكيك في المنطق المقبول عامةً لتطوير منطقه الخاص؟", pair: ["Ti", "Te"] },
+    { text: "هل تجد متعة في تفكيك المشكلات المعقدة إلى أجزاء صغيرة لفهمها بعمق؟", pair: ["Ti", "Te"] },
+    { text: "هل تفضل أن يكون نظامك الفكري داخليًا ومحكمًا، حتى لو لم يراه الآخرون؟", pair: ["Ti", "Te"] },
+
+    { text: "هل تركز على تحقيق الأهداف وإنجاز المهام بفعالية وكفاءة؟", pair: ["Te", "Ti"] },
+    { text: "هل تحب تنظيم الخطط وتوزيع المهام بوضوح لضمان الإنجاز العملي؟", pair: ["Te", "Ti"] },
+    { text: "هل تقيّم نفسك والآخرين بناءً على النتائج الملموسة والإنتاجية المحققة؟", pair: ["Te", "Ti"] },
+    { text: "هل تفضل اتخاذ قرارات سريعة وعملية للمضي قدماً في العمل، حتى لو كانت غير مثالية نظرياً؟", pair: ["Te", "Ti"] },
+    { text: "هل تستخدم الموارد الخارجية (مثل الكتب، الخبراء، البيانات) لدعم قراراتك وتطوير أنظمة عمل؟", pair: ["Te", "Ti"] },
+    { text: "هل تكره المماطلة وتفضل الإنجاز الفوري للمهام؟", pair: ["Te", "Ti"] },
+    { text: "هل أنت شخص قادر على رؤية الأخطاء في الأنظمة أو العمليات وتحسينها لزيادة الكفاءة؟", pair: ["Te", "Ti"] },
+    { text: "هل تفضل وضع الجداول الزمنية ومتابعتها بدقة لضمان سير العمل؟", pair: ["Te", "Ti"] },
+    { text: "هل تعتبر المنطق الموضوعي والنتائج القابلة للقياس هي الأهم في اتخاذ القرارات؟", pair: ["Te", "Ti"] },
+    { text: "هل تميل لقيادة المشاريع وتوجيه الجهود نحو تحقيق الأهداف المحددة؟", pair: ["Te", "Ti"] },
+
+    // Ni vs Ne (الحدس الانطوائي مقابل الحدس الخارجي) - 20 سؤالاً
+    { text: "هل تفكر كثيرًا في المستقبل البعيد وما يمكن أن يحدث فيه، محاولاً التنبؤ بالاتجاهات؟", pair: ["Ni", "Ne"] },
+    { text: "هل تحاول ربط الأشياء ببعضها للوصول إلى معنى أعمق أو رؤية شاملة مخفية؟", pair: ["Ni", "Ne"] },
+    { text: "هل تجيك أحيانًا رؤى مفاجئة أو 'شعور داخلي' بأنك تعرف مسارًا معينًا للأحداث؟", pair: ["Ni", "Ne"] },
+    { text: "هل تفضل التركيز على عدد قليل من الأفكار العميقة، بدلاً من الكثير من الأفكار السطحية؟", pair: ["Ni", "Ne"] },
+    { text: "هل تبحث دائمًا عن السبب الكامن أو المعنى الخفي وراء الأشياء؟", pair: ["Ni", "Ne"] },
+    { text: "هل تجد نفسك غالبًا تستكشف موضوعًا واحدًا بعمق بدلاً من القفز بين عدة مواضيع؟", pair: ["Ni", "Ne"] },
+    { text: "هل تشعر أن لديك رؤية واضحة لما يجب أن تكون عليه الأمور في المستقبل البعيد؟", pair: ["Ni", "Ne"] },
+    { text: "هل تستمتع بتبسيط الأفكار المعقدة إلى جوهرها الأساسي؟", pair: ["Ni", "Ne"] },
+    { text: "هل تلتقط الأنماط والاتجاهات الخفية التي قد لا يراها الآخرون بسهولة؟", pair: ["Ni", "Ne"] },
+    { text: "هل تعتمد على حدسك الداخلي لإرشادك في اتخاذ القرارات الكبرى؟", pair: ["Ni", "Ne"] },
+
+    { text: "هل تجيك أفكار كثيرة وجديدة بسرعة وبشكل مستمر عندما تتفاعل مع العالم؟", pair: ["Ne", "Ni"] },
+    { text: "هل تستمتع باستكشاف الاحتمالات المتعددة لكل موقف أو فكرة، وتتخيل السيناريوهات؟", pair: ["Ne", "Ni"] },
+    { text: "هل تمل بسرعة من الروتين وتفضل البحث عن تجارب أو مفاهيم جديدة وغير مألوفة؟", pair: ["Ne", "Ni"] },
+    { text: "هل تحب ربط الأشياء ببعضها بطرق مبتكرة وغير تقليدية، أو ؟", pair: ["Ne", "Ni"] },
+    { text: "هل من السهل عليك أن ترى كيف يمكن لشيء واحد أن يؤدي إلى العديد من الاحتمالات الأخرى؟", pair: ["Ne", "Ni"] },
+    { text: "هل تستمتع بالعصف الذهني وتوليد عدد لا نهائي من الأفكار؟", pair: ["Ne", "Ni"] },
+    { text: "هل أنت شخص منفتح على التجريب وتغيير الخطط إذا ظهرت احتمالات أفضل؟", pair: ["Ne", "Ni"] },
+    { text: "هل تجذبك الأفكار المجردة والنظريات أكثر من الحقائق الملموسة؟", pair: ["Ne", "Ni"] },
+    { text: "هل تحب النقاش واستكشاف الأفكار المتنوعة، حتى لو لم تكن تؤمن بها شخصيًا؟", pair: ["Ne", "Ni"] },
+    { text: "هل لديك فضول طبيعي لمعرفة كل الاحتمالات الممكنة في أي موقف؟", pair: ["Ne", "Ni"] },
+
+    // Si vs Se (الإحساس الداخلي مقابل الإحساس الخارجي) - 20 سؤالاً
+    { text: "هل تحب الاعتماد على الخبرات السابقة والطرق المجربة والموثوقة في حياتك؟", pair: ["Si", "Se"] },
+    { text: "هل تتذكر التفاصيل الدقيقة للأحداث الماضية، مثل الروائح، الأصوات، أو المشاعر المرتبطة بها؟", pair: ["Si", "Se"] },
+    { text: "هل تفضل الروتين والنظام في حياتك اليومية وتجد فيه الراحة والاستقرار؟", pair: ["Si", "Se"] },
+    { text: "هل تقارن غالبًا ما يحدث الآن بما حدث في الماضي لتفهم الوضع الحالي؟", pair: ["Si", "Se"] },
+    { text: "هل تشعر بالضيق أو عدم الراحة عند حدوث تغييرات مفاجئة أو غير متوقعة في روتينك؟", pair: ["Si", "Se"] },
+    { text: "هل تثق بتجاربك الشخصية والدروس التي تعلمتها من الماضي أكثر من النظريات المجردة؟", pair: ["Si", "Se"] },
+    { text: "هل تفضل الأشياء المألوفة والمريحة على التجارب الجديدة والمجهولة؟", pair: ["Si", "Se"] },
+    { text: "هل أنت شخص دقيق يلتزم بالحقائق والتفاصيل المعروفة؟", pair: ["Si", "Se"] },
+    { text: "هل تحتاج إلى وقت لتستوعب التغييرات الجديدة أو المعلومات المعقدة، وربطها بما تعرفه؟", pair: ["Si", "Se"] },
+    { text: "هل تولي اهتمامًا خاصًا للذكريات والتفاصيل من تجاربك الشخصية؟", pair: ["Si", "Se"] },
+
+    { text: "هل تحب أن تعيش اللحظة الحالية وتستمتع بالتجارب المادية؟", pair: ["Se", "Si"] },
+    { text: "هل تتفاعل بسرعة مع ما يحدث حولك وتلاحظ التفاصيل في بيئتك المباشرة؟", pair: ["Se", "Si"] },
+    { text: "هل تستمتع بالتجارب الحسية مثل الأكل اللذيذ، الرياضات البدنية، أو الموسيقى الصاخبة؟", pair: ["Se", "Si"] },
+    { text: "هل أنت شخص عملي، يفضل 'فعل' الأشياء بدلاً من التفكير فيها طويلاً؟", pair: ["Se", "Si"] },
+    { text: "هل تتخذ قراراتك بناءً على ما هو متاح في الوقت الحالي وما تراه حسيًا؟", pair: ["Se", "Si"] },
+    { text: "هل تنجذب إلى الجماليات، الموضة، أو أي شيء ملموس وجذاب في العالم؟", pair: ["Se", "Si"] },
+    { text: "هل تشعر براحة أكبر عندما تكون نشطًا وتتحرك وتتفاعل مع محيطك؟", pair: ["Se", "Si"] },
+    { text: "هل أنت مستعد للتكيف بسرعة مع المواقف غير المتوقعة؟", pair: ["Se", "Si"] },
+    { text: "هل تفضل التعلم بالممارسة والتجربة المباشرة على القراءة أو الاستماع النظري؟", pair: ["Se", "Si"] },
+    { text: "هل تستمتع بالأنشطة التي تتطلب التركيز الكامل على اللحظة الحالية (مثل الألعاب الرياضية أو الفنون الأدائية)؟", pair: ["Se", "Si"] }
+  ];
+
+  let questions = []; // ستكون هذه مصفوفة الأسئلة بعد الخلط وتحديد funcA/funcB لكل سؤال
+  let currentQuestion = 0;
+  let answers = [];
+  let funcScores = {
+    Fi: 0, Fe: 0, Ti: 0, Te: 0,
+    Ni: 0, Ne: 0, Si: 0, Se: 0,
+  };
+
+  // دالة لخلط المصفوفة (Fisher-Yates shuffle algorithm)
+  function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [array[i], array[j]] = [array[j], array[i]]; // هذا هو التصحيح هنا
+      }
+      return array;
+  }
+
+  // الوظيفة المسؤولة عن بدء الاختبار
+  function startTest() {
+    introBox.style.display = "none";
+    quizBox.style.display = "flex";
+    warningBox.style.display = "none";
+    finalFooter.style.display = "none";
+    resultBoxContainer.style.display = "none"; // إخفاء صندوق النتائج عند البدء من جديد
+
+    // تمكين الأزرار بعد بدء الاختبار
+    document.querySelectorAll(".quiz button").forEach(btn => btn.disabled = false);
+
+    // تجهيز الأسئلة: خلطها ثم تحديد funcA و funcB بشكل عشوائي لكل سؤال
+    questions = originalQuestionsPairs.map(q => {
+        const [func1, func2] = q.pair;
+        // عشوائياً، اجعل func1 ترتبط بـ "نعم" و func2 بـ "لا"، أو العكس
+        if (Math.random() < 0.5) {
+            return { text: q.text, funcA: func1, funcB: func2 };
+        } else {
+            return { text: q.text, funcA: func2, funcB: func1 };
+        }
+    });
+
+    // خلط ترتيب الأسئلة نفسها بعد تحديد funcA/funcB لكل منها
+    questions = shuffleArray(questions);
+
+    currentQuestion = 0;
+    answers = [];
+    resetScores();
+    showQuestion();
+    goBackButton.style.display = (currentQuestion === 0) ? 'none' : 'block'; // إخفاء زر الرجوع في بداية الاختبار
+  }
+
+  function resetScores() {
+    for (let key in funcScores) {
+      funcScores[key] = 0;
+    }
+  }
+
+  function showQuestion() {
+    questionEl.style.opacity = 0;
+    setTimeout(() => {
+      const q = questions[currentQuestion];
+      questionEl.textContent = q.text;
+      progressEl.textContent = `السؤال ${currentQuestion + 1} من ${questions.length}`;
+      questionEl.style.opacity = 1;
+    }, 150);
+
+    // إظهار أو إخفاء زر الرجوع
+    goBackButton.style.display = (currentQuestion === 0) ? 'none' : 'block';
+  }
+
+  function answer(choice) {
+    if (answers[currentQuestion]) {
+      const oldChoice = answers[currentQuestion];
+      const oldFunc = oldChoice === "A" ? questions[currentQuestion].funcA : questions[currentQuestion].funcB;
+      funcScores[oldFunc]--;
+    }
+
+    answers[currentQuestion] = choice;
+
+    const selectedFunc = choice === "A" ? questions[currentQuestion].funcA : questions[currentQuestion].funcB;
+    funcScores[selectedFunc]++;
+
+    currentQuestion++;
+
+    if (currentQuestion >= questions.length) {
+      showResult();
+      return;
+    }
+    showQuestion();
+  }
+
+  function goBack() {
+    if (currentQuestion === 0) return;
+
+    // لكي لا يظهر زر إعادة الاختبار في منتصف الاختبار
+    restartTestButton.style.display = "none";
+    // لإخفاء صندوق النتائج عند الرجوع من صفحة النتائج
+    resultBoxContainer.style.display = "none";
+
+    // تفعيل الأزرار مرة أخرى إذا كانت معطلة
+    document.querySelectorAll(".quiz button").forEach(btn => btn.disabled = false);
+
+    const oldChoice = answers[currentQuestion - 1];
+    if (oldChoice) {
+      const oldFunc = oldChoice === "A" ? questions[currentQuestion - 1].funcA : questions[currentQuestion - 1].funcB;
+      funcScores[oldFunc]--;
+      answers[currentQuestion - 1] = null; // إزالة الإجابة السابقة
+    }
+
+    currentQuestion--;
+    showQuestion();
+  }
+
+  function getMBTIPattern() {
+    // تحديد الحرف الأول (E/I) بناءً على درجات الوظائف الانفتاحية مقابل الانطوائية
+    const E_funcs = ["Fe", "Se", "Ne", "Te"];
+    const I_funcs = ["Fi", "Si", "Ni", "Ti"];
+
+    let E_points = E_funcs.reduce((sum, func) => sum + (funcScores[func] || 0), 0);
+    let I_points = I_funcs.reduce((sum, func) => sum + (funcScores[func] || 0), 0);
+
+    const firstLetter = E_points >= I_points ? "E" : "I";
+
+    // تحديد الحرف الثاني (S/N)
+    const S_points = (funcScores.Si || 0) + (funcScores.Se || 0);
+    const N_points = (funcScores.Ni || 0) + (funcScores.Ne || 0);
+    const secondLetter = N_points >= S_points ? "N" : "S";
+
+    // تحديد الحرف الثالث (T/F)
+    const T_points = (funcScores.Te || 0) + (funcScores.Ti || 0);
+    const F_points = (funcScores.Fe || 0) + (funcScores.Fi || 0);
+    const thirdLetter = T_points >= F_points ? "T" : "F";
+
+    // تحديد الحرف الرابع (J/P) بناءً على الوظيفة المهيمنة (الخارجية للجريئين، الداخلية للانطوائيين)
+    let fourthLetter;
+    if (firstLetter === "E") { // للشخصيات الانفتاحية (E)
+        // الوظيفة الخارجية هي المهيمنة. إذا كانت حكمية (Te/Fe) فالنمط J، وإذا كانت إدراكية (Ne/Se) فالنمط P.
+        const eJudging = (funcScores.Te || 0) + (funcScores.Fe || 0);
+        const ePerceiving = (funcScores.Ne || 0) + (funcScores.Se || 0);
+        fourthLetter = eJudging >= ePerceiving ? "J" : "P";
+    } else { // للشخصيات الانطوائية (I)
+        // الوظيفة الداخلية هي المهيمنة. إذا كانت حكمية (Ti/Fi) فالنمط P، وإذا كانت إدراكية (Ni/Si) فالنمط J.
+        const iJudging = (funcScores.Ti || 0) + (funcScores.Fi || 0);
+        const iPerceiving = (funcScores.Ni || 0) + (funcScores.Si || 0);
+        fourthLetter = iJudging >= iPerceiving ? "P" : "J";
+    }
+
+    return firstLetter + secondLetter + thirdLetter + fourthLetter;
+  }
+
+  function getFunctionsOrder(mbti) {
+    const funcMap = {
+      INTJ: ["Ni", "Te", "Fi", "Se"], INTP: ["Ti", "Ne", "Si", "Fe"],
+      INFJ: ["Ni", "Fe", "Ti", "Se"], INFP: ["Fi", "Ne", "Si", "Te"],
+      ISTJ: ["Si", "Te", "Fi", "Ne"], ISTP: ["Ti", "Se", "Ni", "Fe"],
+      ISFJ: ["Si", "Fe", "Ti", "Ne"], ISFP: ["Fi", "Se", "Ni", "Te"],
+      ENTJ: ["Te", "Ni", "Se", "Fi"], ENTP: ["Ne", "Ti", "Fe", "Si"],
+      ENFJ: ["Fe", "Ni", "Se", "Ti"], ENFP: ["Ne", "Fi", "Te", "Si"],
+      ESTJ: ["Te", "Si", "Ne", "Fi"], ESTP: ["Se", "Ti", "Fe", "Ni"],
+      ESFJ: ["Fe", "Si", "Ne", "Ti"], ESFP: ["Se", "Fi", "Te", "Ni"],
+    };
+    return funcMap[mbti] || [];
+  }
+
+  // قاعدة بيانات الأنماط والوظائف للمقارنة
+  const patternDetails = {
+    "INTJ": {
+      dominant: "Ni (الحدس الانطوائي)", auxiliary: "Te (التفكير الخارجي)",
+      tertiary: "Fi (الشعور الانطوائي)", inferior: "Se (الإحساس الخارجي)",
+      description: "صاحب رؤية بعيدة المدى، يركز على الكفاءة والتنظيم، يخطط بدقة ويحب الوصول لحلول منطقية وفعالة. يميل لربط المفاهيم المجردة ببعضها لتكوين رؤى مستقبلية، ويستخدم المنطق الخارجي لتنظيم العالم وتحقيق أهدافه بكفاءة عالية.",
+      funcComparisons: [
+        { func1: "Ni", func2: "Ne", text: (s1, s2) => `في جانب الحدس، يبدو أنك تركز على الرؤى العميقة والمسار الواحد (Ni، ${s1} نقطة) أكثر من استكشاف العديد من الاحتمالات الخارجية (Ne، ${s2} نقطة).` },
+        { func1: "Te", func2: "Ti", text: (s1, s2) => `في جانب التفكير، تميل نحو الكفاءة والتنظيم الخارجي (Te، ${s1} نقطة) أكثر من بناء نظام منطقي داخلي (Ti، ${s2} نقطة).` },
+        { func1: "Fi", func2: "Fe", text: (s1, s2) => `في جانب المشاعر، قد تكون قيمك ومبادئك الشخصية الداخلية (Fi، ${s1} نقطة) أكثر أهمية لك من الانسجام العاطفي مع المجموعة (Fe، ${s2} نقطة).` },
+        { func1: "Se", func2: "Si", text: (s1, s2) => `في جانب الإحساس، تركز على اللحظة الحالية والتجارب المباشرة (Se، ${s1} نقطة) أكثر من الخبرات والذكريات الماضية (Si، ${s2} نقطة).` }
+      ]
+    },
+    "INTP": {
+      dominant: "Ti (التفكير الانطوائي)", auxiliary: "Ne (الحدس الخارجي)",
+      tertiary: "Si (الإحساس الانطوائي)", inferior: "Fe (الشعور الخارجي)",
+      description: "مفكر منطقي يحب تحليل الأنظمة المعقدة، ويتمتع بفضول فكري كبير، ويبحث عن المعرفة والفهم العميق. يستخدم منطقه الداخلي لتفكيك الأفكار والبحث عن الاتساق، ويستكشف باستمرار الاحتمالات الجديدة لزيادة فهمه للعالم.",
+      funcComparisons: [
+        { func1: "Ti", func2: "Te", text: (s1, s2) => `في جانب التفكير، تميل لبناء نظام منطقي داخلي (Ti، ${s1} نقطة) وتهتم بدقة المفاهيم أكثر من الكفاءة الخارجية والنتائج (Te، ${s2} نقطة).` },
+        { func1: "Ne", func2: "Ni", text: (s1, s2) => `في جانب الحدس، تستمتع بتوليد العديد من الأفكار والاحتمالات الجديدة (Ne، ${s1} نقطة) أكثر من التركيز على رؤية واحدة عميقة (Ni، ${s2} نقطة).` },
+        { func1: "Si", func2: "Se", text: (s1, s2) => `في جانب الإحساس، قد تعتمد على خبراتك الماضية وتفاصيلها (Si، ${s1} نقطة) أكثر من التفاعل المباشر مع العالم المادي في اللحظة (Se، ${s2} نقطة).` },
+        { func1: "Fe", func2: "Fi", text: (s1, s2) => `في جانب المشاعر، قد تركز على الانسجام العاطفي مع المجموعة (Fe، ${s1} نقطة) أكثر من التركيز على قيمك الشخصية الداخلية (Fi، ${s2} نقطة).` }
+      ]
+    },
+    "INFJ": {
+      dominant: "Ni (الحدس الانطوائي)", auxiliary: "Fe (الشعور الخارجي)",
+      tertiary: "Ti (التفكير الانطوائي)", inferior: "Se (الإحساس الخارجي)",
+      description: "رؤيوي وعميق، يهتم بالانسجام والقيم الإنسانية، يسعى لفهم الآخرين ومساعدتهم لتحقيق إمكاناتهم. يمتلك رؤى مستقبلية قوية، ويستخدم شعوره الخارجي لدعم ومراعاة مشاعر الآخرين وخلق جو من التناغم.",
+      funcComparisons: [
+        { func1: "Ni", func2: "Ne", text: (s1, s2) => `في جانب الحدس، يبدو أنك تركز على الرؤى العميقة والمسار الواحد (Ni، ${s1} نقطة) أكثر من استكشاف العديد من الاحتمالات الخارجية (Ne، ${s2} نقطة).` },
+        { func1: "Fe", func2: "Fi", text: (s1, s2) => `في جانب المشاعر، تميل إلى إعطاء الأولوية للانسجام العاطفي مع الآخرين (Fe، ${s1} نقطة) ومراعاة مشاعرهم أكثر من قيمك الشخصية الداخلية (Fi، ${s2} نقطة).` },
+        { func1: "Ti", func2: "Te", text: (s1, s2) => `في جانب التفكير، قد تميل نحو المنطق الداخلي وبناء الأنظمة الفكرية (Ti، ${s1} نقطة) أكثر من الكفاءة والتنظيم الخارجي (Te، ${s2} نقطة).` },
+        { func1: "Se", func2: "Si", text: (s1, s2) => `في جانب الإحساس، قد تركز على اللحظة الحالية والتجارب المباشرة (Se، ${s1} نقطة) أكثر من الخبرات والذكريات الماضية (Si، ${s2} نقطة).` }
+      ]
+    },
+    "INFP": {
+      dominant: "Fi (الشعور الانطوائي)", auxiliary: "Ne (الحدس الخارجي)",
+      tertiary: "Si (الإحساس الانطوائي)", inferior: "Te (التفكير الخارجي)",
+      description: "مثالي ومبدع، يلتزم بقيمه الشخصية القوية، يبحث عن المعنى والهدف في كل شيء، ولديه تعاطف كبير. يقوده شعوره الداخلي نحو الأصالة، ويستكشف الاحتمالات المتعددة للعالم من حوله بحثًا عن المعنى والهدف.",
+      funcComparisons: [
+        { func1: "Fi", func2: "Fe", text: (s1, s2) => `في جانب المشاعر، تركز بشدة على قيمك ومبادئك الشخصية الداخلية (Fi، ${s1} نقطة) أكثر من السعي لإرضاء الآخرين أو الحفاظ على الانسجام الخارجي (Fe، ${s2} نقطة).` },
+        { func1: "Ne", func2: "Ni", text: (s1, s2) => `في جانب الحدس، تستمتع باستكشاف العديد من الأفكار والاحتمالات الجديدة (Ne، ${s1} نقطة) أكثر من التركيز على رؤية واحدة عميقة (Ni، ${s2} نقطة).` },
+        { func1: "Si", func2: "Se", text: (s1, s2) => `في جانب الإحساس، قد تعتمد على خبراتك الماضية وتفاصيلها (Si، ${s1} نقطة) أكثر من التفاعل المباشر مع العالم المادي في اللحظة (Se، ${s2} نقطة).` },
+        { func1: "Te", func2: "Ti", text: (s1, s2) => `في جانب التفكير، قد تميل للاهتمام بالكفاءة والنتائج الخارجية (Te، ${s1} نقطة) أكثر من بناء نظام منطقي داخلي (Ti، ${s2} نقطة).` }
+      ]
+    },
+    "ISTJ": {
+      dominant: "Si (الإحساس الانطوائي)", auxiliary: "Te (التفكير الخارجي)",
+      tertiary: "Fi (الشعور الانطوائي)", inferior: "Ne (الحدس الخارجي)",
+      description: "منظم وموثوق، يعتمد على الخبرة والحقائق، يلتزم بالتقاليد والأنظمة، ويحب الدقة والمسؤولية. يثق بذكرياته وتفاصيله الداخلية، ويستخدم التفكير الخارجي لتنظيم مهامه وتحقيق أهدافه بكفاءة وعملية.",
+      funcComparisons: [
+        { func1: "Si", func2: "Se", text: (s1, s2) => `في جانب الإحساس، تميل للاعتماد على الخبرات والذكريات الماضية والتفاصيل الموثوقة (Si، ${s1} نقطة) أكثر من التفاعل المباشر مع العالم المادي في اللحظة (Se، ${s2} نقطة).` },
+        { func1: "Te", func2: "Ti", text: (s1, s2) => `في جانب التفكير، تركز على الكفاءة والتنظيم الخارجي لتحقيق الأهداف (Te، ${s1} نقطة) أكثر من بناء نظام منطقي داخلي (Ti، ${s2} نقطة).` },
+        { func1: "Fi", func2: "Fe", text: (s1, s2) => `في جانب المشاعر، قد تكون قيمك ومبادئك الشخصية الداخلية (Fi، ${s1} نقطة) أكثر أهمية لك من الانسجام العاطفي مع المجموعة (Fe، ${s2} نقطة).` },
+        { func1: "Ne", func2: "Ni", text: (s1, s2) => `في جانب الحدس، قد تميل لاستكشاف العديد من الاحتمالات الخارجية (Ne، ${s1} نقطة) أكثر من التركيز على رؤية واحدة عميقة (Ni، ${s2} نقطة).` }
+      ]
+    },
+    "ISTP": {
+      dominant: "Ti (التفكير الانطوائي)", auxiliary: "Se (الإحساس الخارجي)",
+      tertiary: "Ni (الحدس الانطوائي)", inferior: "Fe (الشعور الخارجي)",
+      description: "عملي وملاحظ، يحب حل المشكلات باستخدام يديه، مرن وقادر على التكيف مع التحديات في اللحظة. يعتمد على منطقه الداخلي لتحليل المشكلات، ويتفاعل مباشرة مع محيطه الجسدي لاستكشاف العالم وحل المشكلات بشكل عملي.",
+      funcComparisons: [
+        { func1: "Ti", func2: "Te", text: (s1, s2) => `في جانب التفكير، تميل لبناء نظام منطقي داخلي (Ti، ${s1} نقطة) وتهتم بدقة المفاهيم أكثر من الكفاءة الخارجية والنتائج (Te، ${s2} نقطة).` },
+        { func1: "Se", func2: "Si", text: (s1, s2) => `في جانب الإحساس، تستمتع بالتفاعل المباشر مع العالم المادي في اللحظة (Se، ${s1} نقطة) أكثر من الاعتماد على الخبرات والذكريات الماضية (Si، ${s2} نقطة).` },
+        { func1: "Ni", func2: "Ne", text: (s1, s2) => `في جانب الحدس، قد تركز على رؤية واحدة عميقة (Ni، ${s1} نقطة) أكثر من استكشاف العديد من الاحتمالات الخارجية (Ne، ${s2} نقطة).` },
+        { func1: "Fe", func2: "Fi", text: (s1, s2) => `في جانب المشاعر، قد تركز على الانسجام العاطفي مع المجموعة (Fe، ${s1} نقطة) أكثر من التركيز على قيمك الشخصية الداخلية (Fi، ${s2} نقطة).` }
+      ]
+    },
+    "ISFJ": {
+      dominant: "Si (الإحساس الانطوائي)", auxiliary: "Fe (الشعور الخارجي)",
+      tertiary: "Ti (التفكير الانطوائي)", inferior: "Ne (الحدس الخارجي)",
+      description: "مراعٍ ومسؤول، ملتزم بالواجبات، يهتم برفاهية الآخرين، ويقدر التقاليد والاستقرار. يعتمد على ذكرياته وتجاربه السابقة، ويستخدم شعوره الخارجي لدعم الآخرين وخلق بيئة من الانسجام والرعاية.",
+      funcComparisons: [
+        { func1: "Si", func2: "Se", text: (s1, s2) => `في جانب الإحساس، تميل للاعتماد على الخبرات والذكريات الماضية والتفاصيل الموثوقة (Si، ${s1} نقطة) أكثر من التفاعل المباشر مع العالم المادي في اللحظة (Se، ${s2} نقطة).` },
+        { func1: "Fe", func2: "Fi", text: (s1, s2) => `في جانب المشاعر، تميل إلى إعطاء الأولوية للانسجام العاطفي مع الآخرين (Fe، ${s1} نقطة) ومراعاة مشاعرهم أكثر من قيمك الشخصية الداخلية (Fi، ${s2} نقطة).` },
+        { func1: "Ti", func2: "Te", text: (s1, s2) => `في جانب التفكير، قد تميل نحو المنطق الداخلي وبناء الأنظمة الفكرية (Ti، ${s1} نقطة) أكثر من الكفاءة والتنظيم الخارجي (Te، ${s2} نقطة).` },
+        { func1: "Ne", func2: "Ni", text: (s1, s2) => `في جانب الحدس، قد تميل لاستكشاف العديد من الاحتمالات الخارجية (Ne، ${s1} نقطة) أكثر من التركيز على رؤية واحدة عميقة (Ni، ${s2} نقطة).` }
+      ]
+    },
+    "ISFP": {
+      dominant: "Fi (الشعور الانطوائي)", auxiliary: "Se (الإحساس الخارجي)",
+      tertiary: "Ni (الحدس الانطوائي)", inferior: "Te (التفكير الخارجي)",
+      description: "فنان ومحب للجمال، يعيش اللحظة، يعبر عن نفسه من خلال الفن أو الأفعال، حساس لقيمه الشخصية. يقوده شعوره الداخلي نحو الأصالة، ويتفاعل مع العالم من خلال حواسه ليستمتع باللحظة الحالية والتجارب المباشرة.",
+      funcComparisons: [
+        { func1: "Fi", func2: "Fe", text: (s1, s2) => `في جانب المشاعر، تركز بشدة على قيمك ومبادئك الشخصية الداخلية (Fi، ${s1} نقطة) أكثر من السعي لإرضاء الآخرين أو الحفاظ على الانسجام الخارجي (Fe، ${s2} نقطة).` },
+        { func1: "Se", func2: "Si", text: (s1, s2) => `في جانب الإحساس، تستمتع بالتفاعل المباشر مع العالم المادي في اللحظة (Se، ${s1} نقطة) أكثر من الاعتماد على الخبرات والذكريات الماضية (Si، ${s2} نقطة).` },
+        { func1: "Ni", func2: "Ne", text: (s1, s2) => `في جانب الحدس، قد تركز على رؤية واحدة عميقة (Ni، ${s1} نقطة) أكثر من استكشاف العديد من الاحتمالات الخارجية (Ne، ${s2} نقطة).` },
+        { func1: "Te", func2: "Ti", text: (s1, s2) => `في جانب التفكير، قد تميل للاهتمام بالكفاءة والنتائج الخارجية (Te، ${s1} نقطة) أكثر من بناء نظام منطقي داخلي (Ti، ${s2} نقطة).` }
+      ]
+    },
+    "ENTJ": {
+      dominant: "Te (التفكير الخارجي)", auxiliary: "Ni (الحدس الانطوائي)",
+      tertiary: "Se (الإحساس الخارجي)", inferior: "Fi (الشعور الانطوائي)",
+      description: "قائد طبيعي، منظم ومتحمس، يركز على الأهداف ويحب قيادة المشاريع بفعالية وكفاءة. يستخدم تفكيره الخارجي لتنظيم الموارد والأشخاص نحو تحقيق الأهداف، ويمتلك رؤى مستقبلية قوية تساعده على وضع الخطط الاستراتيجية.",
+      funcComparisons: [
+        { func1: "Te", func2: "Ti", text: (s1, s2) => `في جانب التفكير، تركز على الكفاءة والتنظيم الخارجي لتحقيق الأهداف (Te، ${s1} نقطة) أكثر من بناء نظام منطقي داخلي (Ti، ${s2} نقطة).` },
+        { func1: "Ni", func2: "Ne", text: (s1, s2) => `في جانب الحدس، تركز على الرؤى العميقة والمسار الواحد (Ni، ${s1} نقطة) أكثر من استكشاف العديد من الاحتمالات الخارجية (Ne، ${s2} نقطة).` },
+        { func1: "Se", func2: "Si", text: (s1, s2) => `في جانب الإحساس، قد تميل للتركيز على اللحظة الحالية والتجارب المباشرة (Se، ${s1} نقطة) أكثر من الخبرات والذكريات الماضية (Si، ${s2} نقطة).` },
+        { func1: "Fi", func2: "Fe", text: (s1, s2) => `في جانب المشاعر، قد تكون قيمك ومبادئك الشخصية الداخلية (Fi، ${s1} نقطة) أكثر أهمية لك من الانسجام العاطفي مع المجموعة (Fe، ${s2} نقطة).` }
+      ]
+    },
+    "ENTP": {
+      dominant: "Ne (الحدس الخارجي)", auxiliary: "Ti (التفكير الانطوائي)",
+      tertiary: "Fe (الشعور الخارجي)", inferior: "Si (الإحساس الانطوائي)",
+      description: "مبتكر ومحاور ذكي، يحب استكشاف الأفكار الجديدة والاحتمالات، يتمتع بمهارات عالية في النقاش. يستكشف العديد من الاحتمالات والأفكار المبتكرة، ويستخدم منطقه الداخلي لتحليلها وفهم كيفية عملها بدقة.",
+      funcComparisons: [
+        { func1: "Ne", func2: "Ni", text: (s1, s2) => `في جانب الحدس، تستمتع بتوليد العديد من الأفكار والاحتمالات الجديدة (Ne، ${s1} نقطة) أكثر من التركيز على رؤية واحدة عميقة (Ni، ${s2} نقطة).` },
+        { func1: "Ti", func2: "Te", text: (s1, s2) => `في جانب التفكير، تميل لبناء نظام منطقي داخلي (Ti، ${s1} نقطة) وتهتم بدقة المفاهيم أكثر من الكفاءة الخارجية والنتائج (Te، ${s2} نقطة).` },
+        { func1: "Fe", func2: "Fi", text: (s1, s2) => `في جانب المشاعر، قد تركز على الانسجام العاطفي مع المجموعة (Fe، ${s1} نقطة) أكثر من التركيز على قيمك الشخصية الداخلية (Fi، ${s2} نقطة).` },
+        { func1: "Si", func2: "Se", text: (s1, s2) => `في جانب الإحساس، قد تعتمد على الخبرات والذكريات الماضية وتفاصيلها (Si، ${s1} نقطة) أكثر من التفاعل المباشر مع العالم المادي في اللحظة (Se، ${s2} نقطة).` }
+      ]
+    },
+    "ENFJ": {
+      dominant: "Fe (الشعور الخارجي)", auxiliary: "Ni (الحدس الانطوائي)",
+      tertiary: "Se (الإحساس الخارجي)", inferior: "Ti (التفكير الانطوائي)",
+      description: "كاريزمي ومتعاطف، قائد اجتماعي، يهتم بمساعدة الآخرين وتحقيق النمو الجماعي، ملهم ومؤثر. يقوده شعوره الخارجي نحو فهم ومراعاة مشاعر الآخرين، ويمتلك رؤى مستقبلية قوية تساعده على إلهام وتوجيه المجموعات.",
+      funcComparisons: [
+        { func1: "Fe", func2: "Fi", text: (s1, s2) => `في جانب المشاعر، تميل إلى إعطاء الأولوية للانسجام العاطفي مع الآخرين (Fe، ${s1} نقطة) ومراعاة مشاعرهم أكثر من قيمك الشخصية الداخلية (Fi، ${s2} نقطة).` },
+        { func1: "Ni", func2: "Ne", text: (s1, s2) => `في جانب الحدس، تركز على الرؤى العميقة والمسار الواحد (Ni، ${s1} نقطة) أكثر من استكشاف العديد من الاحتمالات الخارجية (Ne، ${s2} نقطة).` },
+        { func1: "Se", func2: "Si", text: (s1, s2) => `في جانب الإحساس، قد تميل للتركيز على اللحظة الحالية والتجارب المباشرة (Se، ${s1} نقطة) أكثر من الخبرات والذكريات الماضية (Si، ${s2} نقطة).` },
+        { func1: "Ti", func2: "Te", text: (s1, s2) => `في جانب التفكير، قد تميل نحو المنطق الداخلي وبناء الأنظمة الفكرية (Ti، ${s1} نقطة) أكثر من الكفاءة والتنظيم الخارجي (Te، ${s2} نقطة).` }
+      ]
+    },
+    "ENFP": {
+      dominant: "Ne (الحدس الخارجي)", auxiliary: "Fi (الشعور الانطوائي)",
+      tertiary: "Te (التفكير الخارجي)", inferior: "Si (الإحساس الانطوائي)",
+      description: "حيوي ومتحمس، محب للأفكار الجديدة والناس، يبحث عن المعنى والهدف في الحياة، ومصدر إلهام للآخرين. يستكشف العديد من الاحتمالات والأفكار المبتكرة، ويقوده شعوره الداخلي نحو الأصالة والقيم الشخصية العميقة.",
+      funcComparisons: [
+        { func1: "Ne", func2: "Ni", text: (s1, s2) => `في جانب الحدس، تستمتع بتوليد العديد من الأفكار والاحتمالات الجديدة (Ne، ${s1} نقطة) أكثر من التركيز على رؤية واحدة عميقة (Ni، ${s2} نقطة).` },
+        { func1: "Fi", func2: "Fe", text: (s1, s2) => `في جانب المشاعر، تركز بشدة على قيمك ومبادئك الشخصية الداخلية (Fi، ${s1} نقطة) أكثر من السعي لإرضاء الآخرين أو الحفاظ على الانسجام الخارجي (Fe، ${s2} نقطة).` },
+        { func1: "Te", func2: "Ti", text: (s1, s2) => `في جانب التفكير، قد تميل للاهتمام بالكفاءة والنتائج الخارجية (Te، ${s1} نقطة) أكثر من بناء نظام منطقي داخلي (Ti، ${s2} نقطة).` },
+        { func1: "Si", func2: "Se", text: (s1, s2) => `في جانب الإحساس، قد تعتمد على الخبرات والذكريات الماضية وتفاصيلها (Si، ${s1} نقطة) أكثر من التفاعل المباشر مع العالم المادي في اللحظة (Se، ${s2} نقطة).` }
+      ]
+    },
+    "ESTJ": {
+      dominant: "Te (التفكير الخارجي)", auxiliary: "Si (الإحساس الانطوائي)",
+      tertiary: "Ne (الحدس الخارجي)", inferior: "Fi (الشعور الانطوائي)",
+      description: "منظم وعملي، يركز على الكفاءة والنتائج، يحب القيادة وتطبيق الأنظمة بفعالية. يستخدم تفكيره الخارجي لتنظيم البيئة وتحقيق الأهداف، ويعتمد على ذكرياته وتجاربه السابقة لضمان التنفيذ الدقيق والموثوق.",
+      funcComparisons: [
+        { func1: "Te", func2: "Ti", text: (s1, s2) => `في جانب التفكير، تركز على الكفاءة والتنظيم الخارجي لتحقيق الأهداف (Te، ${s1} نقطة) أكثر من بناء نظام منطقي داخلي (Ti، ${s2} نقطة).` },
+        { func1: "Si", func2: "Se", text: (s1, s2) => `في جانب الإحساس، تميل للاعتماد على الخبرات والذكريات الماضية والتفاصيل الموثوقة (Si، ${s1} نقطة) أكثر من التفاعل المباشر مع العالم المادي في اللحظة (Se، ${s2} نقطة).` },
+        { func1: "Ne", func2: "Ni", text: (s1, s2) => `في جانب الحدس، قد تميل لاستكشاف العديد من الاحتمالات الخارجية (Ne، ${s1} نقطة) أكثر من التركيز على رؤية واحدة عميقة (Ni، ${s2} نقطة).` },
+        { func1: "Fi", func2: "Fe", text: (s1, s2) => `في جانب المشاعر، قد تكون قيمك ومبادئك الشخصية الداخلية (Fi، ${s1} نقطة) أكثر أهمية لك من الانسجام العاطفي مع المجموعة (Fe، ${s2} نقطة).` }
+      ]
+    },
+    "ESTP": {
+      dominant: "Se (الإحساس الخارجي)", auxiliary: "Ti (التفكير الانطوائي)",
+      tertiary: "Fe (الشعور الخارجي)", inferior: "Ni (الحدس الانطوائي)",
+      description: "واقعي وعفوي، يحب التجارب الجديدة، يتفاعل بسرعة مع العالم المحيط، وحلال للمشكلات عملي. يركز على اللحظة الحالية والتجارب المباشرة، ويستخدم المنطق الداخلي لتحليل المواقف بسرعة واتخاذ قرارات عملية.",
+      funcComparisons: [
+        { func1: "Se", func2: "Si", text: (s1, s2) => `في جانب الإحساس، تستمتع بالتفاعل المباشر مع العالم المادي في اللحظة (Se، ${s1} نقطة) أكثر من الاعتماد على الخبرات والذكريات الماضية (Si، ${s2} نقطة).` },
+        { func1: "Ti", func2: "Te", text: (s1, s2) => `في جانب التفكير، تميل لبناء نظام منطقي داخلي (Ti، ${s1} نقطة) وتهتم بدقة المفاهيم أكثر من الكفاءة الخارجية والنتائج (Te، ${s2} نقطة).` },
+        { func1: "Fe", func2: "Fi", text: (s1, s2) => `في جانب المشاعر، قد تركز على الانسجام العاطفي مع المجموعة (Fe، ${s1} نقطة) أكثر من التركيز على قيمك الشخصية الداخلية (Fi، ${s2} نقطة).` },
+        { func1: "Ni", func2: "Ne", text: (s1, s2) => `في جانب الحدس، قد تركز على رؤية واحدة عميقة (Ni، ${s1} نقطة) أكثر من استكشاف العديد من الاحتمالات الخارجية (Ne، ${s2} نقطة).` }
+      ]
+    },
+    "ESFJ": {
+      dominant: "Fe (الشعور الخارجي)", auxiliary: "Si (الإحساس الانطوائي)",
+      tertiary: "Ne (الحدس الخارجي)", inferior: "Ti (التفكير الانطوائي)",
+      description: "اجتماعي وداعم، يهتم بمساعدة الآخرين وخدمة المجتمع، يلتزم بالتقاليد، ويقدر الانسجام الاجتماعي. يستخدم شعوره الخارجي لرعاية الآخرين وخلق جو من الانسجام، ويعتمد على ذكرياته وتجاربه السابقة لضمان الاستقرار والدعم.",
+      funcComparisons: [
+        { func1: "Fe", func2: "Fi", text: (s1, s2) => `في جانب المشاعر، تميل إلى إعطاء الأولوية للانسجام العاطفي مع الآخرين (Fe، ${s1} نقطة) ومراعاة مشاعرهم أكثر من قيمك الشخصية الداخلية (Fi، ${s2} نقطة).` },
+        { func1: "Si", func2: "Se", text: (s1, s2) => `في جانب الإحساس، تميل للاعتماد على الخبرات والذكريات الماضية والتفاصيل الموثوقة (Si، ${s1} نقطة) أكثر من التفاعل المباشر مع العالم المادي في اللحظة (Se، ${s2} نقطة).` },
+        { func1: "Ne", func2: "Ni", text: (s1, s2) => `في جانب الحدس، قد تميل لاستكشاف العديد من الاحتمالات الخارجية (Ne، ${s1} نقطة) أكثر من التركيز على رؤية واحدة عميقة (Ni، ${s2} نقطة).` },
+        { func1: "Ti", func2: "Te", text: (s1, s2) => `في جانب التفكير، قد تميل نحو المنطق الداخلي وبناء الأنظمة الفكرية (Ti، ${s1} نقطة) أكثر من الكفاءة والتنظيم الخارجي (Te، ${s2} نقطة).` }
+      ]
+    },
+    "ESFP": {
+      dominant: "Se (الإحساس الخارجي)", auxiliary: "Fi (الشعور الانطوائي)",
+      tertiary: "Te (التفكير الخارجي)", inferior: "Ni (الحدس الانطوائي)",
+      description: "محب للمرح والتجارب الجديدة، عفوي ومفعم بالحياة، يتفاعل مع العالم بحواسه، ويحب إسعاد الآخرين. يركز على اللحظة الحالية والتجارب المباشرة، ويقوده شعوره الداخلي نحو التعبير عن قيمه الشخصية وأصالته.",
+      funcComparisons: [
+        { func1: "Se", func2: "Si", text: (s1, s2) => `في جانب الإحساس، تستمتع بالتفاعل المباشر مع العالم المادي في اللحظة (Se، ${s1} نقطة) أكثر من الاعتماد على الخبرات والذكريات الماضية (Si، ${s2} نقطة).` },
+        { func1: "Fi", func2: "Fe", text: (s1, s2) => `في جانب المشاعر، تركز بشدة على قيمك ومبادئك الشخصية الداخلية (Fi، ${s1} نقطة) أكثر من السعي لإرضاء الآخرين أو الحفاظ على الانسجام الخارجي (Fe، ${s2} نقطة).` },
+        { func1: "Te", func2: "Ti", text: (s1, s2) => `في جانب التفكير، قد تميل للاهتمام بالكفاءة والنتائج الخارجية (Te، ${s1} نقطة) أكثر من بناء نظام منطقي داخلي (Ti، ${s2} نقطة).` },
+        { func1: "Ni", func2: "Ne", text: (s1, s2) => `في جانب الحدس، قد تركز على رؤية واحدة عميقة (Ni، ${s1} نقطة) أكثر من استكشاف العديد من الاحتمالات الخارجية (Ne، ${s2} نقطة).` }
+      ]
+    }
+  };
+
+
+  function showResult() {
+    // تعطيل أزرار الأسئلة ومنع التفاعل أثناء عرض النتائج
+    document.querySelectorAll(".quiz button").forEach(btn => btn.disabled = true);
+    quizBox.style.display = "none";
+    resultBoxContainer.style.display = "flex";
+
+    const mbti = getMBTIPattern();
+    const funcs = getFunctionsOrder(mbti); // الوظائف بترتيب النمط الافتراضي
+    const details = patternDetails[mbti];
+
+    let mainFuncsDisplay = "";
+    let scoreComparisons = "";
+
+    if (details) {
+        // عرض الوظائف الأساسية للنمط (المسيطرة والمساعدة)
+        mainFuncsDisplay = `
+            <div class="result-section">
+                <h3>الوظائف الإدراكية لنمط ${mbti} (الترتيب النظري):</h3>
+                <ul>
+                    <li><strong>الوظيفة المهيمنة (Dominant):</strong> ${details.dominant} <br> <em>(درجتك في الاختبار: ${funcScores[funcs[0]] || 0} نقطة)</em></li>
+                    <li><strong>الوظيفة المساعدة (Auxiliary):</strong> ${details.auxiliary} <br> <em>(درجتك في الاختبار: ${funcScores[funcs[1]] || 0} نقطة)</em></li>
+                    <li><strong>الوظيفة الثالثة (Tertiary):</strong> ${details.tertiary} <br> <em>(درجتك في الاختبار: ${funcScores[funcs[2]] || 0} نقطة)</em></li>
+                    <li><strong>الوظيفة الدنيا (Inferior):</strong> ${details.inferior} <br> <em>(درجتك في الاختبار: ${funcScores[funcs[3]] || 0} نقطة)</em></li>
+                </ul>
+            </div>
+        `;
+
+        // بناء قسم المقارنات
+        let comparisonsHtml = "";
+        details.funcComparisons.forEach(comp => {
+            const score1 = funcScores[comp.func1];
+            const score2 = funcScores[comp.func2];
+            if (score1 !== undefined && score2 !== undefined) {
+                 comparisonsHtml += `<li>${comp.text(score1, score2)}</li>`;
+            }
+        });
+
+        if (comparisonsHtml) {
+            scoreComparisons = `
+                <div class="compare-box">
+                    <p><strong>مقارنة أداء وظائفك في الاختبار:</strong></p>
+                    <ul>${comparisonsHtml}</ul>
+                    <p style="margin-top:15px; font-size:15px; color:#666;">
+                        هذه المقارنات توضح أي الوظائف المتعاكسة (مثل Fi مقابل Fe) كانت أقوى لديك بناءً على إجاباتك.
+                    </p>
+                </div>
+            `;
+        }
+    }
+
+    // هنا الجزء الجديد الذي سيعرض جميع درجات الوظائف بالتفصيل
+    let detailedScoresDisplay = `
+        <div class="result-section detailed-scores">
+            <h3>درجاتك في كل وظيفة إدراكية (بشكل تفصيلي):</h3>
+            <ul>
+                <li><strong>Fi:</strong> <span>${funcScores.Fi || 0} نقطة</span></li>
+                <li><strong>Fe:</strong> <span>${funcScores.Fe || 0} نقطة</span></li>
+                <li><strong>Ti:</strong> <span>${funcScores.Ti || 0} نقطة</span></li>
+                <li><strong>Te:</strong> <span>${funcScores.Te || 0} نقطة</span></li>
+                <li><strong>Ni:</strong> <span>${funcScores.Ni || 0} نقطة</span></li>
+                <li><strong>Ne:</strong> <span>${funcScores.Ne || 0} نقطة</span></li>
+                <li><strong>Si:</strong> <span>${funcScores.Si || 0} نقطة</span></li>
+                <li><strong>Se:</strong> <span>${funcScores.Se || 0} نقطة</span></li>
+            </ul>
+            <p style="margin-top:15px; font-size:15px; color:#666;">
+              هذه الدرجات تعكس مدى قوة كل وظيفة إدراكية لديك بناءً على إجاباتك. كل وظيفة تمثل طريقة مختلفة في معالجة المعلومات واتخاذ القرارات.
+            </p>
+        </div>
+    `;
+
+    resultBox.innerHTML = `
+      <h2>نمطك المحتمل هو: ${mbti}</h2>
+      <div class="result-section">
+          <h3>ملخص عن النمط:</h3>
+          <p>${details ? details.description : "لا يوجد وصف متاح لهذا النمط."}</p>
+      </div>
+      ${mainFuncsDisplay}
+      ${scoreComparisons}
+      ${detailedScoresDisplay} `;
+
+    warningBox.style.display = "block";
+    finalFooter.style.display = "block";
+    restartTestButton.style.display = "block"; // تأكد من إظهار زر إعادة الاختبار هنا
+  }
+
+  // إضافة معالج حدث لزر "ابدأ الاختبار" و "أعد الاختبار"
+  document.addEventListener('DOMContentLoaded', () => {
+      // ربط زر البدء (موجود في introBox)
+      if (startButton) {
+          startButton.addEventListener('click', startTest);
+      }
+      // ربط زر إعادة الاختبار (يظهر في result-box-container)
+      if (restartTestButton) {
+          restartTestButton.addEventListener('click', startTest);
+      }
+      // ربط زر الرجوع
+      if (goBackButton) {
+          goBackButton.addEventListener('click', goBack);
+      }
+
+      // إخفاء زر الرجوع في البداية
+      goBackButton.style.display = 'none';
+  });
+
+</script>
+</body>
+</html>
