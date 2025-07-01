@@ -27,6 +27,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            min-height: 100vh; /* Ensure body takes full height */
         }
 
         .container {
@@ -339,6 +340,7 @@
         #restart-quiz-btn-container {
             text-align: center;
             margin-top: 40px;
+            margin-bottom: 40px; /* Space before footer */
         }
 
         #restart-quiz-btn {
@@ -349,6 +351,28 @@
         #restart-quiz-btn:hover {
             background-color: #d32f2f; /* أحمر أغمق */
         }
+
+        /* Footer */
+        footer {
+            width: 100%;
+            max-width: 900px;
+            text-align: center;
+            padding: 20px;
+            margin-top: auto; /* Push footer to bottom */
+            border-top: 1px solid var(--light-grey);
+            color: var(--dark-grey);
+            font-size: 0.9em;
+        }
+
+        footer p {
+            margin: 5px 0;
+        }
+
+        footer .disclaimer {
+            font-size: 0.8em;
+            color: #777;
+        }
+
 
         /* Responsive Design */
         @media (max-width: 768px) {
@@ -479,6 +503,14 @@
 
     </div>
 
+    <footer>
+        <p>&copy; 2025 اختبار الوظائف الإدراكية. جميع الحقوق محفوظة.</p>
+        <p class="disclaimer">
+            ملاحظة: هذا الاختبار مبني على مفاهيم الأنماط الشخصية والوظائف الإدراكية (مثل MBTI) ويهدف لأغراض ترفيهية وتوعوية فقط.
+            النتائج هي تقديرية ولا يجب أن تحل محل الاستشارة المتخصصة.
+        </p>
+    </footer>
+
     <script>
         // --- بيانات الأسئلة والوظائف الإدراكية ---
         const questions = [
@@ -595,7 +627,7 @@
             {
                 question: "ما هو الأكثر إزعاجاً بالنسبة لك في بيئة العمل أو الدراسة؟",
                 options: [
-                    { text: "الروتين والملل، أحب التجديد والتغيير المستمر.", impact: { Se: 2, Ne: 1 } },
+                    { text: "الروتين والملل، أحب التجديد والتغيير المستمر.", impact: { Se: 2, Ne: 1, Si: -1 } },
                     { text: "اللامنطقية والتفكير غير المتسق أو القرارات غير المبررة.", impact: { Ti: 2, Te: 1 } },
                     { text: "عدم الانسجام والصراعات الشخصية التي تعطل العمل.", impact: { Fe: 2, Fi: 1 } },
                     { text: "الضغط للامتثال لقيم لا أؤمن بها شخصياً أو مبادئ لا أوافق عليها.", impact: { Fi: 2, Fe: 1 } },
@@ -932,40 +964,38 @@
             }
         ];
 
-        // --- بيانات الأنماط MBTI ونصائحها (تبسيط للربط بين الوظائف والأنماط) ---
-        // هذه مصفوفة مبسطة لربط الوظائف بالأنماط. تحديد النمط بدقة يعتمد على التسلسل الكامل للوظائف
-        // المهيمنة، المساعدة، الثالثية، والدنيا، بالإضافة إلى الانبساط/الانطواء في الوظيفة المهيمنة.
-        // تم تصميمها لتكون تقريبية بناءً على أعلى وظيفتين في الاختبار.
+        // --- بيانات الأنماط MBTI ونصائحها (مع إضافة تسلسل الوظائف الكامل لكل نمط) ---
         const personalityTypes = [
             // Ni Dominant
-            { type: "INTJ", functions: ["Ni", "Te"], advice: "نمط المفكر الاستراتيجي. لديك رؤية عميقة وقدرة على وضع خطط فعالة. اعمل على تطوير جانبك العاطفي والتواصل بوضوح." },
-            { type: "INFJ", functions: ["Ni", "Fe"], advice: "نمط المحامي/المستشار. تتمتع ببصيرة ثاقبة وتعاطف كبير. اهتم باحتياجاتك الشخصية ولا تفرط في مساعدة الآخرين." },
+            { type: "INTJ", stack: ["Ni", "Te", "Fi", "Se"], advice: "نمط المفكر الاستراتيجي. لديك رؤية عميقة وقدرة على وضع خطط فعالة. اعمل على تطوير جانبك العاطفي والتواصل بوضوح." },
+            { type: "INFJ", stack: ["Ni", "Fe", "Ti", "Se"], advice: "نمط المحامي/المستشار. تتمتع ببصيرة ثاقبة وتعاطف كبير. اهتم باحتياجاتك الشخصية ولا تفرط في مساعدة الآخرين." },
             // Ne Dominant
-            { type: "ENFP", functions: ["Ne", "Fi"], advice: "نمط الملهم. متفائل، مبدع، ولديك قيم قوية. ركز على إنجاز بعض أفكارك العظيمة ولا تشتت نفسك." },
-            { type: "ENTP", functions: ["Ne", "Ti"], advice: "نمط المبتكر. لديك شغف بالأفكار الجديدة وقدرة تحليلية. حاول أن تلتزم بالمشاريع وتطور مهاراتك الاجتماعية." },
+            { type: "ENFP", stack: ["Ne", "Fi", "Te", "Si"], advice: "نمط الملهم. متفائل، مبدع، ولديك قيم قوية. ركز على إنجاز بعض أفكارك العظيمة ولا تشتت نفسك." },
+            { type: "ENTP", stack: ["Ne", "Ti", "Fe", "Si"], advice: "نمط المبتكر. لديك شغف بالأفكار الجديدة وقدرة تحليلية. حاول أن تلتزم بالمشاريع وتطور مهاراتك الاجتماعية." },
             // Si Dominant
-            { type: "ISFJ", functions: ["Si", "Fe"], advice: "نمط المدافع. دقيق، مسؤول، ويهتم بالآخرين. كن منفتحاً على التغيير ولا تبالغ في التمسك بالروتين." },
-            { type: "ISTJ", functions: ["Si", "Te"], advice: "نمط اللوجستي. منظم، عملي، وموثوق به. قدّر قيمة المرونة وتطوير العلاقات العاطفية." },
+            { type: "ISFJ", stack: ["Si", "Fe", "Ti", "Ne"], advice: "نمط المدافع. دقيق، مسؤول، ويهتم بالآخرين. كن منفتحاً على التغيير ولا تبالغ في التمسك بالروتين." },
+            { type: "ISTJ", stack: ["Si", "Te", "Fi", "Ne"], advice: "نمط اللوجستي. منظم، عملي، وموثوق به. قدّر قيمة المرونة وتطوير العلاقات العاطفية." },
             // Se Dominant
-            { type: "ESFP", functions: ["Se", "Fi"], advice: "نمط المؤدي. حيوي، عفوي، ومحب للمتعة.وازن بين الاستمتاع باللحظة والتفكير في النتائج طويلة الأمد." },
-            { type: "ESTP", functions: ["Se", "Ti"], advice: "نمط المروج. جريء، عملي، وملاحظ. ركز على التفكير المسبق وتطوير رؤياك للمستقبل." },
+            { type: "ESFP", stack: ["Se", "Fi", "Te", "Ni"], advice: "نمط المؤدي. حيوي، عفوي، ومحب للمتعة.وازن بين الاستمتاع باللحظة والتفكير في النتائج طويلة الأمد." },
+            { type: "ESTP", stack: ["Se", "Ti", "Fe", "Ni"], advice: "نمط المروج. جريء، عملي، وملاحظ. ركز على التفكير المسبق وتطوير رؤياك للمستقبل." },
             // Fi Dominant
-            { type: "INFP", functions: ["Fi", "Ne"], advice: "نمط الوسيط. مثالي، مبدع، ولديك قيم عميقة. تعلم كيفية التعبير عن قيمك بوضوح للآخرين دون التنازل عنها." },
-            { type: "ISFP", functions: ["Fi", "Se"], advice: "نمط المغامر. هادئ، فني، ويقدر اللحظة. ابحث عن طرق لتنظيم حياتك وتحقيق أهدافك بفعالية." },
+            { type: "INFP", stack: ["Fi", "Ne", "Si", "Te"], advice: "نمط الوسيط. مثالي، مبدع، ولديك قيم عميقة. تعلم كيفية التعبير عن قيمك بوضوح للآخرين دون التنازل عنها." },
+            { type: "ISFP", stack: ["Fi", "Se", "Ni", "Te"], advice: "نمط المغامر. هادئ، فني، ويقدر اللحظة. ابحث عن طرق لتنظيم حياتك وتحقيق أهدافك بفعالية." },
             // Fe Dominant
-            { type: "ENFJ", functions: ["Fe", "Ni"], advice: "نمط المعلم. كاريزمي، متعاطف، ولديك رؤية. لا تضع احتياجات الآخرين فوق احتياجاتك، وتعلم تحديد أولوياتك." },
-            { type: "ESFJ", functions: ["Fe", "Si"], advice: "نمط المعيل. اجتماعي، منظم، وداعم. كن منفتحاً على الأفكار الجديدة ولا تلتزم بالتقاليد الجامدة." },
+            { type: "ENFJ", stack: ["Fe", "Ni", "Se", "Ti"], advice: "نمط المعلم. كاريزمي، متعاطف، ولديك رؤية. لا تضع احتياجات الآخرين فوق احتياجاتك، وتعلم تحديد أولوياتك." },
+            { type: "ESFJ", stack: ["Fe", "Si", "Ne", "Ti"], advice: "نمط المعيل. اجتماعي، منظم، وداعم. كن منفتحاً على الأفكار الجديدة ولا تلتزم بالتقاليد الجامدة." },
             // Ti Dominant
-            { type: "INTP", functions: ["Ti", "Ne"], advice: "نمط المنطقي. مستقل، محلل، ومبتكر. حاول أن تطبق أفكارك وتتواصل بفعالية مع الآخرين." },
-            { type: "ISTP", functions: ["Ti", "Se"], advice: "نمط الحرفي. منطقي، عملي، وملاحظ. ركز على فهم مشاعرك ومشاع الآخرين لتطوير علاقاتك." },
+            { type: "INTP", stack: ["Ti", "Ne", "Si", "Fe"], advice: "نمط المنطقي. مستقل، محلل، ومبتكر. حاول أن تطبق أفكارك وتتواصل بفعالية مع الآخرين." },
+            { type: "ISTP", stack: ["Ti", "Se", "Ni", "Fe"], advice: "نمط الحرفي. منطقي، عملي، وملاحظ. ركز على فهم مشاعرك ومشاع الآخرين لتطوير علاقاتك." },
             // Te Dominant
-            { type: "ENTJ", functions: ["Te", "Ni"], advice: "نمط القائد. حاسم، منظم، ولديك رؤية واضحة. كن أكثر مرونة واستمع إلى وجهات نظر الآخرين ومشاعرهم." },
-            { type: "ESTJ", functions: ["Te", "Si"], advice: "نمط المدير التنفيذي. كفؤ، مسؤول، ومنظم. حاول أن تكون أكثر انفتاحاً على التغيير والأفكار الجديدة." }
+            { type: "ENTJ", stack: ["Te", "Ni", "Se", "Fi"], advice: "نمط القائد. حاسم، منظم، ولديك رؤية واضحة. كن أكثر مرونة واستمع إلى وجهات نظر الآخرين ومشاعرهم." },
+            { type: "ESTJ", stack: ["Te", "Si", "Ne", "Fi"], advice: "نمط المدير التنفيذي. كفؤ، مسؤول، ومنظم. حاول أن تكون أكثر انفتاحاً على التغيير والأفكار الجديدة." }
         ];
 
 
         let currentQuestionIndex = 0;
-        let userAnswers = new Array(questions.length).fill([]); // Stores selected option indices (array of numbers)
+        // الإصلاح: تهيئة كل عنصر في userAnswers بمصفوفة فارغة منفصلة
+        let userAnswers = Array.from({length: questions.length}, () => []); 
         let scores = {
             Ni: 0, Ne: 0, Si: 0, Se: 0,
             Fi: 0, Fe: 0, Ti: 0, Te: 0
@@ -1068,6 +1098,7 @@
                             alert(`يمكنك اختيار إجابتين كحد أقصى لكل سؤال. لقد اخترت بالفعل ${MAX_ANSWERS_PER_QUESTION}.`);
                         }
                     } else {
+                        // Remove the deselected item
                         userAnswers[currentQuestionIndex] = currentSelected.filter(item => item !== selectedIndex);
                     }
                 });
@@ -1096,7 +1127,7 @@
             // التحقق من أن جميع الأسئلة تم الإجابة عليها (إجابة واحدة على الأقل لكل سؤال)
             const unansweredQuestionsCount = userAnswers.filter(answer => answer.length === 0).length;
             if (unansweredQuestionsCount > 0) {
-                alert(`لم يتم الإجابة على ${unansweredQuestionsCount} سؤال. يرجى إكمال جميع الأسئلة قبل إنهاء الاختبار. ${unansweredQuestionsCount > 1 ? 'انقر على السابق للعودة.' : 'انقر على التالي للاستمرار.'}`);
+                alert(`لم يتم الإجابة على ${unansweredQuestionsCount} سؤال. يرجى إكمال جميع الأسئلة قبل إنهاء الاختبار.`);
                 // العودة إلى أول سؤال لم يتم الإجابة عليه
                 currentQuestionIndex = userAnswers.findIndex(answer => answer.length === 0);
                 displayQuestion();
@@ -1133,31 +1164,50 @@
             const sortedFunctions = Object.entries(scores).map(([name, score]) => ({ name, score }))
                                         .sort((a, b) => b.score - a.score);
 
-            if (sortedFunctions.length === 0) {
+            if (sortedFunctions.length === 0 || sortedFunctions[0].score === 0) {
                 finalTypeName.textContent = "غير محدد";
-                typeAdvice.textContent = "لا يمكن تحديد النمط بسبب عدم كفاية البيانات.";
+                typeAdvice.textContent = "لم يتم جمع بيانات كافية لتحديد النمط.";
                 return;
             }
 
-            const dominantFunc = sortedFunctions[0].name;
-            let auxiliaryFunc = null;
-            if (sortedFunctions.length > 1) {
-                auxiliaryFunc = sortedFunctions[1].name;
-            }
-            
-            let matchedType = null;
-            for (const typeData of personalityTypes) {
-                // Simplified matching: check if the top two functions match the core functions for a type
-                // This is a basic approach and doesn't cover the full complexity of cognitive function stacks.
-                if (typeData.functions.includes(dominantFunc) && typeData.functions.includes(auxiliaryFunc)) {
-                    matchedType = typeData;
-                    break;
-                }
-            }
+            // Top functions from user's scores
+            const userTopFunctions = sortedFunctions.slice(0, 4).map(f => f.name);
 
-            if (matchedType) {
-                finalTypeName.textContent = matchedType.type;
-                typeAdvice.textContent = matchedType.advice;
+            let bestMatch = null;
+            let maxMatchScore = -1;
+            let potentialMatches = []; // To store types and their scores
+
+            personalityTypes.forEach(typeData => {
+                let currentMatchScore = 0;
+                // Score based on position in stack
+                const positionWeights = [100, 50, 20, 10]; // Weight for 1st, 2nd, 3rd, 4th function in stack
+
+                userTopFunctions.forEach((userFunc, userIdx) => {
+                    const funcIndexInStack = typeData.stack.indexOf(userFunc);
+                    if (funcIndexInStack !== -1 && funcIndexInStack < 4) { // Only consider top 4 in stack
+                        currentMatchScore += positionWeights[funcIndexInStack];
+                    }
+                });
+                potentialMatches.push({ type: typeData.type, advice: typeData.advice, score: currentMatchScore });
+
+                if (currentMatchScore > maxMatchScore) {
+                    maxMatchScore = currentMatchScore;
+                    bestMatch = typeData;
+                }
+            });
+
+            // Sort potential matches by score descending
+            potentialMatches.sort((a, b) => b.score - a.score);
+
+            if (bestMatch && maxMatchScore > 0) { // If at least one function matched
+                finalTypeName.textContent = `${potentialMatches[0].type}`;
+                typeAdvice.textContent = potentialMatches[0].advice;
+
+                // If there's a second closest type with a reasonable score
+                if (potentialMatches.length > 1 && potentialMatches[1].score > (maxMatchScore * 0.7)) { // e.g., second best is at least 70% of best
+                    finalTypeName.textContent += ` أو ${potentialMatches[1].type}`;
+                    typeAdvice.textContent += `\n\nأو قد تكون قريباً من نمط ${potentialMatches[1].type}: ${potentialMatches[1].advice.split(': ')[1] || potentialMatches[1].advice}`;
+                }
             } else {
                 finalTypeName.textContent = "غير محدد بدقة";
                 typeAdvice.textContent = "بناءً على إجاباتك، لم نستطع تحديد نمط شخصية محدد بوضوح. قد يكون لديك مزيج فريد من الوظائف أو تحتاج لمزيد من الاستكشاف.";
@@ -1178,8 +1228,8 @@
                 };
             }).sort((a, b) => b.score - a.score);
 
-            // Display the top 2-3 most dominant functions
-            const displayedDominant = sortedFunctions.slice(0, 2); // Display top 2
+            // Display the top 2 functions
+            const displayedDominant = sortedFunctions.slice(0, 2); 
 
             displayedDominant.forEach((func, index) => {
                 const item = document.createElement('div');
@@ -1203,10 +1253,10 @@
 
                     // Determine score level (simplified thresholds, adjust as needed)
                     // Max possible score for a function (approx): 2 * num_questions * 2 (max impact)
-                    // Max score approx = 25 questions * 2 (max answers) * 2 (max impact per answer) = 100
+                    // Max score approx = 33 questions * 2 (max answers) * 2 (max impact per answer) = 132
                     const maxPossibleScore = questions.length * MAX_ANSWERS_PER_QUESTION * 2; // Assuming max impact of 2
-                    const highThreshold = maxPossibleScore * 0.4; // e.g., 40% of max
-                    const lowThreshold = maxPossibleScore * 0.1;  // e.g., 10% of max
+                    const highThreshold = maxPossibleScore * 0.45; // e.g., 45% of max
+                    const lowThreshold = maxPossibleScore * 0.15;  // e.g., 15% of max
 
                     if (func.score >= highThreshold) {
                         levelAdvice = funcData.advice.high;
@@ -1239,9 +1289,9 @@
                 const row = document.createElement('tr');
                 
                 // Determine score level for advice
-                const maxPossibleScore = questions.length * MAX_ANSWERS_PER_QUESTION * 2; // Assuming max impact of 2
-                const highThreshold = maxPossibleScore * 0.4; 
-                const lowThreshold = maxPossibleScore * 0.1;
+                const maxPossibleScore = questions.length * MAX_ANSWERS_PER_QUESTION * 2; 
+                const highThreshold = maxPossibleScore * 0.45; 
+                const lowThreshold = maxPossibleScore * 0.15;
                 
                 let adviceText = "لا توجد نصيحة محددة.";
                 const funcData = cognitiveFunctionsData.find(f => f.name === func.originalName);
@@ -1286,7 +1336,8 @@
         // --- وظيفة إعادة الاختبار ---
         function resetQuiz() {
             currentQuestionIndex = 0;
-            userAnswers = new Array(questions.length).fill([]); // Reset to empty arrays
+            // إعادة تعيين userAnswers بشكل صحيح بمصفوفات منفصلة
+            userAnswers = Array.from({length: questions.length}, () => []); 
             for (const func in scores) {
                 scores[func] = 0;
             }
@@ -1300,7 +1351,9 @@
             questionsContainer.innerHTML = '';
             dominantFunctionsResults.innerHTML = '';
             rankedFunctionsBody.innerHTML = '';
-            typeResult.style.display = 'none'; // Hide type result section
+            typeResult.style.display = 'block'; // Make sure it's visible if results are shown again
+            finalTypeName.textContent = ""; // Clear previous type name
+            typeAdvice.textContent = ""; // Clear previous advice
             updateProgressIndicator(); // Reset progress indicator text
         }
 
