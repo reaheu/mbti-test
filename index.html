@@ -254,7 +254,8 @@
   const quizButtons = document.querySelectorAll(".quiz button");
   const restartTestButton = document.getElementById("restartTestButton");
 
-  const questions = [
+  // تعريف الأسئلة الأصلية
+  const originalQuestions = [
     // Fi vs Fe (الشعور الداخلي مقابل الشعور الخارجي) - 20 سؤال
     { text: "هل تفضل أن تعيش وفقاً لقيمك ومبادئك الشخصية، حتى لو اختلف الناس معك؟", funcA: "Fi", funcB: "Fe" },
     { text: "هل غالباً ما تتخذ قراراتك بناءً على ما تشعر به صحيحاً من الداخل، وليس بالضرورة ما يرضي الآخرين؟", funcA: "Fi", funcB: "Fe" },
@@ -344,12 +345,22 @@
     { text: "هل تستمتع بالأنشطة التي تتطلب التركيز الكامل على اللحظة الحالية (مثل الألعاب الرياضية الخطرة أو الفنون الأدائية)؟", funcA: "Se", funcB: "Si" }
   ];
 
+  let questions = []; // ستكون هذه مصفوفة الأسئلة بعد الخلط
   let currentQuestion = 0;
   let answers = [];
   let funcScores = {
     Fi: 0, Fe: 0, Ti: 0, Te: 0,
     Ni: 0, Ne: 0, Si: 0, Se: 0,
   };
+
+  // دالة لخلط المصفوفة (Fisher-Yates shuffle algorithm)
+  function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+  }
 
   function startTest() {
     introBox.style.display = "none";
@@ -361,6 +372,9 @@
 
     quizButtons.forEach(btn => btn.disabled = false);
 
+    // خلط الأسئلة عند بدء الاختبار
+    questions = shuffleArray([...originalQuestions]);
+    
     currentQuestion = 0;
     answers = [];
     resetScores();
@@ -429,33 +443,33 @@
     const E_funcs = ["Fe", "Se", "Ne", "Te"];
     const I_funcs = ["Fi", "Si", "Ni", "Ti"];
 
-    let E_points = E_funcs.reduce((sum, func) => sum + funcScores[func], 0);
-    let I_points = I_funcs.reduce((sum, func) => sum + funcScores[func], 0);
+    let E_points = E_funcs.reduce((sum, func) => sum + (funcScores[func] || 0), 0);
+    let I_points = I_funcs.reduce((sum, func) => sum + (funcScores[func] || 0), 0);
 
     const firstLetter = E_points >= I_points ? "E" : "I";
 
     // تحديد الحرف الثاني (S/N)
-    const S_points = funcScores.Si + funcScores.Se;
-    const N_points = funcScores.Ni + funcScores.Ne;
+    const S_points = (funcScores.Si || 0) + (funcScores.Se || 0);
+    const N_points = (funcScores.Ni || 0) + (funcScores.Ne || 0);
     const secondLetter = N_points >= S_points ? "N" : "S";
 
     // تحديد الحرف الثالث (T/F)
-    const T_points = funcScores.Te + funcScores.Ti;
-    const F_points = funcScores.Fe + funcScores.Fi;
+    const T_points = (funcScores.Te || 0) + (funcScores.Ti || 0);
+    const F_points = (funcScores.Fe || 0) + (funcScores.Fi || 0);
     const thirdLetter = T_points >= F_points ? "T" : "F";
 
     // تحديد الحرف الرابع (J/P) بناءً على الوظيفة المهيمنة (الخارجية للجريئين، الداخلية للانطوائيين)
     let fourthLetter;
     if (firstLetter === "E") { // للشخصيات الانفتاحية (E)
         // الوظيفة الخارجية هي المهيمنة. إذا كانت حكمية (Te/Fe) فالنمط J، وإذا كانت إدراكية (Ne/Se) فالنمط P.
-        const eJudging = funcScores.Te + funcScores.Fe;
-        const ePerceiving = funcScores.Ne + funcScores.Se;
+        const eJudging = (funcScores.Te || 0) + (funcScores.Fe || 0);
+        const ePerceiving = (funcScores.Ne || 0) + (funcScores.Se || 0);
         fourthLetter = eJudging >= ePerceiving ? "J" : "P";
     } else { // للشخصيات الانطوائية (I)
         // الوظيفة الداخلية هي المهيمنة. إذا كانت حكمية (Ti/Fi) فالنمط P، وإذا كانت إدراكية (Ni/Si) فالنمط J.
         // هذا قد يبدو معكوساً ولكنه صحيح لأن الحكمية لديهم داخلية والإدراكية خارجية.
-        const iJudging = funcScores.Ti + funcScores.Fi;
-        const iPerceiving = funcScores.Ni + funcScores.Si;
+        const iJudging = (funcScores.Ti || 0) + (funcScores.Fi || 0);
+        const iPerceiving = (funcScores.Ni || 0) + (funcScores.Si || 0);
         fourthLetter = iJudging >= iPerceiving ? "P" : "J";
     }
 
