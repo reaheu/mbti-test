@@ -252,11 +252,8 @@
   const warningBox = document.getElementById("warning-box");
   const finalFooter = document.getElementById("final-footer");
   const restartTestButton = document.getElementById("restartTestButton");
-  const startButton = document.getElementById("startButton"); // تم إضافة هذا المتغير
+  const startButton = document.getElementById("startButton");
 
-  // تعريف الأسئلة الأصلية مع تحديد الزوج الوظيفي لكل سؤال
-  // كل زوج وظيفي الآن يحتوي على 20 سؤالاً، ليصبح المجموع الكلي 80 سؤالاً.
-  // تم تعديل الصياغة لبعض الأسئلة لزيادة الحيادية والتوازن ومنع الانحياز.
   const originalQuestionsPairs = [
     // Fi vs Fe (الشعور الداخلي مقابل الشعور الخارجي) - 20 سؤالاً
     { text: "هل تفضل أن تعيش وفقاً لقيمك ومبادئك الشخصية، حتى لو أدى ذلك لبعض الاختلاف مع الآخرين؟", pair: ["Fi", "Fe"] },
@@ -319,7 +316,7 @@
     { text: "هل تجيك أفكار كثيرة وجديدة بسرعة وبشكل مستمر عندما تتفاعل مع العالم؟", pair: ["Ne", "Ni"] },
     { text: "هل تستمتع باستكشاف الاحتمالات المتعددة لكل موقف أو فكرة، وتتخيل السيناريوهات؟", pair: ["Ne", "Ni"] },
     { text: "هل تمل بسرعة من الروتين وتفضل البحث عن تجارب أو مفاهيم جديدة وغير مألوفة؟", pair: ["Ne", "Ni"] },
-    { text: "هل تحب ربط الأشياء ببعضها بطرق مبتكرة وغير تقليدية، أو " , pair: ["Ne", "Ni"] },
+    { text: "هل تحب ربط الأشياء ببعضها بطرق مبتكرة وغير تقليدية، أو "خارج الصندوق"؟", pair: ["Ne", "Ni"] },
     { text: "هل من السهل عليك أن ترى كيف يمكن لشيء واحد أن يؤدي إلى العديد من الاحتمالات الأخرى؟", pair: ["Ne", "Ni"] },
     { text: "هل تستمتع بالعصف الذهني وتوليد عدد لا نهائي من الأفكار؟", pair: ["Ne", "Ni"] },
     { text: "هل أنت شخص منفتح على التجريب وتغيير الخطط إذا ظهرت احتمالات أفضل؟", pair: ["Ne", "Ni"] },
@@ -363,7 +360,7 @@
   function shuffleArray(array) {
       for (let i = array.length - 1; i > 0; i--) {
           const j = Math.floor(Math.random() * (i + 1));
-          [array[i], array[j]] = [array[j], array[i]];
+          [array[i], array[j]] = array[j][array[i]];
       }
       return array;
   }
@@ -745,15 +742,22 @@
         }
     }
 
-    // عرض جميع الوظائف الإدراكية بالترتيب من الأعلى للأقل حسب الدرجات
-    let allFuncsByScoreDisplay = `
+    // هنا الجزء الجديد الذي سيعرض جميع درجات الوظائف بالتفصيل
+    let detailedScoresDisplay = `
         <div class="result-section">
-            <h3>جميع الوظائف الإدراكية (مرتبة حسب درجاتك الفعلية في الاختبار):</h3>
-            <ul>
-                ${allFuncsSortedByScore.map((f) => `<li><strong>${f.func}</strong> (درجة: ${f.score})</li>`).join("")}
+            <h3>درجاتك في كل وظيفة إدراكية:</h3>
+            <ul style="list-style-type: disc; padding-right: 20px;">
+                <li>**Fi (الشعور الداخلي):** ${funcScores.Fi || 0} نقطة</li>
+                <li>**Fe (الشعور الخارجي):** ${funcScores.Fe || 0} نقطة</li>
+                <li>**Ti (التفكير الداخلي):** ${funcScores.Ti || 0} نقطة</li>
+                <li>**Te (التفكير الخارجي):** ${funcScores.Te || 0} نقطة</li>
+                <li>**Ni (الحدس الانطوائي):** ${funcScores.Ni || 0} نقطة</li>
+                <li>**Ne (الحدس الخارجي):** ${funcScores.Ne || 0} نقطة</li>
+                <li>**Si (الإحساس الانطوائي):** ${funcScores.Si || 0} نقطة</li>
+                <li>**Se (الإحساس الخارجي):** ${funcScores.Se || 0} نقطة</li>
             </ul>
             <p style="margin-top:15px; font-size:14px; color:#777;">
-              التوضيح: كل وظيفة إدراكية تمثل طريقة محددة في التفكير أو الإدراك. الوظيفة الأعلى درجة هي الأكثر تأثيراً في شخصيتك حسب إجاباتك على جميع الأسئلة.
+              هذه الدرجات تعكس مدى قوة كل وظيفة إدراكية لديك بناءً على إجاباتك. كل وظيفة تمثل طريقة مختلفة في معالجة المعلومات واتخاذ القرارات.
             </p>
         </div>
     `;
@@ -766,8 +770,7 @@
       </div>
       ${mainFuncsDisplay}
       ${scoreComparisons}
-      ${allFuncsByScoreDisplay}
-    `;
+      ${detailedScoresDisplay} `;
 
     warningBox.style.display = "block";
     finalFooter.style.display = "block";
@@ -775,7 +778,6 @@
   }
 
   // إضافة معالج حدث لزر "ابدأ الاختبار" و "أعد الاختبار"
-  // هذا يضمن أن يتم العثور على الأزرار بعد تحميل الصفحة.
   document.addEventListener('DOMContentLoaded', () => {
       const startButton = document.getElementById("startButton");
       if (startButton) {
