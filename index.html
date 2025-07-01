@@ -62,7 +62,7 @@
     }
     #question {
       font-size: 22px; /* حجم أكبر للسؤال */
-      margin: 25px 0;
+      margin: 25px auto; /* توسيط السؤال */
       color: var(--dark-gray);
       min-height: 100px; /* مساحة أكبر للسؤال */
       display: flex;
@@ -72,6 +72,7 @@
       transition: opacity var(--transition-speed) ease-in-out;
       font-weight: 500;
       line-height: 1.6; /* تباعد الأسطر */
+      max-width: 80%; /* لكي لا يمتد السؤال كثيراً بالعرض */
     }
     #progress {
       font-size: 17px;
@@ -79,8 +80,15 @@
       margin-bottom: 20px;
       font-weight: 500;
     }
+    .quiz .button-group { /* مجموعة الأزرار تحت السؤال */
+        display: flex;
+        flex-direction: column; /* جعل الأزرار تظهر تحت بعضها */
+        align-items: center; /* توسيط الأزرار */
+        gap: 15px; /* مسافة بين الأزرار */
+        margin-top: 20px; /* مسافة عن السؤال */
+    }
     button {
-      margin: 10px 15px; /* زيادة الهامش الأفقي */
+      /*margin: 10px 15px;*/ /* تم إزالة هذا الهامش لصالح الـ gap في button-group */
       padding: 15px 30px; /* حجم أكبر للأزرار */
       font-size: 18px; /* خط أكبر للأزرار */
       border: none;
@@ -89,7 +97,7 @@
       color: white;
       cursor: pointer;
       transition: background-color var(--transition-speed) ease, transform 0.1s ease;
-      min-width: 120px; /* عرض أدنى للأزرار */
+      min-width: 200px; /* عرض أدنى للأزرار */
       font-weight: 700;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* ظل للأزرار */
     }
@@ -136,22 +144,31 @@
       color: var(--secondary-color);
       text-decoration: underline;
     }
+    /* تعديل تنسيق صندوق التنبيه ليكون أعلى صفحة النتائج وواضحاً */
     #warning-box {
-      background: #fff3cd;
-      color: #856404;
-      border: 1px solid #ffeeba;
-      padding: 20px;
+      background: #fff3cd; /* لون أصفر فاتح */
+      color: #856404; /* لون نص بني غامق */
+      border: 1px solid #ffeeba; /* حدود خفيفة */
+      padding: 25px; /* زيادة البادينغ */
       border-radius: var(--border-radius);
       max-width: 800px;
-      margin: 25px auto;
+      margin: 0 auto 25px auto; /* هامش علوي صفر، هامش سفلي 25px */
       text-align: right;
       direction: rtl;
-      display: none;
+      display: none; /* يتم التحكم بها بواسطة JS */
       font-weight: 500;
       box-shadow: 0 5px 10px rgba(0,0,0,0.05);
+      font-size: 18px; /* حجم خط أكبر قليلاً */
+      line-height: 1.6;
+    }
+    #warning-box h2 {
+        font-size: 24px; /* حجم أكبر للعنوان داخل التنبيه */
+        margin-top: 0;
+        margin-bottom: 15px;
+        color: #e74c3c; /* لون أحمر للعناوين داخل التنبيه */
     }
     .result-box-container {
-      margin-top: 30px;
+      margin-top: 0; /* تم إزالة الهامش العلوي لأنه الآن يأتي بعد صندوق التنبيه */
       padding: 30px;
       text-align: right;
       direction: rtl;
@@ -270,21 +287,25 @@
         text-decoration: underline;
     }
 
-    /* تحسين زر الرجوع */
+    /* زر الرجوع - أصغر وتحت نعم/لا */
     #goBackButton {
         background-color: #95a5a6; /* لون رمادي مختلف */
-        margin-left: 20px; /* مسافة عن زر نعم/لا */
+        padding: 10px 20px; /* تصغير البادينغ */
+        font-size: 16px; /* تصغير الخط */
+        min-width: 150px; /* عرض أدنى مناسب */
+        margin-top: 20px; /* مسافة عن أزرار نعم/لا */
     }
     #goBackButton:hover {
         background-color: #7f8c8d;
     }
 
-    /* زر إعادة الاختبار في صفحة النتائج */
+    /* زر إعادة الاختبار في صفحة النتائج - تصغير حجمه */
     #restartTestButton {
         background-color: #2ecc71; /* أخضر */
         margin-top: 30px; /* مسافة عن باقي المحتوى */
-        padding: 15px 40px;
-        font-size: 20px;
+        padding: 12px 25px; /* تصغير البادينغ */
+        font-size: 17px; /* تصغير الخط */
+        min-width: unset; /* إزالة العرض الأدنى */
     }
     #restartTestButton:hover {
         background-color: #27ae60;
@@ -340,17 +361,10 @@
       <h1>اختبار الوظائف الإدراكية</h1>
       <div id="progress"></div>
       <div id="question"></div>
-      <div>
-        <button onclick="answer('A')">نعم</button>
+      <div class="button-group"> <button onclick="answer('A')">نعم</button>
         <button onclick="answer('B')">لا</button>
+        <button id="goBackButton" onclick="goBack()">رجوع</button>
       </div>
-      <button id="goBackButton" onclick="goBack()" style="margin-top: 20px;">رجوع</button>
-    </div>
-
-    <div class="box result-box-container" style="display: none;">
-      <div id="result-box">
-      </div>
-      <button id="restartTestButton">أعد الاختبار</button>
     </div>
 
     <div id="warning-box" style="display: none;">
@@ -359,6 +373,13 @@
       <p>لكل نمط تحدياته ونقاط قوته. استخدم هذه النتيجة للانطلاق في رحلة اكتشاف الذات وليس للتصنيف النهائي.</p>
       <p>لو عندك أي سؤال أو حاب تتواصل معنا، راسلنا على تيك توك: <a href='https://www.tiktok.com/@reatwiy?_t=ZS-8xeuozu76z2&_r=1' target='_blank'>@reatwiy</a></p>
     </div>
+
+    <div class="box result-box-container" style="display: none;">
+      <div id="result-box">
+      </div>
+      <button id="restartTestButton">أعد الاختبار</button>
+    </div>
+
   </div> <div class="footer" id="final-footer" style="display: none;">
     <p><strong>تم بناء هذا الاختبار استنادًا إلى فهمنا للوظائف الإدراكية من المصادر التالية:</strong></p>
     <ul style="list-style: none; padding: 0;">
@@ -446,7 +467,7 @@
     { text: "هل تجيك أفكار كثيرة وجديدة بسرعة وبشكل مستمر عندما تتفاعل مع العالم؟", pair: ["Ne", "Ni"] },
     { text: "هل تستمتع باستكشاف الاحتمالات المتعددة لكل موقف أو فكرة، وتتخيل السيناريوهات؟", pair: ["Ne", "Ni"] },
     { text: "هل تمل بسرعة من الروتين وتفضل البحث عن تجارب أو مفاهيم جديدة وغير مألوفة؟", pair: ["Ne", "Ni"] },
-    { text: "هل تحب ربط الأشياء ببعضها بطرق مبتكرة وغير تقليدية، أو ؟", pair: ["Ne", "Ni"] },
+    { text: "هل تحب ربط الأشياء ببعضها بطرق مبتكرة وغير تقليدية، أو "خارج الصندوق"؟", pair: ["Ne", "Ni"] },
     { text: "هل من السهل عليك أن ترى كيف يمكن لشيء واحد أن يؤدي إلى العديد من الاحتمالات الأخرى؟", pair: ["Ne", "Ni"] },
     { text: "هل تستمتع بالعصف الذهني وتوليد عدد لا نهائي من الأفكار؟", pair: ["Ne", "Ni"] },
     { text: "هل أنت شخص منفتح على التجريب وتغيير الخطط إذا ظهرت احتمالات أفضل؟", pair: ["Ne", "Ni"] },
@@ -490,7 +511,7 @@
   function shuffleArray(array) {
       for (let i = array.length - 1; i > 0; i--) {
           const j = Math.floor(Math.random() * (i + 1));
-          [array[i], array[j]] = [array[j], array[i]]; // هذا هو التصحيح هنا
+          [array[i], array[j]] = [array[j], array[i]];
       }
       return array;
   }
@@ -574,6 +595,7 @@
     restartTestButton.style.display = "none";
     // لإخفاء صندوق النتائج عند الرجوع من صفحة النتائج
     resultBoxContainer.style.display = "none";
+    warningBox.style.display = "none"; // إخفاء صندوق التنبيه عند الرجوع
 
     // تفعيل الأزرار مرة أخرى إذا كانت معطلة
     document.querySelectorAll(".quiz button").forEach(btn => btn.disabled = false);
@@ -825,7 +847,8 @@
     // تعطيل أزرار الأسئلة ومنع التفاعل أثناء عرض النتائج
     document.querySelectorAll(".quiz button").forEach(btn => btn.disabled = true);
     quizBox.style.display = "none";
-    resultBoxContainer.style.display = "flex";
+    warningBox.style.display = "block"; // إظهار صندوق التنبيه أولاً
+    resultBoxContainer.style.display = "flex"; // ثم إظهار صندوق النتائج
 
     const mbti = getMBTIPattern();
     const funcs = getFunctionsOrder(mbti); // الوظائف بترتيب النمط الافتراضي
@@ -901,7 +924,6 @@
       ${scoreComparisons}
       ${detailedScoresDisplay} `;
 
-    warningBox.style.display = "block";
     finalFooter.style.display = "block";
     restartTestButton.style.display = "block"; // تأكد من إظهار زر إعادة الاختبار هنا
   }
