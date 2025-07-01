@@ -373,6 +373,21 @@
             color: #777;
         }
 
+        footer .social-media {
+            margin-top: 15px;
+        }
+
+        footer .social-media a {
+            color: var(--primary-color);
+            text-decoration: none;
+            margin: 0 10px;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        footer .social-media a:hover {
+            color: #43a047;
+        }
 
         /* Responsive Design */
         @media (max-width: 768px) {
@@ -509,6 +524,10 @@
             ملاحظة: هذا الاختبار مبني على مفاهيم الأنماط الشخصية والوظائف الإدراكية (مثل MBTI) ويهدف لأغراض ترفيهية وتوعوية فقط.
             النتائج هي تقديرية ولا يجب أن تحل محل الاستشارة المتخصصة.
         </p>
+        <div class="social-media">
+            <p><strong>تابعنا:</strong></p>
+            <a href="https://www.tiktok.com/@yourtiktokaccount" target="_blank">حساب تيك توك (ضع حسابك هنا)</a>
+            </div>
     </footer>
 
     <script>
@@ -1160,6 +1179,17 @@
             displayAllFunctionsRanked();
         }
 
+        // Helper to extract MBTI letters from a type string (e.g., "INTJ" -> {P1:'I', P2:'N', P3:'T', P4:'J'})
+        function getMbtiLetters(type) {
+            if (!type || type.length !== 4) return null;
+            return {
+                P1: type[0], // I/E
+                P2: type[1], // N/S
+                P3: type[2], // T/F
+                P4: type[3]  // J/P
+            };
+        }
+
         function inferAndDisplayPersonalityType() {
             const sortedFunctions = Object.entries(scores).map(([name, score]) => ({ name, score }))
                                         .sort((a, b) => b.score - a.score);
@@ -1173,40 +1203,57 @@
             // Top functions from user's scores
             const userTopFunctions = sortedFunctions.slice(0, 4).map(f => f.name);
 
-            let bestMatch = null;
-            let maxMatchScore = -1;
             let potentialMatches = []; // To store types and their scores
 
             personalityTypes.forEach(typeData => {
                 let currentMatchScore = 0;
-                // Score based on position in stack
-                const positionWeights = [100, 50, 20, 10]; // Weight for 1st, 2nd, 3rd, 4th function in stack
+                // Weights for functions based on their position in the theoretical stack
+                const positionWeights = [100, 50, 20, 10]; // 1st, 2nd, 3rd, 4th function in stack
 
                 userTopFunctions.forEach((userFunc, userIdx) => {
                     const funcIndexInStack = typeData.stack.indexOf(userFunc);
-                    if (funcIndexInStack !== -1 && funcIndexInStack < 4) { // Only consider top 4 in stack
+                    if (funcIndexInStack !== -1 && funcIndexInStack < 4) { // Only consider top 4 functions in type's stack
                         currentMatchScore += positionWeights[funcIndexInStack];
                     }
                 });
                 potentialMatches.push({ type: typeData.type, advice: typeData.advice, score: currentMatchScore });
-
-                if (currentMatchScore > maxMatchScore) {
-                    maxMatchScore = currentMatchScore;
-                    bestMatch = typeData;
-                }
             });
 
             // Sort potential matches by score descending
             potentialMatches.sort((a, b) => b.score - a.score);
 
-            if (bestMatch && maxMatchScore > 0) { // If at least one function matched
-                finalTypeName.textContent = `${potentialMatches[0].type}`;
-                typeAdvice.textContent = potentialMatches[0].advice;
+            const best = potentialMatches[0];
+            const secondBest = potentialMatches.length > 1 ? potentialMatches[1] : null;
 
-                // If there's a second closest type with a reasonable score
-                if (potentialMatches.length > 1 && potentialMatches[1].score > (maxMatchScore * 0.7)) { // e.g., second best is at least 70% of best
-                    finalTypeName.textContent += ` أو ${potentialMatches[1].type}`;
-                    typeAdvice.textContent += `\n\nأو قد تكون قريباً من نمط ${potentialMatches[1].type}: ${potentialMatches[1].advice.split(': ')[1] || potentialMatches[1].advice}`;
+            if (best && best.score > 0) {
+                // Threshold for considering a single best type vs. two close types
+                // If secondBest's score is less than X% of the best's score, consider 'best' as the single primary.
+                const singleBestThresholdRatio = 0.75; // If second best is less than 75% of best score, it's not "close enough"
+
+                if (!secondBest || secondBest.score < (best.score * singleBestThresholdRatio)) {
+                    // Display only the best type
+                    finalTypeName.textContent = best.type;
+                    typeAdvice.textContent = best.advice;
+                } else {
+                    // Two types are close. Check if they differ only by I/E.
+                    const bestLetters = getMbtiLetters(best.type);
+                    const secondLetters = getMbtiLetters(secondBest.type);
+
+                    if (bestLetters && secondLetters &&
+                        bestLetters.P2 === secondLetters.P2 && // N/S is same
+                        bestLetters.P3 === secondLetters.P3 && // T/F is same
+                        bestLetters.P4 === secondLetters.P4 && // J/P is same
+                        bestLetters.P1 !== secondLetters.P1) { // Only I/E is different
+                        
+                        // They differ only by I/E (e.g., INTJ and ENTJ -> xNTJ)
+                        const commonTypePart = `${bestLetters.P2}${bestLetters.P3}${bestLetters.P4}`;
+                        finalTypeName.textContent = `نمط x${commonTypePart} المحتمل (قد تكون ${best.type} أو ${secondBest.type})`;
+                        typeAdvice.textContent = `بناءً على نتائجك، قد تكون إما ${best.type} أو ${secondBest.type}. كلا النمطين يشتركان في نفس الوظائف الإدراكية الرئيسية ولكن يختلفان في تفضيل الانطواء/الانبساط. \n\n${best.advice} \n\nوقد تكون قريباً أيضاً من نمط ${secondBest.type}: ${secondBest.advice.split(': ')[1] || secondBest.advice}`;
+                    } else {
+                        // Two close types, but not just I/E difference, or more complex scenario
+                        finalTypeName.textContent = `${best.type} أو ${secondBest.type}`;
+                        typeAdvice.textContent = `${best.advice} \n\nوقد تكون قريباً أيضاً من نمط ${secondBest.type}: ${secondBest.advice.split(': ')[1] || secondBest.advice}`;
+                    }
                 }
             } else {
                 finalTypeName.textContent = "غير محدد بدقة";
