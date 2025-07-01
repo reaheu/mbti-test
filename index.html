@@ -204,7 +204,7 @@
     <p>كلما أجبْت بصدق، كانت النتائج أدق. إذا لم ينطبق عليك السؤال، اختر "لا".</p>
     <p>في حال وجود أي استفسار أو ملاحظة، راسلونا على TikTok:</p>
     <p><a href="https://www.tiktok.com/@reatwiy?_t=ZS-8xeuozu76z2&_r=1" target="_blank">@reatwiy</a></p>
-    <button onclick="startTest()">ابدأ الاختبار</button>
+    <button id="startButton">ابدأ الاختبار</button>
   </div>
 
   <div class="box quiz" style="display:none">
@@ -215,7 +215,7 @@
     <button onclick="answer('B')">لا</button>
     <br />
     <button onclick="goBack()">رجوع</button>
-    <button id="restartTestButton" style="display:none; margin-top: 20px;" onclick="startTest()">أعد الاختبار</button>
+    <button id="restartTestButton" style="display:none; margin-top: 20px;">أعد الاختبار</button>
   </div>
 
   <div class="box result-box-container" style="display: none;">
@@ -251,8 +251,8 @@
   const resultBox = document.getElementById("result-box");
   const warningBox = document.getElementById("warning-box");
   const finalFooter = document.getElementById("final-footer");
-  const quizButtons = document.querySelectorAll(".quiz button");
   const restartTestButton = document.getElementById("restartTestButton");
+  const startButton = document.getElementById("startButton"); // تم إضافة هذا المتغير
 
   // تعريف الأسئلة الأصلية مع تحديد الزوج الوظيفي لكل سؤال
   // كل زوج وظيفي الآن يحتوي على 20 سؤالاً، ليصبح المجموع الكلي 80 سؤالاً.
@@ -319,7 +319,7 @@
     { text: "هل تجيك أفكار كثيرة وجديدة بسرعة وبشكل مستمر عندما تتفاعل مع العالم؟", pair: ["Ne", "Ni"] },
     { text: "هل تستمتع باستكشاف الاحتمالات المتعددة لكل موقف أو فكرة، وتتخيل السيناريوهات؟", pair: ["Ne", "Ni"] },
     { text: "هل تمل بسرعة من الروتين وتفضل البحث عن تجارب أو مفاهيم جديدة وغير مألوفة؟", pair: ["Ne", "Ni"] },
-    { text: "هل تحب ربط الأشياء ببعضها بطرق مبتكرة وغير تقليدية، أو "خارج الصندوق"؟", pair: ["Ne", "Ni"] },
+    { text: "هل تحب ربط الأشياء ببعضها بطرق مبتكرة وغير تقليدية، أو " , pair: ["Ne", "Ni"] },
     { text: "هل من السهل عليك أن ترى كيف يمكن لشيء واحد أن يؤدي إلى العديد من الاحتمالات الأخرى؟", pair: ["Ne", "Ni"] },
     { text: "هل تستمتع بالعصف الذهني وتوليد عدد لا نهائي من الأفكار؟", pair: ["Ne", "Ni"] },
     { text: "هل أنت شخص منفتح على التجريب وتغيير الخطط إذا ظهرت احتمالات أفضل؟", pair: ["Ne", "Ni"] },
@@ -368,6 +368,7 @@
       return array;
   }
 
+  // الوظيفة المسؤولة عن بدء الاختبار
   function startTest() {
     introBox.style.display = "none";
     quizBox.style.display = "flex";
@@ -376,7 +377,8 @@
     restartTestButton.style.display = "none";
     resultBoxContainer.style.display = "none";
 
-    quizButtons.forEach(btn => btn.disabled = false);
+    // تمكين الأزرار بعد بدء الاختبار
+    document.querySelectorAll(".quiz button").forEach(btn => btn.disabled = false);
 
     // تجهيز الأسئلة: خلطها ثم تحديد funcA و funcB بشكل عشوائي لكل سؤال
     questions = originalQuestionsPairs.map(q => {
@@ -413,6 +415,7 @@
       questionEl.style.opacity = 1;
     }, 150);
 
+    // للتأكد من مسح النتائج السابقة إذا تم إعادة الاختبار
     resultBox.textContent = "";
   }
 
@@ -441,7 +444,7 @@
     if (currentQuestion === 0) return;
 
     restartTestButton.style.display = "none";
-    quizButtons.forEach(btn => btn.disabled = false);
+    document.querySelectorAll(".quiz button").forEach(btn => btn.disabled = false); // تمكين الأزرار عند الرجوع
     resultBoxContainer.style.display = "none";
 
     const oldChoice = answers[currentQuestion - 1];
@@ -484,7 +487,6 @@
         fourthLetter = eJudging >= ePerceiving ? "J" : "P";
     } else { // للشخصيات الانطوائية (I)
         // الوظيفة الداخلية هي المهيمنة. إذا كانت حكمية (Ti/Fi) فالنمط P، وإذا كانت إدراكية (Ni/Si) فالنمط J.
-        // هذا قد يبدو معكوساً ولكنه صحيح لأن الحكمية لديهم داخلية والإدراكية خارجية.
         const iJudging = (funcScores.Ti || 0) + (funcScores.Fi || 0);
         const iPerceiving = (funcScores.Ni || 0) + (funcScores.Si || 0);
         fourthLetter = iJudging >= iPerceiving ? "P" : "J";
@@ -690,7 +692,7 @@
 
 
   function showResult() {
-    quizButtons.forEach(btn => btn.disabled = true);
+    document.querySelectorAll(".quiz button").forEach(btn => btn.disabled = true);
     quizBox.style.display = "none";
     resultBoxContainer.style.display = "flex";
 
@@ -771,6 +773,19 @@
     finalFooter.style.display = "block";
     restartTestButton.style.display = "block";
   }
+
+  // إضافة معالج حدث لزر "ابدأ الاختبار" و "أعد الاختبار"
+  // هذا يضمن أن يتم العثور على الأزرار بعد تحميل الصفحة.
+  document.addEventListener('DOMContentLoaded', () => {
+      const startButton = document.getElementById("startButton");
+      if (startButton) {
+          startButton.addEventListener('click', startTest);
+      }
+      if (restartTestButton) {
+          restartTestButton.addEventListener('click', startTest);
+      }
+  });
+
 </script>
 </body>
 </html>
