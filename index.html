@@ -88,7 +88,6 @@
         margin-top: 20px; /* مسافة عن السؤال */
     }
     button {
-      /*margin: 10px 15px;*/ /* تم إزالة هذا الهامش لصالح الـ gap في button-group */
       padding: 15px 30px; /* حجم أكبر للأزرار */
       font-size: 18px; /* خط أكبر للأزرار */
       border: none;
@@ -165,7 +164,7 @@
         font-size: 24px; /* حجم أكبر للعنوان داخل التنبيه */
         margin-top: 0;
         margin-bottom: 15px;
-        color: #e74c3c; /* لون أحمر للعناوين داخل التنبيه */
+        color: var(--accent-color); /* لون أحمر للعناوين داخل التنبيه */
     }
     .result-box-container {
       margin-top: 0; /* تم إزالة الهامش العلوي لأنه الآن يأتي بعد صندوق التنبيه */
@@ -299,13 +298,16 @@
         background-color: #7f8c8d;
     }
 
-    /* زر إعادة الاختبار في صفحة النتائج - تصغير حجمه */
+    /* زر إعادة الاختبار في صفحة النتائج - تصغير حجمه وموقعه */
     #restartTestButton {
         background-color: #2ecc71; /* أخضر */
         margin-top: 30px; /* مسافة عن باقي المحتوى */
         padding: 12px 25px; /* تصغير البادينغ */
         font-size: 17px; /* تصغير الخط */
         min-width: unset; /* إزالة العرض الأدنى */
+        display: block; /* لضمان أنه يأخذ سطرًا كاملاً */
+        margin-left: auto;
+        margin-right: auto;
     }
     #restartTestButton:hover {
         background-color: #27ae60;
@@ -340,6 +342,39 @@
         color: var(--primary-color);
     }
 
+    /* تنسيقات الأيقونة الخاصة بـ "أنا وعيسى" */
+    .isa-icon-container {
+        margin-top: 30px; /* مسافة من المحتوى العلوي */
+        margin-bottom: 20px; /* مسافة قبل زر البدء */
+        display: flex;
+        flex-direction: column; /* الأيقونة والنص تحت بعضهما */
+        align-items: center; /* توسيط المحتوى */
+        gap: 10px; /* مسافة بين الأيقونة والنص */
+    }
+
+    .isa-icon {
+        width: 100px; /* حجم الأيقونة */
+        height: 100px;
+        border-radius: 50%; /* لجعلها دائرية إذا كانت الصورة مربعة */
+        object-fit: cover; /* لضمان ملء الصورة للحيز دون تشويه */
+        border: 3px solid var(--primary-color); /* إطار حول الأيقونة */
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* ظل خفيف */
+        transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+        cursor: pointer; /* لإظهار أنها قابلة للنقر */
+    }
+
+    .isa-icon:hover {
+        transform: scale(1.05); /* تكبير طفيف عند التمرير */
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15); /* ظل أكبر */
+    }
+
+    .isa-icon-label {
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--secondary-color);
+        text-decoration: none;
+    }
+
   </style>
 </head>
 <body>
@@ -351,6 +386,12 @@
       <p>لتحصل على أدق النتائج، نرجو منك الإجابة بصدق وعفوية على جميع الأسئلة. إذا وجدت سؤالاً لا ينطبق عليك تماماً، اختر "لا".</p>
       <p class="tiktok-link">لمزيد من المحتوى التعليمي والترفيهي حول الأنماط، تابعونا على TikTok:</p>
       <p><a href="https://www.tiktok.com/@reatwiy?_t=ZS-8xeuozu76z2&_r=1" target="_blank">@reatwiy</a></p>
+
+      <div class="isa-icon-container">
+        <img src="isa_and_me_icon.png" alt="اختباري أنا وعيسى" class="isa-icon" id="isaIcon">
+        <p class="isa-icon-label">اختباري أنا وعيسى</p>
+      </div>
+
       <button id="startButton">ابدأ الاختبار</button>
     </div>
 
@@ -400,15 +441,15 @@
   const finalFooter = document.getElementById("final-footer");
   const restartTestButton = document.getElementById("restartTestButton");
   const startButton = document.getElementById("startButton");
-  const goBackButton = document.getElementById("goBackButton"); // زر الرجوع
+  const goBackButton = document.getElementById("goBackButton");
+  const isaIcon = document.getElementById('isaIcon');
 
-  // تأكد من وجود هذه العناصر قبل محاولة الوصول إليها
-  if (!introBox || !quizBox || !startButton) {
+  if (!introBox || !quizBox || !startButton || !isaIcon) {
       console.error("خطأ: لم يتم العثور على أحد العناصر الأساسية في DOM. تأكد من أن الـ HTML صحيح.");
   }
 
-
-  const originalQuestionsPairs = [
+  // الأسئلة الأصلية (40 سؤالاً فريداً)
+  const baseQuestionsPairs = [
     // Fi vs Fe (الشعور الداخلي مقابل الشعور الخارجي)
     { text: "هل تفضل اتخاذ القرارات بناءً على قناعاتك الشخصية العميقة، حتى لو كانت تتعارض مع آراء الآخرين؟", pair: ["Fi", "Fe"] },
     { text: "هل من المهم بالنسبة لك أن تكون صادقاً مع نفسك وقيمك الداخلية، حتى لو كان ذلك يعني عدم إرضاء الجميع؟", pair: ["Fi", "Fe"] },
@@ -477,18 +518,19 @@
 
   // الوظيفة المسؤولة عن بدء الاختبار
   function startTest() {
-    console.log("دالة startTest() بدأت."); // رسالة تصحيح
     introBox.style.display = "none";
-    quizBox.style.display = "flex"; // Changed from "block" to "flex" to align button-group correctly
+    quizBox.style.display = "flex";
     warningBox.style.display = "none";
     finalFooter.style.display = "none";
-    resultBoxContainer.style.display = "none"; // إخفاء صندوق النتائج عند البدء من جديد
+    resultBoxContainer.style.display = "none";
 
-    // تمكين الأزرار بعد بدء الاختبار
     document.querySelectorAll(".quiz button").forEach(btn => btn.disabled = false);
 
+    // مضاعفة الأسئلة لـ 80 سؤالاً
+    const doubledQuestions = [...baseQuestionsPairs, ...baseQuestionsPairs];
+
     // تجهيز الأسئلة: خلطها ثم تحديد funcA و funcB بشكل عشوائي لكل سؤال
-    questions = originalQuestionsPairs.map(q => {
+    questions = doubledQuestions.map(q => {
         const [func1, func2] = q.pair;
         // عشوائياً، اجعل func1 ترتبط بـ "نعم" و func2 بـ "لا"، أو العكس
         if (Math.random() < 0.5) {
@@ -505,8 +547,7 @@
     answers = [];
     resetScores();
     showQuestion();
-    goBackButton.style.display = (currentQuestion === 0) ? 'none' : 'block'; // إخفاء زر الرجوع في بداية الاختبار
-    console.log("انتهت دالة startTest()."); // رسالة تصحيح
+    goBackButton.style.display = (currentQuestion === 0) ? 'none' : 'block';
   }
 
   function resetScores() {
@@ -516,7 +557,6 @@
   }
 
   function showQuestion() {
-    console.log("عرض السؤال رقم:", currentQuestion + 1); // رسالة تصحيح
     questionEl.style.opacity = 0;
     setTimeout(() => {
       const q = questions[currentQuestion];
@@ -525,13 +565,10 @@
       questionEl.style.opacity = 1;
     }, 150);
 
-    // إظهار أو إخفاء زر الرجوع
     goBackButton.style.display = (currentQuestion === 0) ? 'none' : 'block';
   }
 
   function answer(choice) {
-    console.log("تمت الإجابة:", choice, "على السؤال رقم:", currentQuestion + 1); // رسالة تصحيح
-
     if (answers[currentQuestion]) {
       const oldChoice = answers[currentQuestion];
       const oldFunc = oldChoice === "A" ? questions[currentQuestion].funcA : questions[currentQuestion].funcB;
@@ -553,23 +590,19 @@
   }
 
   function goBack() {
-    console.log("تم الضغط على زر الرجوع."); // رسالة تصحيح
     if (currentQuestion === 0) return;
 
-    // لكي لا يظهر زر إعادة الاختبار في منتصف الاختبار
     restartTestButton.style.display = "none";
-    // لإخفاء صندوق النتائج عند الرجوع من صفحة النتائج
     resultBoxContainer.style.display = "none";
-    warningBox.style.display = "none"; // إخفاء صندوق التنبيه عند الرجوع
+    warningBox.style.display = "none";
 
-    // تفعيل الأزرار مرة أخرى إذا كانت معطلة
     document.querySelectorAll(".quiz button").forEach(btn => btn.disabled = false);
 
     const oldChoice = answers[currentQuestion - 1];
     if (oldChoice) {
       const oldFunc = oldChoice === "A" ? questions[currentQuestion - 1].funcA : questions[currentQuestion - 1].funcB;
       funcScores[oldFunc]--;
-      answers[currentQuestion - 1] = null; // إزالة الإجابة السابقة
+      answers[currentQuestion - 1] = null;
     }
 
     currentQuestion--;
@@ -577,7 +610,6 @@
   }
 
   function getMBTIPattern() {
-    // تحديد الحرف الأول (E/I) بناءً على درجات الوظائف الانفتاحية مقابل الانطوائية
     const E_funcs = ["Fe", "Se", "Ne", "Te"];
     const I_funcs = ["Fi", "Si", "Ni", "Ti"];
 
@@ -586,25 +618,20 @@
 
     const firstLetter = E_points >= I_points ? "E" : "I";
 
-    // تحديد الحرف الثاني (S/N)
     const S_points = (funcScores.Si || 0) + (funcScores.Se || 0);
     const N_points = (funcScores.Ni || 0) + (funcScores.Ne || 0);
     const secondLetter = N_points >= S_points ? "N" : "S";
 
-    // تحديد الحرف الثالث (T/F)
     const T_points = (funcScores.Te || 0) + (funcScores.Ti || 0);
     const F_points = (funcScores.Fe || 0) + (funcScores.Fi || 0);
     const thirdLetter = T_points >= F_points ? "T" : "F";
 
-    // تحديد الحرف الرابع (J/P) بناءً على الوظيفة المهيمنة (الخارجية للجريئين، الداخلية للانطوائيين)
     let fourthLetter;
-    if (firstLetter === "E") { // للشخصيات الانفتاحية (E)
-        // الوظيفة الخارجية هي المهيمنة. إذا كانت حكمية (Te/Fe) فالنمط J، وإذا كانت إدراكية (Ne/Se) فالنمط P.
+    if (firstLetter === "E") {
         const eJudging = (funcScores.Te || 0) + (funcScores.Fe || 0);
         const ePerceiving = (funcScores.Ne || 0) + (funcScores.Se || 0);
         fourthLetter = eJudging >= ePerceiving ? "J" : "P";
-    } else { // للشخصيات الانطوائية (I)
-        // الوظيفة الداخلية هي المهيمنة. إذا كانت حكمية (Ti/Fi) فالنمط P، وإذا كانت إدراكية (Ni/Si) فالنمط J.
+    } else {
         const iJudging = (funcScores.Ti || 0) + (funcScores.Fi || 0);
         const iPerceiving = (funcScores.Ni || 0) + (funcScores.Si || 0);
         fourthLetter = iJudging >= iPerceiving ? "P" : "J";
@@ -627,7 +654,6 @@
     return funcMap[mbti] || [];
   }
 
-  // قاعدة بيانات الأنماط والوظائف للمقارنة
   const patternDetails = {
     "INTJ": {
       dominant: "Ni (الحدس الانطوائي)", auxiliary: "Te (التفكير الخارجي)",
@@ -809,23 +835,20 @@
 
 
   function showResult() {
-    console.log("عرض النتائج..."); // رسالة تصحيح
-    // تعطيل أزرار الأسئلة ومنع التفاعل أثناء عرض النتائج
     document.querySelectorAll(".quiz button").forEach(btn => btn.disabled = true);
     quizBox.style.display = "none";
-    warningBox.style.display = "block"; // إظهار صندوق التنبيه أولاً
-    resultBoxContainer.style.display = "flex"; // ثم إظهار صندوق النتائج
-    finalFooter.style.display = "block"; // إظهار الفوتر
+    warningBox.style.display = "block";
+    resultBoxContainer.style.display = "flex";
+    finalFooter.style.display = "block";
 
     const mbti = getMBTIPattern();
-    const funcs = getFunctionsOrder(mbti); // الوظائف بترتيب النمط الافتراضي
+    const funcs = getFunctionsOrder(mbti);
     const details = patternDetails[mbti];
 
     let mainFuncsDisplay = "";
     let scoreComparisons = "";
 
     if (details) {
-        // عرض الوظائف الأساسية للنمط (المسيطرة والمساعدة)
         mainFuncsDisplay = `
             <div class="result-section">
                 <h3>الوظائف الإدراكية لنمط ${mbti} (الترتيب النظري):</h3>
@@ -838,7 +861,6 @@
             </div>
         `;
 
-        // بناء قسم المقارنات
         let comparisonsHtml = "";
         details.funcComparisons.forEach(comp => {
             const score1 = funcScores[comp.func1];
@@ -861,13 +883,12 @@
         }
     }
 
-    // هنا الجزء الجديد الذي سيعرض جميع درجات الوظائف بالتفصيل
     let detailedScoresDisplay = `
         <div class="result-section detailed-scores">
             <h3>درجاتك في كل وظيفة إدراكية (بشكل تفصيلي):</h3>
             <ul>
                 <li><strong>Fi:</strong> <span>${funcScores.Fi || 0} نقطة</span></li>
-                <li><strong>Fe:</b> <span>${funcScores.Fe || 0} نقطة</span></li>
+                <li><strong>Fe:</strong> <span>${funcScores.Fe || 0} نقطة</span></li>
                 <li><strong>Ti:</strong> <span>${funcScores.Ti || 0} نقطة</span></li>
                 <li><strong>Te:</strong> <span>${funcScores.Te || 0} نقطة</span></li>
                 <li><strong>Ni:</strong> <span>${funcScores.Ni || 0} نقطة</span></li>
@@ -889,33 +910,28 @@
       </div>
       ${mainFuncsDisplay}
       ${scoreComparisons}
-      ${detailedScoresDisplay} `;
+      ${detailedScoresDisplay}
+    `;
 
-    restartTestButton.style.display = "block"; // تأكد من إظهار زر إعادة الاختبار هنا
+    restartTestButton.style.display = "block";
   }
 
-  // إضافة معالج حدث لزر "ابدأ الاختبار" و "أعد الاختبار"
   document.addEventListener('DOMContentLoaded', () => {
-      console.log("DOMContentLoaded: تم تحميل DOM."); // رسالة تصحيح
-      // ربط زر البدء (موجود في introBox)
       if (startButton) {
           startButton.addEventListener('click', startTest);
-          console.log("تم ربط زر 'ابدأ الاختبار'."); // رسالة تصحيح
-      } else {
-          console.error("خطأ: زر 'ابدأ الاختبار' (id=startButton) لم يتم العثور عليه!"); // رسالة خطأ
       }
-      // ربط زر إعادة الاختبار (يظهر في result-box-container)
       if (restartTestButton) {
           restartTestButton.addEventListener('click', startTest);
-          console.log("تم ربط زر 'أعد الاختبار'."); // رسالة تصحيح
       }
-      // ربط زر الرجوع
       if (goBackButton) {
           goBackButton.addEventListener('click', goBack);
-          console.log("تم ربط زر 'رجوع'."); // رسالة تصحيح
+      }
+      if (isaIcon) {
+          isaIcon.addEventListener('click', () => {
+              alert('أهلاً بك في صفحة اختبارنا الخاصة أنا وعيسى! هذه مجرد تجربة. ما زلنا نعمل عليها!');
+          });
       }
 
-      // إخفاء زر الرجوع في البداية
       goBackButton.style.display = 'none';
   });
 
