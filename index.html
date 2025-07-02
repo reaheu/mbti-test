@@ -1,104 +1,1791 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <title>اختبار الوظائف الإدراكية - MBTI</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;700&display=swap" rel="stylesheet" />
-  <style>
-    /* هنا يندمج كل CSS اللي فصلناه من قبل */
-    /* ... */
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اختبار الوظائف الإدراكية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4CAF50; /* أخضر */
+            --secondary-color: #FFC107; /* أصفر */
+            --background-color: #f4f7f6;
+            --text-color: #333;
+            --light-grey: #eee;
+            --dark-grey: #555;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --border-radius: 8px;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 15px var(--shadow-color);
+            margin-bottom: 20px;
+            box-sizing: border-box;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        header h1 {
+            color: var(--primary-color);
+            font-size: 2.8em;
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 2px var(--shadow-color);
+        }
+
+        header p {
+            font-size: 1.2em;
+            color: var(--dark-grey);
+        }
+
+        .section-title {
+            font-size: 2em;
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        /* ----- التنويهات والتحذيرات ----- */
+        .alert {
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: var(--border-radius);
+            font-weight: bold;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .alert ul {
+            margin: 0;
+            padding-right: 20px;
+            list-style-type: disc;
+        }
+        .alert li {
+            margin-bottom: 5px;
+        }
+
+        .alert.info {
+            background-color: #e0f7fa;
+            color: #00796b;
+            border: 1px solid #00bcd4;
+        }
+
+        .alert.warning {
+            background-color: #fff3e0;
+            color: #ef6c00;
+            border: 1px solid #ff9800;
+        }
+
+        .alert.error {
+            background-color: #ffebee;
+            color: #d32f2f;
+            border: 1px solid #f44336;
+        }
+
+        .alert .icon {
+            font-size: 1.5em;
+            flex-shrink: 0;
+        }
+
+        /* ----- قسم الاختبار ----- */
+        #quiz-section {
+            display: none;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            width: 100%;
+            background-color: var(--light-grey);
+            border-radius: 5px;
+            margin-bottom: 20px;
+            height: 25px;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden; /* Ensure progress-bar does not overflow */
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background-color: var(--primary-color);
+            border-radius: 5px;
+            text-align: center;
+            line-height: 25px;
+            color: white;
+            transition: width 0.4s ease-in-out;
+            position: absolute;
+            right: 0; /* Align to the right for RTL */
+        }
+
+        .progress-text {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            color: var(--dark-grey);
+            font-weight: bold;
+            z-index: 1; /* Ensure text is above bar */
+        }
+
+        .question-card {
+            background-color: var(--light-grey);
+            border-radius: var(--border-radius);
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px var(--shadow-color);
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .question-card p {
+            font-size: 1.3em;
+            margin-bottom: 20px;
+            color: var(--dark-grey);
+            font-weight: bold;
+        }
+
+        .options label {
+            display: block;
+            background-color: #fff;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid var(--light-grey);
+            display: flex;
+            align-items: center;
+        }
+
+        .options label:hover {
+            background-color: #e8f5e9;
+            border-color: var(--primary-color);
+            transform: translateX(5px);
+        }
+
+        .options input[type="checkbox"] {
+            margin-left: 10px;
+            transform: scale(1.2);
+            accent-color: var(--primary-color);
+        }
+        
+        .options input[type="checkbox"]:checked + span {
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            flex-direction: row-reverse;
+        }
+
+        .btn {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            background-color: #43a047;
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        .btn.secondary {
+            background-color: var(--secondary-color);
+        }
+
+        .btn.secondary:hover {
+            background-color: #ffb300;
+        }
+
+        /* ----- قسم النتائج ----- */
+        #results-section {
+            display: none;
+            text-align: center;
+        }
+
+        #results-section h2 {
+            margin-bottom: 20px;
+        }
+
+        .result-item {
+            background-color: var(--light-grey);
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: var(--border-radius);
+            text-align: right;
+            font-size: 1.1em;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .result-item strong {
+            color: var(--primary-color);
+            font-size: 1.2em;
+        }
+
+        .function-advice-card {
+            background-color: #e8f5e9;
+            border-right: 5px solid var(--primary-color);
+            padding: 15px;
+            margin-top: 15px;
+            border-radius: var(--border-radius);
+            text-align: right;
+            margin-bottom: 20px;
+        }
+
+        .function-advice-card h3 {
+            color: var(--primary-color);
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+        .function-advice-card h4 {
+            color: var(--dark-grey);
+            margin-top: 5px;
+            margin-bottom: 5px;
+            font-size: 1.1em;
+        }
+
+        .function-advice-card ul {
+            margin-top: 10px;
+            padding-right: 20px;
+            list-style-type: disc;
+        }
+
+        /* Style for the type result */
+        #type-result {
+            background-color: #ffe0b2;
+            border-right: 5px solid #ff9800;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: var(--border-radius);
+            text-align: right;
+        }
+        #type-result h3 {
+            color: #ef6c00;
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 1.5em;
+        }
+        #type-result p {
+            font-size: 1.1em;
+        }
+
+
+        /* ----- قسم الجدول (الوظائف الإدراكية) ----- */
+        #functions-table-section {
+            margin-top: 50px;
+        }
+
+        .styled-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            font-size: 0.9em;
+            min-width: 400px;
+            box-shadow: 0 0 20px var(--shadow-color);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+        }
+
+        .styled-table thead tr {
+            background-color: var(--primary-color);
+            color: #ffffff;
+            text-align: right;
+        }
+
+        .styled-table th,
+        .styled-table td {
+            padding: 12px 15px;
+            border: 1px solid #dddddd;
+            text-align: right;
+            vertical-align: top;
+        }
+
+        .styled-table tbody tr {
+            border-bottom: 1px solid #dddddd;
+        }
+
+        .styled-table tbody tr:nth-of-type(even) {
+            background-color: #f3f3f3;
+        }
+
+        .styled-table tbody tr:last-of-type {
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        .styled-table tbody tr.active-row {
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        /* زر إعادة الاختبار / مشاركة / طباعة */
+        .results-actions {
+            display: flex;
+            flex-wrap: wrap; /* Allow buttons to wrap on smaller screens */
+            justify-content: center;
+            gap: 15px; /* Space between buttons */
+            margin-top: 30px;
+            margin-bottom: 40px;
+        }
+
+        .results-actions .btn {
+            min-width: 150px; /* Ensure buttons have a minimum width */
+            text-align: center;
+        }
+
+        .btn.print-btn { background-color: #2196F3; } /* Blue */
+        .btn.print-btn:hover { background-color: #1976D2; }
+
+        .btn.download-btn { background-color: #607D8B; } /* Grey-blue */
+        .btn.download-btn:hover { background-color: #455A64; }
+
+        .btn.share-btn { background-color: #795548; } /* Brown - generic share */
+        .btn.share-btn:hover { background-color: #5D4037; }
+
+        /* Specific social media colors */
+        .btn.whatsapp-share { background-color: #25D366; }
+        .btn.whatsapp-share:hover { background-color: #1DA851; }
+
+        .btn.twitter-share { background-color: #1DA1F2; }
+        .btn.twitter-share:hover { background-color: #0C85D0; }
+
+        .btn.facebook-share { background-color: #1877F2; }
+        .btn.facebook-share:hover { background-color: #166EE0; }
+
+        /* Footer */
+        footer {
+            width: 100%;
+            max-width: 900px;
+            text-align: center;
+            padding: 20px;
+            margin-top: auto;
+            border-top: 1px solid var(--light-grey);
+            color: var(--dark-grey);
+            font-size: 0.9em;
+        }
+
+        footer p {
+            margin: 5px 0;
+        }
+
+        footer .disclaimer {
+            font-size: 0.8em;
+            color: #777;
+        }
+
+        footer .social-media {
+            margin-top: 15px;
+        }
+
+        footer .social-media a {
+            color: var(--primary-color);
+            text-decoration: none;
+            margin: 0 10px;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        footer .social-media a:hover {
+            color: #43a047;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            header h1 {
+                font-size: 2em;
+            }
+            .section-title {
+                font-size: 1.5em;
+            }
+            .question-card p {
+                font-size: 1.1em;
+            }
+            .options label {
+                padding: 12px;
+            }
+            .btn {
+                padding: 10px 20px;
+                font-size: 1em;
+            }
+            .navigation-buttons {
+                flex-direction: column-reverse;
+                gap: 15px;
+            }
+            .navigation-buttons #next-btn { order: 1; }
+            .navigation-buttons #prev-btn { order: 2; }
+            .results-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <h1>اختبار الوظائف الإدراكية</h1>
-      <p>اكتشف نمط شخصيتك ووظائفك الإدراكية المهيمنة بدقة.</p>
-    </header>
+    <div class="container">
+        <header>
+            <h1>اختبار الوظائف الإدراكية</h1>
+            <p>اكتشف نمط شخصيتك ووظائفك الإدراكية المهيمنة بدقة.</p>
+        </header>
 
-    <!-- تنبيهات البداية -->
-    <div id="pre-quiz-info" class="alert info"> ... </div>
+        <div id="pre-quiz-info" class="alert info">
+            <span class="icon">💡</span>
+            <div>
+                <p><strong>مرحبًا بك في اختبار الوظائف الإدراكية!</strong></p>
+                <p>يهدف هذا الاختبار إلى مساعدتك في فهم الوظائف الإدراكية التي تستخدمها بشكل طبيعي.</p>
+                <p><strong>تنبيه هام:</strong></p>
+                <ul>
+                    <li><strong>الإجابات الصادقة:</strong> أجب على الأسئلة بصدق تام، واختر الإجابة التي تعبر عنك أكثر في معظم المواقف، وليس ما تتمنى أن تكون عليه.</li>
+                    <li><strong>خيارات متعددة:</strong> يمكنك اختيار <strong>إجابة واحدة أو إجابتين كحد أقصى</strong> لكل سؤال إذا كنت تشعر أن كلاهما يعبر عنك.</li>
+                    <li><strong>لا يوجد إجابات صحيحة أو خاطئة:</strong> جميع الإجابات مقبولة، والهدف هو فهمك لذاتك.</li>
+                    <li><strong>كل إجابة تفرق:</strong> تذكر أن كل إجابة تفرق وتؤثر بشكل مباشر على النتائج النهائية ودقة تحديد وظائفك الإدراكية ونمط شخصيتك.</li>
+                    <li><strong>مدة الاختبار:</strong> قد يستغرق الاختبار بعض الوقت، لذا تأكد أن لديك متسعًا من الوقت والتركيز.</li>
+                </ul>
+            </div>
+        </div>
 
-    <!-- أزرار البداية -->
-    <button id="start-quiz-btn" class="btn">ابدأ الاختبار</button>
-    <button id="resume-quiz-btn" class="btn secondary" style="display: none;">استئناف الاختبار</button>
-    <button id="view-last-results-btn" class="btn secondary" style="display: none;">عرض آخر النتائج</button>
+        <button id="start-quiz-btn" class="btn" style="display: block; margin: 0 auto 30px;">ابدأ الاختبار</button>
+        <button id="resume-quiz-btn" class="btn secondary" style="display: none; margin: 0 auto 30px;">استئناف الاختبار</button>
+        <button id="view-last-results-btn" class="btn secondary" style="display: none; margin: 0 auto 30px;">عرض آخر النتائج</button>
 
-    <!-- قسم الاختبار -->
-    <div id="quiz-section" style="display:none">
-      <h2 class="section-title">ابدأ اختبارك الآن</h2>
-      <div class="progress-container">
-        <div class="progress-bar" id="progress-bar"></div>
-        <div class="progress-text" id="progress-text">السؤال 1 من XX</div>
-      </div>
-      <div id="questions-container"></div>
-      <div class="navigation-buttons">
-        <button id="next-btn" class="btn">التالي</button>
-        <button id="prev-btn" class="btn" disabled>السابق</button>
-      </div>
+
+        <div id="quiz-section">
+            <h2 class="section-title">ابدأ اختبارك الآن</h2>
+            <div class="progress-container">
+                <div class="progress-bar" id="progress-bar"></div>
+                <div class="progress-text" id="progress-text">السؤال 1 من XX</div>
+            </div>
+            <div id="questions-container">
+                </div>
+            <div class="navigation-buttons">
+                <button id="next-btn" class="btn">التالي</button>
+                <button id="prev-btn" class="btn" disabled>السابق</button>
+            </div>
+        </div>
+
+        <div id="results-section">
+            <h2 class="section-title">نتائجك</h2>
+            <div class="alert info">
+                <span class="icon">✨</span>
+                <p>هذه هي وظائفك الإدراكية المهيمنة ونمط شخصيتك. تذكر أن هذه النتائج هي نقطة بداية للفهم، وقد تحتاج لمزيد من الاستكشاف.</p>
+            </div>
+
+            <div id="type-result">
+                <h3>نمط شخصيتك المحتمل: <span id="final-type-name"></span></h3>
+                <p id="type-advice"></p>
+            </div>
+
+            <div id="dominant-functions-results">
+                <h3>الوظائف الإدراكية المهيمنة:</h3>
+                </div>
+            
+            <div id="all-functions-ranked">
+                <h3>ترتيب جميع الوظائف الإدراكية:</h3>
+                <table class="styled-table">
+                    <thead>
+                        <tr>
+                            <th>الوظيفة الإدراكية</th>
+                            <th>النقاط</th>
+                            <th>المميزات</th>
+                            <th>التحديات</th>
+                            <th>نصيحة</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ranked-functions-body">
+                        </tbody>
+                </table>
+            </div>
+            
+            <div class="results-actions">
+                <button id="restart-quiz-btn" class="btn error">بدء اختبار جديد</button>
+                <button id="print-results-btn" class="btn print-btn">طباعة النتائج</button>
+                <button id="download-results-btn" class="btn download-btn">تحميل النتائج</button>
+                <button id="share-whatsapp-btn" class="btn whatsapp-share">مشاركة واتساب</button>
+                <button id="share-twitter-btn" class="btn twitter-share">مشاركة تويتر</button>
+                <button id="share-facebook-btn" class="btn facebook-share">مشاركة فيسبوك</button>
+            </div>
+        </div>
+
+        <div id="functions-table-section">
+            <h2 class="section-title">دليل الوظائف الإدراكية</h2>
+            <div class="alert info">
+                <span class="icon">📚</span>
+                <p>هذا الجدول يوضح خصائص كل وظيفة إدراكية لمساعدتك على فهم نتائجك بشكل أفضل. يمكنك الرجوع إليه في أي وقت.</p>
+            </div>
+            <table class="styled-table">
+                <thead>
+                    <tr>
+                        <th>الوظيفة</th>
+                        <th>النمط</th>
+                        <th>الخصائص الرئيسية</th>
+                        <th>المميزات</th>
+                        <th>التحديات</th>
+                        <th>نصائح عامة</th>
+                    </tr>
+                </thead>
+                <tbody id="cognitive-functions-body">
+                    </tbody>
+            </table>
+        </div>
     </div>
 
-    <!-- النتائج -->
-    <div id="results-section" style="display:none">
-      <h2 class="section-title">نتائجك</h2>
-      <div class="alert info">...</div>
-      <div id="type-result">...</div>
-      <div id="dominant-functions-results"></div>
-      <div id="all-functions-ranked">
-        <h3>ترتيب جميع الوظائف الإدراكية:</h3>
-        <canvas id="functionsChart" style="width: 100%; max-width: 700px; margin: auto;"></canvas>
-      </div>
-      <div class="results-actions">
-        <button id="restart-quiz-btn" class="btn error">بدء اختبار جديد</button>
-        <button id="print-results-btn" class="btn print-btn">طباعة</button>
-        <button id="download-results-btn" class="btn download-btn">تحميل</button>
-        <button id="share-whatsapp-btn" class="btn whatsapp-share">واتساب</button>
-        <button id="share-twitter-btn" class="btn twitter-share">تويتر</button>
-        <button id="share-facebook-btn" class="btn facebook-share">فيسبوك</button>
-      </div>
-    </div>
-  </div>
+    <footer>
+        <p>&copy; 2025 اختبار الوظائف الإدراكية. جميع الحقوق محفوظة.</p>
+        <p class="disclaimer">
+            ملاحظة: هذا الاختبار مبني على مفاهيم الأنماط الشخصية والوظائف الإدراكية (مثل MBTI) ويهدف لأغراض ترفيهية وتوعوية فقط.
+            النتائج هي تقديرية ولا يجب أن تحل محل الاستشارة المتخصصة.
+        </p>
+        <div class="social-media">
+            <p><strong>تابعنا:</strong></p>
+            <a href="https://www.tiktok.com/@reatwiy?_t=ZS-8xfyr92oGP9&_r=1" target="_blank">حساب تيك توك</a>
+            </div>
+    </footer>
 
-  <footer>
-    <p>&copy; 2025 اختبار الوظائف الإدراكية. جميع الحقوق محفوظة.</p>
-    <p class="disclaimer">النتائج توعوية وليست تشخيصية.</p>
-  </footer>
+    <script>
+        // --- بيانات الأسئلة والوظائف الإدراكية ---
+        const originalQuestions = [
+            {
+                question: "كيف تتعامل مع المعلومات الجديدة أو النظرية؟",
+                options: [
+                    { text: "أبحث عن الروابط الخفية والأنماط لفهم المعنى الأعمق وما قد يعنيه للمستقبل.", impact: { Ni: 2, Ne: 1 } },
+                    { text: "أفكر في كيفية تطبيقها عملياً وما هي نتائجها الملموسة والمنظمة.", impact: { Te: 2, Se: 1 } },
+                    { text: "أقوم بتفكيكها منطقياً لمعرفة مدى صحتها واتساقها مع فهمي الخاص.", impact: { Ti: 2, Te: 1 } },
+                    { text: "أرى كيف تتناسب مع تجاربي السابقة أو الحقائق الموثقة، وأقارنها بما هو مألوف.", impact: { Si: 2, Ne: -1 } },
+                    { text: "أستكشف جميع الاحتمالات والروابط المحتملة التي قد تنشأ عنها هذه المعلومات، وأفكر في كل السيناريوهات الممكنة.", impact: { Ne: 2, Ni: 1 } },
+                    { text: "أفكر في مدى توافقها مع قيمي الشخصية وما إذا كانت تحدث صدى داخلياً لدي.", impact: { Fi: 1, Ni: 1 } },
+                    { text: "أركز على مدى سهولة دمجها في بيئتي الحالية وكيف يمكنني تجربتها عملياً.", impact: { Se: 1, Si: -1 } }
+                ]
+            },
+            {
+                question: "عند اتخاذ قرار شخصي مهم، ما هو أهم شيء بالنسبة لي؟",
+                options: [
+                    { text: "مدى توافق القرار مع قيمي ومبادئي الداخلية الصادقة، وأصالة شعوري تجاهه.", impact: { Fi: 2, Fe: -1 } },
+                    { text: "تحليل الحقائق والمزايا والعيوب بشكل منطقي وموضوعي، وإيجاد الحل الأكثر كفاءة.", impact: { Te: 2, Ti: 1 } },
+                    { text: "التأثير على الآخرين وكيف سيؤثر القرار على الانسجام في العلاقات والجو العام.", impact: { Fe: 2, Fi: -1 } },
+                    { text: "النتائج العملية والفعالية التي سيحققها القرار في العالم المادي.", impact: { Se: 1, Te: 1 } },
+                    { text: "إحساسي الحدسي تجاه الخيار الصحيح للمستقبل ورؤيتي لتداعياته طويلة الأمد.", impact: { Ni: 2, Fi: 1 } },
+                    { text: "المنطق الداخلي والاتساق في القرار، ومدى معقوليته بالنسبة لي شخصياً.", impact: { Ti: 2, Te: 1 } }
+                ]
+            },
+            {
+                question: "كيف أتعامل مع التغييرات المفاجئة في الخطط؟",
+                options: [
+                    { text: "أتكيف بسرعة وأجد طرقاً جديدة للاستمتاع بالموقف الحالي والمغامرة فيه.", impact: { Se: 2, Ne: 1, Si: -1 } },
+                    { text: "أشعر بعدم الارتياح وأفضل الالتزام بالخطة الأصلية التي وضعتها، أو إيجاد طريقة لإعادتها للمسار المعتاد.", impact: { Si: 2, Se: -1 } },
+                    { text: "أرى فيها فرصة لاكتشاف مسارات جديدة أو بدائل مبتكرة، وأستمتع باستكشاف الاحتمالات غير المتوقعة.", impact: { Ne: 2, Ni: 1 } },
+                    { text: "أقوم بإعادة تنظيم الأمور منطقياً لأقلل من الفوضى والاضطراب، وأبحث عن الحل الأكثر فعالية.", impact: { Te: 2, Ti: 1 } },
+                    { text: "أفكر في كيفية تأثير ذلك على مشاعري ومشاعر الآخرين المعنيين، وأحاول الحفاظ على الهدوء والانسجام.", impact: { Fe: 2, Fi: 1 } },
+                    { text: "أبحث عن المعنى الأعمق وراء التغيير وكيف يمكن أن يكون جزءاً من خطة أكبر غير مرئية.", impact: { Ni: 1 } }
+                ]
+            },
+            {
+                question: "ما الذي يحفزني أكثر لإنجاز المهام؟",
+                options: [
+                    { text: "الرغبة في تحقيق نتائج ملموسة وفعالة بأقصى كفاءة وإنتاجية.", impact: { Te: 2, Ti: 1 } },
+                    { text: "الشغف الشخصي بالمهمة وما إذا كانت تتوافق مع اهتماماتي وقيمي الداخلية العميقة.", impact: { Fi: 2, Fe: -1 } },
+                    { text: "فهمي المنطقي لكيفية عمل الأشياء والتحدي الفكري في حل المشكلة بطريقة متماسكة.", impact: { Ti: 2, Te: 1 } },
+                    { text: "إمكانية استكشاف طرق جديدة ومبتكرة أو فرص للتوسع والتعلم.", impact: { Ne: 2, Ni: 1 } },
+                    { text: "المساهمة في تحقيق الانسجام أو مساعدة الآخرين في المجموعة، والحفاظ على جو إيجابي.", impact: { Fe: 2, Fi: 1 } },
+                    { text: "الحفاظ على معايير الجودة والدقة العالية، والالتزام بالخطوات المجربة والموثوقة.", impact: { Si: 1, Te: 1 } }
+                ]
+            },
+            {
+                question: "عندما أواجه مشكلة، ما هو نهجي المفضل لحلها؟",
+                options: [
+                    { text: "أبحث عن حلول مبتكرة وغير تقليدية، حتى لو كانت غير مجربة، وأستكشف كل الاحتمالات.", impact: { Ne: 2, Ni: 1 } },
+                    { text: "أقوم بتحليل المشكلة منطقياً لتحديد السبب الجذري والخطوات الفعالة، وأبحث عن الاتساق الداخلي.", impact: { Ti: 2, Te: 1 } },
+                    { text: "أعتمد على الخبرات السابقة والحلول التي أثبتت نجاحها في الماضي، وأفضل الطرق المجربة.", impact: { Si: 2, Te: 1 } },
+                    { text: "أفكر في التأثير على الآخرين وأسعى لحل يرضي الجميع ويحافظ على الانسجام الاجتماعي.", impact: { Fe: 2, Fi: 1 } },
+                    { text: "أبحث عن رؤية شاملة للمستقبل وكيف ستتطور الأمور بمرور الوقت، وما هي النتائج طويلة الأمد.", impact: { Ni: 2, Ne: 1 } },
+                    { text: "أركز على الجانب العملي والمباشر للمشكلة، وأجد حلاً فورياً وقابلاً للتطبيق.", impact: { Se: 1, Te: 1 } },
+                    { text: "أستمع إلى شعوري الداخلي وما تخبرني به قيمي عن الحل المناسب لي.", impact: { Fi: 1 } }
+                ]
+            },
+            {
+                question: "ما الذي يصف أفضل طريقتي في التعلم؟",
+                options: [
+                    { text: "بالتجربة العملية، والتفاعل المباشر مع المادة، والمحاولة والخطأ، والتعلم بالممارسة.", impact: { Se: 2, Te: 1 } },
+                    { text: "بالاستماع إلى المحاضرات وقراءة الكتب لجمع المعلومات التفصيلية بدقة، وتخزين الحقائق.", impact: { Si: 2, Ti: 1 } },
+                    { text: "بربط الأفكار الجديدة بما أعرفه بالفعل ورؤية الصورة الكبيرة والمعاني الخفية، وتركيب تصورات للمستقبل.", impact: { Ni: 2, Ne: 1 } },
+                    { text: "باستكشاف المفاهيم من زوايا متعددة وتوليد أفكار جديدة حولها، ورؤية الإمكانيات اللامحدودة.", impact: { Ne: 2, Ni: 1 } },
+                    { text: "بتنظيم المعلومات في نظام فعال ومنطقي يمكنني استخدامه عملياً لتحقيق نتائج ملموسة.", impact: { Te: 2, Ti: 1 } },
+                    { text: "من خلال مناقشة الأفكار مع الآخرين وفهم وجهات نظرهم المتنوعة حول الموضوع.", impact: { Fe: 1, Ne: 1 } }
+                ]
+            },
+            {
+                question: "كيف أتعامل مع النقد أو الملاحظات حول أدائي؟",
+                options: [
+                    { text: "أحللها بموضوعية ومنطق لأرى ما إذا كانت صحيحة ويمكن الاستفادة منها في تحسين كفاءتي.", impact: { Te: 2, Ti: 1 } },
+                    { text: "أفكر في كيفية تأثيرها على صورتي أو علاقاتي بالآخرين وجو المجموعة، وأسعى للحفاظ على التوافق.", impact: { Fe: 2, Fi: 1 } },
+                    { text: "أقيمها بناءً على قيمي الشخصية وما إذا كانت تتوافق مع مبادئي الأساسية، وهل أشعر بالراحة تجاهها.", impact: { Fi: 2, Fe: -1 } },
+                    { text: "أبحث عن رؤية أعمق للموقف من زوايا مختلفة، وأحاول فهم الدوافع الخفية وراء النقد.", impact: { Ni: 2, Ne: 1 } },
+                    { text: "أركز على الخطوات العملية الملموسة التي أحتاجها لتحسين أدائي بناءً عليها، وأطبقها فوراً.", impact: { Se: 2, Te: 1 } },
+                    { text: "أفكر في مدى اتساق النقد مع الحقائق التي أعرفها، وما إذا كان منطقياً في سياقه.", impact: { Ti: 1, Si: 1 } }
+                ]
+            },
+            {
+                question: "ما الذي يجعلك تشعر بالراحة والأمان؟",
+                options: [
+                    { text: "وجود روتين واضح وبيئة مألوفة يمكن التنبؤ بها، حيث يمكنني الاعتماد على الخبرة.", impact: { Si: 2, Se: -1 } },
+                    { text: "القدرة على التكيف مع أي موقف جديد وغير متوقع والتعامل معه بفعالية في اللحظة.", impact: { Se: 2, Si: -1 } },
+                    { text: "الاستقلالية في اتخاذ القرارات بناءً على قيمي ومبادئي الخاصة، والشعور بالأصالة.", impact: { Fi: 2, Fe: -1 } },
+                    { text: "العمل ضمن نظام فعال ومنظم وله أهداف واضحة، حيث يتم تحقيق النتائج بكفاءة.", impact: { Te: 2, Ti: 1 } },
+                    { text: "الشعور بالانتماء والدعم من مجتمع متناغم حيث يشعر الجميع بالتقدير، والجو الإيجابي.", impact: { Fe: 2, Fi: 1 } },
+                    { text: "فهمي العميق لكيفية عمل الأمور من الداخل، ووضوح المنطق خلف كل شيء.", impact: { Ti: 1, Ni: 1 } },
+                    { text: "الرؤية المستقبلية الواضحة والقدرة على التنبؤ بما هو قادم.", impact: { Ni: 1 } }
+                ]
+            },
+            {
+                question: "عند التفكير في المستقبل، ما الذي يشغل بالي أكثر؟",
+                options: [
+                    { text: "رؤية واضحة ومحددة للمستقبل وما سيحدث، كأنها ومضات من البصيرة الموجهة نحو هدف محدد.", impact: { Ni: 2, Ne: -1 } },
+                    { text: "الإمكانيات اللانهائية والخيارات المتعددة التي قد تظهر لي، وأحب استكشاف كل الطرق الممكنة.", impact: { Ne: 2, Ni: -1 } },
+                    { text: "كيف سأحافظ على الاستقرار والأمان بناءً على تجارب الماضي والدروس المستفادة، وتجنب الأخطاء السابقة.", impact: { Si: 2, Se: -1 } },
+                    { text: "الخطوات الملموسة والعملية التي أحتاج لاتخاذها لتحقيق أهدافي المحددة بكفاءة وفعالية.", impact: { Te: 2, Se: 1 } },
+                    { text: "كيف ستؤثر قراراتي على علاقاتي بالآخرين والانسجام الاجتماعي العام، وهل ستكون مقبولة للجميع.", impact: { Fe: 2, Fi: 1 } },
+                    { text: "مدى توافق المستقبل مع قيمي وأحلامي الشخصية العميقة، وهل سيحقق لي الرضا الداخلي.", impact: { Fi: 1, Ni: 1 } }
+                ]
+            },
+            {
+                question: "ما هو الأكثر إزعاجاً بالنسبة لك في بيئة العمل أو الدراسة؟",
+                options: [
+                    { text: "الروتين والملل، أحب التجديد والتغيير المستمر والفرص الجديدة.", impact: { Ne: 2, Si: -1 } },
+                    { text: "اللامنطقية والتفكير غير المتسق أو القرارات غير المبررة التي تفتقر للدقة.", impact: { Ti: 2, Te: 1 } },
+                    { text: "عدم الانسجام والصراعات الشخصية التي تعطل العمل وتؤثر على الروح المعنوية.", impact: { Fe: 2, Fi: 1 } },
+                    { text: "الضغط للامتثال لقيم لا أؤمن بها شخصياً أو مبادئ لا أوافق عليها داخلياً.", impact: { Fi: 2, Fe: -1 } },
+                    { text: "عدم الكفاءة أو عدم تحقيق الأهداف بفعالية وإضاعة الوقت والموارد.", impact: { Te: 2, Ti: 1 } },
+                    { text: "قلة الإثارة والنشاط العملي، أو عدم وجود فرصة للانخراط مباشرة في الأنشطة.", impact: { Se: 1, Si: -1 } }
+                ]
+            },
+            {
+                question: "كيف تصف طريقة تواصلك مع الآخرين؟",
+                options: [
+                    { text: "مباشر ومنطقي، أركز على الحقائق والفعالية والنتائج بوضوح.", impact: { Te: 2, Ti: 1 } },
+                    { text: "ودي ومتعاون، أحرص على مشاعر الآخرين والجو الإيجابي العام والمحافظة على التوافق.", impact: { Fe: 2, Fi: 1 } },
+                    { text: "أبحث عن معانٍ أعمق وأحياناً أتحدث بطريقة مجازية أو رمزية، وأشارك رؤى مستقبلية.", impact: { Ni: 2, Ne: 1 } },
+                    { text: "أطرح الكثير من الأفكار والأسئلة، وأستكشف الاحتمالات المختلفة أثناء الحديث.", impact: { Ne: 2, Ni: 1 } },
+                    { text: "واضح ومحدد، أذكر التفاصيل الدقيقة وأتجنب الغموض، وأعتمد على الحقائق الواقعية.", impact: { Si: 2, Se: 1 } },
+                    { text: "أشارك ما أشعر به بصدق وأصالة، وأحرص على التعبير عن قيمي الشخصية.", impact: { Fi: 1 } },
+                    { text: "تلقائي وعفوي، وأفضل التفاعل الحي والمباشر مع الناس والتركيز على اللحظة.", impact: { Se: 1 } }
+                ]
+            },
+            {
+                question: "عندما تشاهد فيلمًا أو تقرأ كتابًا، ما الذي تستمتع به أكثر؟",
+                options: [
+                    { text: "القصص المعقدة ذات المعاني الخفية والرمزية والرسائل العميقة التي تتطلب التأمل.", impact: { Ni: 2, Ne: 1 } },
+                    { text: "الحبكات المليئة بالإثارة والأحداث سريعة الوتيرة والتجارب الحسية المباشرة.", impact: { Se: 2, Si: -1 } },
+                    { text: "الشخصيات العميقة والمشبعة بالعواطف التي يمكنني التعاطف معها وفهم دوافعها الأخلاقية.", impact: { Fi: 2, Fe: 1 } },
+                    { text: "الأفكار الجديدة والمفاهيم الفريدة التي تحفز تفكيري وتوسع آفاقي وتفتح لي آفاقاً جديدة.", impact: { Ne: 2, Ni: 1 } },
+                    { text: "التحليل المنطقي لكيفية تطور الحبكة أو دوافع الشخصيات بشكل متسق ومنطقي.", impact: { Ti: 2, Te: 1 } },
+                    { text: "التفاصيل الدقيقة والواقعية في السرد، وكيفية بناء العالم بتفاصيله الدقيقة.", impact: { Si: 1, Se: 1 } },
+                    { text: "النتائج النهائية وكيف تم حل المشكلة بفعالية في القصة.", impact: { Te: 1 } }
+                ]
+            },
+            {
+                question: "كيف تتعامل مع المشاعر القوية، سواء كانت لك أو للآخرين؟",
+                options: [
+                    { text: "أحاول فهمها منطقياً ومعالجتها بشكل عقلاني وهادئ، وأبحث عن الأسباب المنطقية لها.", impact: { Ti: 2, Fi: -1 } },
+                    { text: "أستشعرها بعمق وأفهمها من منظور شخصي ومدى تأثيرها عليّ وعلى قيمي الأساسية.", impact: { Fi: 2, Fe: -1 } },
+                    { text: "أحاول تهدئة الأجواء وإعادة الانسجام العاطفي بين الأطراف، والتركيز على مشاعر الجميع.", impact: { Fe: 2, Fi: 1 } },
+                    { text: "أراقبها ولكن أركز على الحلول العملية بدلاً من الانغماس فيها، وأبحث عن طرق فعالة للتعامل مع الموقف.", impact: { Te: 2, Se: 1 } },
+                    { text: "أبحث عن المعنى الأعمق وراء هذه المشاعر وكيف تشكل أنماطًا في المستقبل.", impact: { Ni: 2, Fi: 1 } },
+                    { text: "أتعامل معها بشكل مباشر وعفوي، وأفضل التعبير عنها فوراً إن كان مناسباً.", impact: { Se: 1, Fe: 1 } }
+                ]
+            },
+            {
+                question: "ما هو اهتمامك الرئيسي عند حضور حدث اجتماعي؟",
+                options: [
+                    { text: "الاستمتاع باللحظة والتفاعل المباشر مع المحيط والأنشطة، والبحث عن المغامرات الحسية.", impact: { Se: 2, Si: -1 } },
+                    { text: "التعرف على أشخاص جدد وتبادل الأفكار المثيرة للاهتمام، واستكشاف وجهات نظر مختلفة.", impact: { Ne: 2, Fe: 1 } },
+                    { text: "مراقبة التفاعلات الاجتماعية وفهم الديناميكيات الخفية بين الناس، والجو العام للعلاقات.", impact: { Fe: 2, Ti: 1 } },
+                    { text: "الحفاظ على راحتي وتجنب المواقف غير المألوفة أو المزعجة، والالتزام بما هو مريح لي.", impact: { Si: 2, Se: -1 } },
+                    { text: "الاستفادة العملية من الحدث، مثل التواصل المهني أو بناء العلاقات المفيدة لتحقيق أهداف.", impact: { Te: 2, Fe: 1 } },
+                    { text: "إيجاد فرص للتعبير عن نفسي بطرق إبداعية أو فريدة.", impact: { Fi: 1, Ne: 1 } },
+                    { text: "النظر إلى الحدث ككل وما يمكن أن يعنيه للمستقبل أو لرؤية أعمق.", impact: { Ni: 1 } }
+                ]
+            },
+            {
+                question: "كيف تتعامل مع مهمة تتطلب الكثير من الإبداع والابتكار؟",
+                options: [
+                    { text: "أبحث عن طرق فريدة وغير تقليدية لتنفيذها وتوليد أفكار جديدة وغير مسبوقة.", impact: { Ne: 2, Ni: 1 } },
+                    { text: "أركز على إنتاج حل عملي وفعال، حتى لو لم يكن الأكثر جمالية أو فنية، فالكفاءة هي الأهم.", impact: { Te: 2, Ti: 1 } },
+                    { text: "أتبع إحساسي الداخلي وأنتج شيئاً يعبر عني شخصياً وقيمي الفنية، ويكون أصيلاً لذاتي.", impact: { Fi: 2, Ni: 1 } },
+                    { text: "أستلهم من تجارب سابقة أو أعمال فنية معروفة كمرجع للإبداع، وأبني على ما هو مجرب.", impact: { Si: 2, Ni: 1 } },
+                    { text: "أبحث عن المفهوم الأعمق أو الرؤية الفريدة التي أريد التعبير عنها، وما هي الرسالة النهائية.", impact: { Ni: 2, Ne: 1 } },
+                    { text: "أفضل أن أبدأ بالتجربة العملية مباشرة، وأتعلم من خلال المحاولة والخطأ أثناء الإبداع.", impact: { Se: 1, Ne: 1 } },
+                    { text: "أقوم بتحليل الجوانب المنطقية للمهمة لأجد أفضل طريقة لتنظيم عملية الإبداع.", impact: { Ti: 1 } }
+                ]
+            },
+            {
+                question: "ما هو الشيء الذي تقدّره أكثر في العلاقة؟",
+                options: [
+                    { text: "الاستقلالية والاحترام المتبادل للقيم الشخصية لكل طرف، والصدق مع الذات.", impact: { Fi: 2, Fe: -1 } },
+                    { text: "الوضوح والصراحة المنطقية في التواصل وفهم الأمور بعقلانية، والاتساق في التفكير.", impact: { Ti: 2, Te: 1 } },
+                    { text: "الانسجام العاطفي والدعم المتبادل الذي يخلق بيئة مريحة ودافئة، وتلبية احتياجات الجميع.", impact: { Fe: 2, Fi: 1 } },
+                    { text: "التجارب المشتركة والمغامرات المثيرة التي تجعل الحياة ممتعة ومليئة بالنشاط.", impact: { Se: 2, Si: -1 } },
+                    { text: "الثقة المتبادلة والقدرة على تحقيق الأهداف والتطور معاً بفعالية وإنتاجية.", impact: { Te: 2, Ni: 1 } },
+                    { text: "الذكريات المشتركة والروابط التاريخية التي تبنى على أساس من الألفة والاستقرار.", impact: { Si: 1 } }
+                ]
+            },
+            {
+                question: "عندما تصف شخصاً ما، ما الذي تميل للتركيز عليه؟",
+                options: [
+                    { text: "سلوكه الظاهري، أسلوب كلامه، أو مظهره وكيف يتصرف في الواقع الملموس.", impact: { Se: 2, Si: 1 } },
+                    { text: "دوافعه الخفية، قيمه الأساسية، أو رؤيته العميقة للحياة وما يعنيه ذلك لمستقبله.", impact: { Ni: 2, Fi: 1 } },
+                    { text: "مبادئه الأخلاقية، ومدى اتساقه مع قناعاته الشخصية الحقيقية، وهل هو أصيل لذاته.", impact: { Fi: 2, Fe: 1 } },
+                    { text: "كيف يتفاعل مع الآخرين، ومدى تأثيره على الجو العام للمجموعة، وقدرته على بناء العلاقات.", impact: { Fe: 2, Ti: -1 } },
+                    { text: "قدرته على حل المشاكل، أو مدى كفاءته وفعاليته في العمل، وإنجازه للأهداف.", impact: { Te: 2, Ti: 1 } },
+                    { text: "طريقة تفكيره المنطقية، وهل حججه متماسكة ومنسقة داخلياً.", impact: { Ti: 1 } },
+                    { text: "قدرته على توليد أفكار جديدة واستكشاف الاحتمالات المتنوعة.", impact: { Ne: 1 } }
+                ]
+            },
+            {
+                question: "ما هو شعورك تجاه الروتين والتكرار؟",
+                options: [
+                    { text: "أفضل التغيير والتنوع باستمرار، وأشعر بالملل من التكرار والرتابة.", impact: { Ne: 2, Si: -1 } },
+                    { text: "أجد فيه راحة وكفاءة، فهو يساعدني على التركيز وإنجاز المهام بدقة وجودة.", impact: { Si: 2, Ne: -1 } },
+                    { text: "أتقبله إذا كان يؤدي لنتائج فعالة وملموسة ويحافظ على النظام والإنتاجية.", impact: { Te: 1, Ti: 1 } },
+                    { text: "يمكن أن يكون مملاً، لكن أبحث عن طرق لإضافة لمسات إبداعية أو تغييرات طفيفة لجعلها أكثر إثارة.", impact: { Se: 1, Ne: 1 } },
+                    { text: "أراه ضرورياً للحفاظ على النظام والاستقرار والقدرة على التنبؤ بالمستقبل.", impact: { Ni: 1, Si: 1 } },
+                    { text: "أشعر أنه يحد من قدرتي على التعبير عن نفسي أو استكشاف ما هو جديد.", impact: { Fi: 1, Ne: 1 } }
+                ]
+            },
+            {
+                question: "كيف تتعامل مع المهام الروتينية أو المتكررة؟",
+                options: [
+                    { text: "أجد طرقًا لتبسيطها وجعلها أكثر كفاءة وإنجازها بسرعة ودقة.", impact: { Te: 2, Ti: 1 } },
+                    { text: "أحاول أتمتتها أو تفويضها للآخرين لأتفرغ للمهام الأكثر تعقيدًا وإبداعاً.", impact: { Ni: 1, Ne: 1 } },
+                    { text: "أركز على إتقانها وتحسين الأداء في كل مرة لضمان الدقة والالتزام بالمعايير.", impact: { Si: 2, Se: 1 } },
+                    { text: "أحاول إدخال عنصر المرح أو التحدي فيها لتجنب الملل وجعلها أكثر إثارة.", impact: { Se: 2, Ne: 1 } },
+                    { text: "أجد صعوبة في الالتزام بها وأفضل المهام المتنوعة والمبتكرة التي تتيح لي استكشاف الجديد.", impact: { Ne: 2, Si: -1 } },
+                    { text: "أفكر في الهدف الأعمق من هذه المهام وكيف تخدم رؤية أكبر.", impact: { Ni: 1 } }
+                ]
+            },
+            {
+                question: "ما الذي يثير فضولك أكثر في العالم؟",
+                options: [
+                    { text: "كيف تعمل الأنظمة المعقدة والظواهر الطبيعية ومبادئها الأساسية ومنطقها الداخلي.", impact: { Ti: 2, Te: 1 } },
+                    { text: "الآثار التاريخية والثقافات القديمة وتفاصيل الماضي الدقيقة، وكيف أثرت على الحاضر.", impact: { Si: 2, Ni: 1 } },
+                    { text: "الابتكارات التكنولوجية والتطورات المستقبلية وكيف ستغير العالم، وما هي الإمكانيات الجديدة التي ستخلقها.", impact: { Ni: 2, Ne: 2 } },
+                    { text: "التنوع البشري والعلاقات الاجتماعية وكيف يتفاعل الناس في مجموعات، وديناميكية التفاعلات.", impact: { Fe: 2, Fi: 1 } },
+                    { text: "الظواهر الغامضة وغير المفسرة، والمعاني الخفية وراء الأشياء، والبحث عن رؤى عميقة.", impact: { Ni: 2, Ne: 1 } },
+                    { text: "المغامرات الجديدة والتجارب الحسية المباشرة التي تضعني في قلب الحدث.", impact: { Se: 1, Ne: 1 } },
+                    { text: "ما يثير شغفي وقيمي الشخصية ويلامس روحي.", impact: { Fi: 1 } }
+                ]
+            },
+            {
+                question: "عند التخطيط لرحلة، ما هو أسلوبك المفضل؟",
+                options: [
+                    { text: "أضع خطة مفصلة تشمل كل التفاصيل الصغيرة والجداول الزمنية الدقيقة، وألتزم بها.", impact: { Si: 2, Te: 1 } },
+                    { text: "أترك الأمر مفتوحاً لاستكشاف الفرص والمغامرات غير المتوقعة في اللحظة، والاستجابة للعفوية.", impact: { Se: 2, Ne: 1, Si: -1 } },
+                    { text: "أفكر في التجارب الجديدة التي سأخوضها وكيف ستوسع آفاقي ومعارفي، وما هي الإمكانيات التي قد تظهر.", impact: { Ne: 2, Ni: 1 } },
+                    { text: "أبحث عن الوجهات التي تتوافق مع قيمي وميزانيتي وتفضيلاتي الشخصية وتلبي رغباتي الداخلية.", impact: { Fi: 2, Te: 1 } },
+                    { text: "أضع خطة عامة وأترك مساحة للتكيف بناءً على ما يظهر، مع التركيز على الهدف النهائي والرؤية الكبرى للرحلة.", impact: { Ni: 1, Te: 1, Ne: 1, Se: 1 } },
+                    { text: "أقوم بالبحث والتحليل لكل الخيارات المتاحة لأجد الخطة الأكثر منطقية وكفاءة.", impact: { Ti: 1, Te: 1 } },
+                    { text: "أفكر في من سأذهب معه وكيف سنستمتع معاً ونخلق ذكريات جيدة.", impact: { Fe: 1 } }
+                ]
+            },
+            {
+                question: "ما هو أكثر ما يميز علاقاتي الشخصية؟",
+                options: [
+                    { text: "الصدق والأصالة، والتعبير عن مشاعري وقيمي الحقيقية بوضوح.", impact: { Fi: 2, Fe: -1 } },
+                    { text: "التواصل الواضح والمنطقي، وحل المشكلات بناءً على الحقائق والبحث عن الحلول الفعالة.", impact: { Te: 2, Ti: 1 } },
+                    { text: "الانسجام العاطفي والدعم المتبادل الذي يخلق بيئة مريحة وداعمة للجميع.", impact: { Fe: 2, Fi: 1 } },
+                    { text: "التجارب المشتركة والمغامرات المثيرة التي تجعل الحياة ممتعة ومليئة بالحيوية.", impact: { Se: 2, Ne: 1 } },
+                    { text: "الولاء والثقة، والاستناد إلى تاريخنا المشترك والخبرات الموثوقة.", impact: { Si: 2, Fi: 1 } },
+                    { text: "التحليل العميق لديناميكيات العلاقة وفهم سبب سلوكيات الأشخاص.", impact: { Ti: 1 } },
+                    { text: "القدرة على رؤية الإمكانيات الجديدة في العلاقة وتطويرها بشكل مستمر.", impact: { Ne: 1 } }
+                ]
+            },
+            {
+                question: "عندما أشارك في نقاش جماعي، ما هو الدور الذي أميل إليه؟",
+                options: [
+                    { text: "تقديم رؤى جديدة وغير تقليدية، أو طرح أسئلة عميقة تتجاوز السطح.", impact: { Ni: 2, Ne: 1 } },
+                    { text: "تحليل النقاط المنطقية وتحديد الثغرات أو التناقضات في الحجج، والبحث عن الاتساق الداخلي.", impact: { Ti: 2, Te: 1 } },
+                    { text: "توجيه النقاش نحو تحقيق هدف عملي أو اتخاذ قرار فعال، والحفاظ على الإنتاجية.", impact: { Te: 2, Ti: 1 } },
+                    { text: "التأكد من أن الجميع يشعر بالراحة، ومحاولة تخفيف التوتر والحفاظ على الانسجام في المجموعة.", impact: { Fe: 2, Fi: 1 } },
+                    { text: "التعبير عن وجهة نظري الشخصية المبنية على قناعاتي الداخلية وقيمي الأساسية.", impact: { Fi: 2, Fe: -1 } },
+                    { text: "طرح العديد من الأفكار والفرضيات لاستكشاف جميع الجوانب الممكنة للموضوع.", impact: { Ne: 1, Ti: 1 } },
+                    { text: "تقديم أمثلة واقعية من تجاربي أو خبراتي لدعم وجهة نظري.", impact: { Si: 1 } }
+                ]
+            },
+            {
+                question: "كيف تتعامل مع اللحظات التي تتطلب اتخاذ قرار سريع؟",
+                options: [
+                    { text: "أعتمد على غريزتي وقدرتي على قراءة الوضع في اللحظة الحالية والتحرك بناءً على الحقائق الملموسة.", impact: { Se: 2, Ni: 1 } },
+                    { text: "أبحث عن خيارات متعددة بسرعة وأختار الأنسب بناءً على الإمكانيات والفرص التي تظهر.", impact: { Ne: 2, Se: 1 } },
+                    { text: "أقوم بتقييم منطقي سريع للمعلومات المتاحة للوصول لأفضل حل فعال وعملي.", impact: { Te: 2, Ti: 1 } },
+                    { text: "أفكر في التأثير الفوري لقراري على الآخرين وكيف سيشعرون، وأختار ما يحافظ على التوافق.", impact: { Fe: 2, Fi: 1 } },
+                    { text: "أستند إلى تجربتي السابقة مع مواقف مشابهة لاتخاذ قرار آمن وموثوق به.", impact: { Si: 2, Te: 1 } },
+                    { text: "أستشير حدسي الخاص وما يمليه علي ضميري، حتى لو كان سريعاً وغير منطقي للآخرين.", impact: { Fi: 1, Ni: 1 } },
+                    { text: "أحلل الموقف بسرعة لمعرفة المبدأ الأساسي الذي يجب تطبيقه.", impact: { Ti: 1 } }
+                ]
+            },
+            {
+                question: "ما الذي يجعلك تشعر بالإجهاد أو الإرهاق؟",
+                options: [
+                    { text: "القيود على حريتي، أو عدم القدرة على استكشاف خيارات جديدة ومبتكرة.", impact: { Ne: 2, Si: -1 } },
+                    { text: "التعامل مع المشاعر الشديدة أو الصراعات العاطفية المعقدة، خاصة تلك التي لا تتوافق مع قيمي.", impact: { Fi: 2, Fe: 1 } },
+                    { text: "عدم الكفاءة، الفوضى، أو الإجراءات غير الفعالة التي تعيق التقدم وتحقيق الأهداف.", impact: { Te: 2, Ti: 1 } },
+                    { text: "المهام التي تفتقر إلى المنطق الواضح أو الاتساق الداخلي الجيد، والغموض في التفكير.", impact: { Ti: 2, Te: 1 } },
+                    { text: "التغييرات المفاجئة أو عدم القدرة على التنبؤ بالمستقبل أو ما هو قادم، وعدم وجود رؤية واضحة.", impact: { Ni: 2, Si: 1 } },
+                    { text: "الجلوس لفترة طويلة دون حركة أو نشاط عملي، أو عدم وجود تجارب حسية جديدة.", impact: { Se: 1, Ni: -1 } },
+                    { text: "الروتين الممل والتكرار الذي لا يتيح لي أي جديد.", impact: { Si: -1 } }
+                ]
+            },
+            {
+                question: "كيف تتعامل مع الانتقادات الموجهة إلى أفكارك أو عملك الإبداعي؟",
+                options: [
+                    { text: "أحاول فهم المنطق وراء النقد وأحلله بموضوعية لأتعلم منه وأحسن كفاءتي.", impact: { Ti: 2, Te: 1 } },
+                    { text: "أركز على ما إذا كان النقد يتوافق مع قيمي الشخصية ورؤيتي الأساسية، وهل هو أصيل أم لا.", impact: { Fi: 2, Fe: -1 } },
+                    { text: "أفكر في كيفية تأثير النقد على الآخرين أو على صورتي العامة، وأسعى لتصحيح الانطباع إن لزم الأمر.", impact: { Fe: 2, Fi: 1 } },
+                    { text: "أرى فيها فرصة لتطوير العمل وإيجاد طرق جديدة لتحسينه واستكشاف إمكانيات لم تخطر ببالي.", impact: { Ne: 2, Ni: 1 } },
+                    { text: "أبحث عن رد عملي أو حل ملموس لمعالجة النقد بفعالية وتحقيق نتائج أفضل.", impact: { Te: 2, Se: 1 } },
+                    { text: "أستخدمها كفرصة لمراجعة التفاصيل الدقيقة للتأكد من عدم وجود أخطاء.", impact: { Si: 1 } },
+                    { text: "أبحث عن المعنى الأعمق للنقد وكيف يتماشى مع رؤيتي الشاملة.", impact: { Ni: 1 } }
+                ]
+            },
+            {
+                question: "ما هو الشيء الذي يجذبك أكثر في تعلم مهارة جديدة؟",
+                options: [
+                    { text: "القدرة على تطبيقها عملياً وتحقيق نتائج ملموسة فوراً، والممارسة الحية.", impact: { Se: 2, Te: 1 } },
+                    { text: "فهم المبادئ الأساسية والقواعد المنطقية التي تحكمها بعمق، وبناء نظام لفهمها.", impact: { Ti: 2, Te: 1 } },
+                    { text: "استكشاف جميع الاحتمالات لتطويرها بطرق مبتكرة وفريدة، والبحث عن آفاق غير مسبوقة.", impact: { Ne: 2, Ni: 1 } },
+                    { text: "الاستفادة من التجارب السابقة أو نصائح الخبراء في المجال، والالتزام بالأساليب المجربة.", impact: { Si: 2, Te: 1 } },
+                    { text: "الشعور بالإنجاز الشخصي والنمو الذاتي الذي تحققه المهارة، وتوافقها مع قيمي.", impact: { Fi: 2, Ni: 1 } },
+                    { text: "التحكم فيها وإتقانها بحيث يمكنني تطبيقها بكفاءة عالية لتحقيق أهداف.", impact: { Te: 1, Se: 1 } },
+                    { text: "الرؤية الشاملة لكيفية دمج هذه المهارة في حياتي المستقبلية.", impact: { Ni: 1 } }
+                ]
+            },
+            {
+                question: "عند التفكير في مشاعري الشخصية، كيف أتعامل معها؟",
+                options: [
+                    { text: "أحللها منطقياً لأفهم سببها وماذا تعني لي، وأبحث عن الاتساق في منطقها.", impact: { Ti: 2, Fi: -1 } },
+                    { text: "أستشعرها بعمق وأستمع إلى ما تخبرني به عن قيمي وذاتي الحقيقية، وأركز على أصالتها.", impact: { Fi: 2, Fe: -1 } },
+                    { text: "أبحث عن طرق للتعبير عنها بطريقة صحية ومقبولة اجتماعياً، وأسعى للحفاظ على التوافق مع الآخرين.", impact: { Fe: 2, Fi: 1 } },
+                    { text: "أحاول وضعها جانباً والتركيز على المهمة التي بين يدي لتحقيق الأهداف العملية.", impact: { Te: 1, Se: 1 } },
+                    { text: "أبحث عن النمط الأعمق أو الرؤية التي تكشفها هذه المشاعر عن المستقبل أو المعنى الخفي.", impact: { Ni: 2, Fi: 1 } },
+                    { text: "أفضل التعامل معها بشكل مباشر وعفوي دون تحليل مفرط.", impact: { Se: 1 } },
+                    { text: "أقارنها بتجارب سابقة لأرى كيف تتشابه وتختلف.", impact: { Si: 1 } }
+                ]
+            },
+            {
+                question: "كيف تتعامل مع المواعيد النهائية والالتزامات الزمنية؟",
+                options: [
+                    { text: "أضع جدولاً زمنياً صارماً وألتزم به بدقة لضمان الإنجاز بفعالية وكفاءة.", impact: { Te: 2, Si: 1 } },
+                    { text: "أحاول إنهاء المهام قبل الموعد النهائي بوقت كافٍ لتجنب الضغط والحرص على الجودة.", impact: { Si: 2, Ti: 1 } },
+                    { text: "أشعر بالتوتر، لكن أتكيف وأنجز العمل تحت الضغط إذا لزم الأمر، وأكون فعالاً في اللحظة الأخيرة.", impact: { Se: 2, Ne: 1 } },
+                    { text: "أبحث عن طرق مبتكرة لإنجاز العمل بأسرع طريقة ممكنة وفتح خيارات جديدة لتحقيق الأهداف.", impact: { Ne: 2, Te: 1 } },
+                    { text: "أركز على الجودة والتسليم المثالي حتى لو استغرق وقتاً أطول، وأبحث عن الاتساق المنطقي.", impact: { Ti: 1, Fi: 1 } },
+                    { text: "أفكر في التأثير على الآخرين إذا لم يتم الالتزام بالمواعيد، وأسعى للحفاظ على علاقات جيدة.", impact: { Fe: 1 } },
+                    { text: "أرى الموعد النهائي كجزء من رؤية أكبر وكيف يساهم في تحقيق هدف بعيد المدى.", impact: { Ni: 1 } }
+                ]
+            },
+            {
+                question: "ما الذي يميز أسلوبك في حل النزاعات؟",
+                options: [
+                    { text: "أبحث عن حلول وسط ترضي جميع الأطراف وتحافظ على الانسجام والجو الإيجابي.", impact: { Fe: 2, Fi: 1 } },
+                    { text: "أركز على الحقائق والمنطق لتقديم حل عادل وموضوعي وفعال.", impact: { Te: 2, Ti: 1 } },
+                    { text: "أتبع مبادئي وقيمي الشخصية لأجد الحل الذي أراه صحيحاً وأصيلاً لذاتي.", impact: { Fi: 2, Fe: -1 } },
+                    { text: "أبحث عن حل عملي وفعال ينهي النزاع بسرعة وكفاءة، وأطبق الحلول المباشرة.", impact: { Se: 2, Te: 1 } },
+                    { text: "أحاول فهم الدوافع الخفية والأنماط الكامنة وراء النزاع، وما هي الرؤية الأعمق.", impact: { Ni: 2, Fi: 1 } },
+                    { text: "أقوم بتحليل المشكلة من منظور منطقي بحت لأرى الخلل في الاتساق.", impact: { Ti: 1 } },
+                    { text: "أستكشف جميع الاحتمالات لحل المشكلة بطرق غير تقليدية.", impact: { Ne: 1 } }
+                ]
+            },
+            {
+                question: "كيف تستعد لحدث مهم أو تحدٍ كبير؟",
+                options: [
+                    { text: "أجمع كل المعلومات الممكنة وأقوم بالتخطيط المفصل لكل خطوة بدقة، وأعتمد على الخبرة.", impact: { Si: 2, Te: 1 } },
+                    { text: "أضع تصوراً للنتيجة النهائية وأحاول أن أرى كل الاحتمالات المستقبلية، وأركز على الرؤية الكبيرة.", impact: { Ni: 2, Ne: 1 } },
+                    { text: "أتدرب عملياً وأستعد للتكيف مع أي ظروف طارئة في اللحظة، وأكون جاهزاً للتصرف الفوري.", impact: { Se: 2, Ne: 1 } },
+                    { text: "أحلل الموقف بعمق لأفهم جميع الجوانب المنطقية والتحديات الفكرية، وأبحث عن أفضل منطق.", impact: { Ti: 2, Te: 1 } },
+                    { text: "أتأكد من أنني مستعد عاطفياً وأن قيمي تتماشى مع التحدي، وأنني أشعر بالسلام الداخلي تجاهه.", impact: { Fi: 2, Fe: 1 } },
+                    { text: "أفكر في كيفية تنسيق الجهود مع الآخرين لضمان نجاح الفريق أو المجموعة.", impact: { Fe: 1, Te: 1 } },
+                    { text: "أضع خطة فعالة لتحقيق أفضل النتائج العملية.", impact: { Te: 1 } }
+                ]
+            },
+            {
+                question: "كيف تفضل قضاء وقت فراغك؟",
+                options: [
+                    { text: "في استكشاف أفكار ومفاهيم جديدة، والقراءة عن نظريات معقدة أو التفكير في المستقبل.", impact: { Ni: 2, Ne: 1 } },
+                    { text: "في تجربة أنشطة جديدة ومثيرة، أو الانخراط في مغامرات حسية ومباشرة.", impact: { Se: 2, Ne: 1 } },
+                    { text: "في قضاء وقت مع الأصدقاء والعائلة، والتركيز على بناء العلاقات والحفاظ على الانسجام الاجتماعي.", impact: { Fe: 2, Fi: 1 } },
+                    { text: "في ممارسة هواية تعبر عن قيمي الشخصية وشغفي الداخلي، أو التأمل في مشاعري.", impact: { Fi: 2, Ni: 1 } },
+                    { text: "في تنظيم وترتيب الأمور، أو العمل على مشاريع جانبية لتحقيق أهداف ملموسة وفعالة.", impact: { Te: 2, Si: 1 } },
+                    { text: "في التفكير بعمق في مشكلة أو نظرية، ومحاولة فهم منطقها الداخلي من الألف إلى الياء.", impact: { Ti: 2, Ni: 1 } },
+                    { text: "في استرجاع الذكريات الجميلة أو مراجعة التفاصيل القديمة والمألوفة.", impact: { Si: 1 } }
+                ]
+            },
+            {
+                question: "عند التفاعل مع فكرة جديدة، ما هو رد فعلك الأولي؟",
+                options: [
+                    { text: "أفكر في جميع الاحتمالات والسيناريوهات التي يمكن أن تنشأ عنها، وكيف يمكن تطويرها.", impact: { Ne: 2, Ni: 1 } },
+                    { text: "أحاول فهمها منطقياً ومعرفة ما إذا كانت تتسق مع مبادئي وتصوري للعالم.", impact: { Ti: 2, Te: 1 } },
+                    { text: "أفكر في كيفية تطبيقها عملياً وما هي الخطوات الملموسة لتحقيقها بفعالية.", impact: { Te: 2, Se: 1 } },
+                    { text: "أقيمها بناءً على ما أشعر به تجاهها، وما إذا كانت تتوافق مع قيمي الشخصية ومبادئي.", impact: { Fi: 2, Fe: 1 } },
+                    { text: "أرى كيف تتناسب مع تجاربي السابقة أو الحقائق الموثقة التي أعرفها.", impact: { Si: 2, Ne: -1 } },
+                    { text: "أبحث عن المعنى الأعمق أو الرؤية الكامنة وراء هذه الفكرة.", impact: { Ni: 2, Ne: 1 } },
+                    { text: "أتحمس لتجربتها فوراً لمعرفة كيف تعمل في الواقع.", impact: { Se: 1 } }
+                ]
+            },
+            {
+                question: "ما الذي تفضل التركيز عليه في محادثة مع شخص؟",
+                options: [
+                    { text: "الأفكار المجردة، النظريات، الاحتمالات المستقبلية، والمعاني العميقة.", impact: { Ni: 2, Ne: 2 } },
+                    { text: "التفاصيل الملموسة، الحقائق، التجارب الشخصية، وما يحدث في الوقت الحاضر.", impact: { Si: 2, Se: 2 } },
+                    { text: "المنطق، التحليل، الاتساق، وكيفية عمل الأشياء بشكل منطقي.", impact: { Ti: 2, Te: 2 } },
+                    { text: "المشاعر، القيم، العلاقات، وكيف يؤثر الكلام على مشاعر الآخرين.", impact: { Fi: 2, Fe: 2 } }
+                ]
+            },
+            {
+                question: "في المواقف الاجتماعية، هل تميل إلى:",
+                options: [
+                    { text: "التفاعل بنشاط مع العديد من الأشخاص، والبحث عن محفزات خارجية.", impact: { Fe: 2, Se: 2, E: 2 } },
+                    { text: "التفاعل بعمق مع عدد قليل من الأشخاص، والبحث عن روابط ذات مغزى.", impact: { Fi: 2, Ni: 2, I: 2 } },
+                    { text: "مراقبة وتحليل التفاعلات من بعيد، وفهم الديناميكيات قبل الانخراط.", impact: { Ti: 2, Ni: 1, I: 1 } },
+                    { text: "المشاركة العملية في الأنشطة أو الألعاب، والاستمتاع باللحظة.", impact: { Se: 2, E: 1 } },
+                    { text: "تقديم معلومات منظمة أو آراء منطقية عند الحاجة، والتركيز على الكفاءة.", impact: { Te: 2, E: 1 } },
+                    { text: "البقاء مع من تعرفهم والتركيز على المحادثات المألوفة والمريحة.", impact: { Si: 2, I: 1 } }
+                ]
+            },
+            {
+                question: "هل تفضل أن تكون حياتك:",
+                options: [
+                    { text: "مخطط لها ومنظمة، مع أهداف وجداول زمنية واضحة ومحددة.", impact: { Te: 2, Si: 2, J: 2 } },
+                    { text: "مرنة وعفوية، مع ترك مساحة للاستكشاف والتكيف مع الفرص الجديدة.", impact: { Ne: 2, Se: 2, P: 2 } },
+                    { text: "موجهة نحو تحقيق رؤية مستقبلية عميقة، مع السعي لفهم المعنى الأكبر.", impact: { Ni: 2, Fi: 1, J: 1 } },
+                    { text: "تتماشى مع قيمك الداخلية، مع حرية التعبير عن الذات والعيش بأصالة.", impact: { Fi: 2, P: 1 } },
+                    { text: "مليئة بالأنشطة والتجارب الحسية المباشرة والمغامرات الجديدة.", impact: { Se: 2, P: 1 } },
+                    { text: "تستند إلى الحقائق والخبرات الماضية، مع التركيز على الاستقرار والدقة.", impact: { Si: 2, J: 1 } },
+                    { text: "تتبع منطقًا داخليًا متسقًا، مع السعي للفهم العميق والتحليل الموضوعي.", impact: { Ti: 2, P: 1 } },
+                    { text: "تركز على الانسجام الاجتماعي والعلاقات الجيدة، مع الاهتمام بمشاعر الآخرين.", impact: { Fe: 2, J: 1 } }
+                ]
+            }
+        ];
 
-  <!-- سكريبت: Chart.js -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        const cognitiveFunctionsData = [
+            {
+                name: "Ni",
+                arabicName: "الحدس الانطوائي (Ni)",
+                pattern: "وظيفة الإدراك",
+                characteristics: "يرى الأنماط والروابط الخفية، يتنبأ بالمستقبل، يدرك المعاني العميقة والرمزية، لديه رؤى وبصائر مفاجئة، يركز على الصورة الكلية والأهداف طويلة المدى، يفهم الدوافع الكامنة.",
+                strengths: ["الرؤية بعيدة المدى", "البصيرة والتنبؤ", "القدرة على إيجاد حلول عميقة", "فهم الأنماط المعقدة"],
+                challenges: ["قد يصبح منعزلاً أو غامضاً", "صعوبة في شرح الأفكار بوضوح", "قد يغفل التفاصيل اليومية", "المبالغة في التفكير أو التحليل الزائد"],
+                advice: {
+                    high: "ثق بحدسك ورؤياك، لكن حاول أيضاً التحقق من رؤياك بالواقع ومشاركتها بوضوح. لا تبالغ في التخطيط حتى لا تفوت الفرص الحالية.",
+                    balanced: "استمر في تطوير رؤياك الداخلية، واحرص على ربطها بالواقع العملي والتفاصيل الملموسة. ابحث عن توازن بين الرؤية والتطبيق.",
+                    low: "حاول تطوير قدرتك على رؤية الصورة الكبيرة والأنماط. خصص وقتاً للتأمل والتفكير العميق. استمع لحدسك ولا ترفضه مباشرة."
+                }
+            },
+            {
+                name: "Ne",
+                arabicName: "الحدس الانبساطي (Ne)",
+                pattern: "وظيفة الإدراك",
+                characteristics: "يستكشف الإمكانيات المتعددة، يولد أفكاراً جديدة باستمرار، يربط بين المفاهيم غير المتجانسة، يبحث عن التجديد والابتكار، لديه فضول واسع، يستمتع بالعصف الذهني، يرى الفرص في كل مكان.",
+                strengths: ["الإبداع والتفكير خارج الصندوق", "المرونة والتكيف السريع", "القدرة على رؤية الحلول المتعددة", "الشخصية المفعمة بالنشاط والفضول"],
+                challenges: ["صعوبة في التركيز على فكرة واحدة", "قد يترك المشاريع دون إكمالها", "المبالغة في الخيارات تؤدي لتشتت", "النفور من الروتين والتفاصيل"],
+                advice: {
+                    high: "ركز على إنجاز بعض الأفكار بدلاً من القفز بينها. تعلم كيفية تضييق الخيارات واختيار الأفضل. استمتع بتوليد الأفكار، لكن خصص وقتاً لتطبيقها.",
+                    balanced: "استمر في استكشاف الأفكار الجديدة، وحاول أيضاً أن تخصص وقتاً لتنفيذ بعضها. ابحث عن توازن بين الابتكار والإنجاز.",
+                    low: "حاول تطوير قدرتك على رؤية الإمكانيات والحلول الجديدة. كن منفتحاً على الأفكار غير التقليدية. لا تخف من التجربة."
+                }
+            },
+            {
+                name: "Si",
+                arabicName: "الاستشعار الانطوائي (Si)",
+                pattern: "وظيفة الإدراك",
+                characteristics: "يركز على التفاصيل الدقيقة، يتذكر الخبرات الماضية بدقة، يقدر الروتين والتقاليد، يبحث عن الألفة والاستقرار، يلاحظ التغيرات الطفيفة، يتمتع بذاكرة قوية للحقائق والتفاصيل الملموسة.",
+                strengths: ["الذاكرة التفصيلية", "الالتزام والدقة", "الاعتمادية والجدية", "الراحة في الروتين والأنظمة"],
+                challenges: ["صعوبة في التكيف مع التغيير المفاجئ", "قد يتمسك بالماضي أكثر من اللازم", "الميل إلى الروتين يقلل من الاستكشاف", "قد يغفل الصورة الكبيرة أو الإمكانيات"],
+                advice: {
+                    high: "لا تخف من تجربة أشياء جديدة والتحرر من الروتين أحياناً. كن مرناً مع التغيير. استخدم خبراتك الماضية كقاعدة للانطلاق نحو المستقبل، لا كقيد.",
+                    balanced: "استمر في الاستفادة من خبراتك، واحرص على تجربة بعض الجديد. ابحث عن توازن بين الاستقرار والتكيف مع التغيير.",
+                    low: "حاول الانتباه للتفاصيل والخبرات الماضية. قم بتدوين الملاحظات. تعلم تقدير الروتين وأهمية الاستقرار في بعض جوانب حياتك."
+                }
+            },
+            {
+                name: "Se",
+                arabicName: "الاستشعار الانبساطي (Se)",
+                pattern: "وظيفة الإدراك",
+                characteristics: "يعيش في اللحظة، يركز على الحقائق الملموسة والواقع، يستمتع بالتجارب الحسية، يتكيف بسرعة مع المواقف الجديدة، عملي، يحب الحركة والنشاط، يلاحظ التفاصيل في بيئته المباشرة، يعيش اللحظة.",
+                strengths: ["القدرة على التكيف السريع", "الواقعية والعملية", "حب المغامرة والتجربة", "التركيز على اللحظة الحالية"],
+                challenges: ["قد يتجاهل التخطيط طويل الأجل", "الاندفاع أو التهور", "صعوبة في التركيز على الأفكار المجردة", "قد يميل إلى المشتتات الحسية"],
+                advice: {
+                    high: "خذ وقتاً للتفكير قبل اتخاذ القرارات السريعة. قدّر قيمة التخطيط طويل الأجل. انتبه للمستقبل دون أن تفقد متعة الحاضر.",
+                    balanced: "استمتع باللحظة، ولكن حاول أيضاً تخصيص وقت للتفكير في النتائج طويلة الأمد. ابحث عن توازن بين المغامرة والمسؤولية.",
+                    low: "حاول الانخراط أكثر في العالم المادي والتجارب الحسية. جرب أنشطة جديدة تتطلب التركيز على اللحظة الحالية. كن أكثر تلقائية."
+                }
+            },
+            {
+                name: "Fi",
+                arabicName: "الشعور الانطوائي (Fi)",
+                pattern: "وظيفة الحكم",
+                characteristics: "يتمتع بقيم داخلية عميقة، مستقل في آرائه العاطفية، يتعاطف مع مشاعر الآخرين بناءً على فهمه الذاتي، يبحث عن الأصالة، يلتزم بمبادئه الشخصية، لديه بوصلة أخلاقية داخلية قوية، يبحث عن الانسجام مع الذات.",
+                strengths: ["الأصالة والنزاهة", "التعاطف العميق", "الالتزام بالمبادئ", "الوعي الذاتي القوي"],
+                challenges: ["صعوبة في التعبير عن المشاعر", "قد يصبح انعزالياً", "المبالغة في النقد الذاتي", "صعوبة في التكيف مع قيم الآخرين"],
+                advice: {
+                    high: "شارك مشاعرك وقيمك مع المقربين. كن منفتحاً على وجهات نظر الآخرين، فقد لا تتفق معهم ولكن يمكنك فهمهم. تذكر أن بناء العلاقات يتطلب أحياناً التنازلات البسيطة.",
+                    balanced: "استمر في التعبير عن قيمك، وحاول أيضاً أن تكون أكثر انفتاحاً على مشاعر واحتياجات الآخرين. ابحث عن توازن بين قيمك والانسجام الاجتماعي.",
+                    low: "حاول التواصل مع مشاعرك وقيمك الداخلية. خصص وقتاً للتأمل الذاتي وفهم ما يهمك حقاً. كن أكثر وعياً باحتياجاتك العاطفية."
+                }
+            },
+            {
+                name: "Fe",
+                arabicName: "الشعور الانبساطي (Fe)",
+                pattern: "وظيفة الحكم",
+                characteristics: "يركز على الانسجام الاجتماعي، يتعاطف مع مشاعر الآخرين بسهولة، حساس للجو العام، يسعى لإرضاء الآخرين، يبني العلاقات، يهتم بالتقاليد الاجتماعية، يجيد قراءة تعبيرات الوجه ولغة الجسد، يعطي الأولوية لمشاعر المجموعة.",
+                strengths: ["بناء العلاقات القوية", "التعاطف والتفهم الاجتماعي", "القدرة على خلق جو إيجابي", "مهارات التواصل الجيدة"],
+                challenges: ["قد يهمل احتياجاته الشخصية", "صعوبة في قول 'لا'", "الحساسية المفرطة للنقد", "قد يتأثر بمشاعر الآخرين بسهولة"],
+                advice: {
+                    high: "لا تبالغ في إرضاء الآخرين على حساب احتياجاتك الخاصة. تعلم أن تقول 'لا' بلباقة. ركز على بناء قيمك الداخلية أيضاً ولا تعتمد كلياً على القبول الخارجي.",
+                    balanced: "استمر في دعم الآخرين، واحرص على تلبية احتياجاتك الخاصة. ابحث عن توازن بين العطاء والرعاية الذاتية.",
+                    low: "حاول الانخراط أكثر في التفاعلات الاجتماعية. تدرب على التعاطف وقراءة الإشارات غير اللفظية. لا تخف من التعبير عن مشاعرك لتقوية العلاقات."
+                }
+            },
+            {
+                name: "Ti",
+                arabicName: "التفكير الانطوائي (Ti)",
+                pattern: "وظيفة الحكم",
+                characteristics: "يحلل بعمق، يبحث عن المنطق الداخلي والاتساق، يفكر بشكل مستقل، يفضل الدقة على السرعة، يحب فهم كيفية عمل الأشياء، يلاحظ التناقضات، منهجي في التفكير، يبني أنظمة منطقية داخلية.",
+                strengths: ["التحليل العميق", "المنطق والاتساق", "الاستقلالية في التفكير", "حل المشكلات المعقدة"],
+                challenges: ["صعوبة في التواصل أو شرح الأفكار للآخرين", "قد يصبح منعزلاً في تفكيره", "المبالغة في الكمال قد تؤخر الإنجاز", "البرود العاطفي أو التجاهل للمشاعر"],
+                advice: {
+                    high: "شارك أفكارك وتحليلاتك مع الآخرين لتجنب العزلة. كن مستعداً لتبسيط شرحك للوصول إلى جمهور أوسع. تذكر أن العلاقات الإنسانية لا تقوم على المنطق فقط.",
+                    balanced: "استمر في تطوير تحليلك المنطقي، وحاول أيضاً أن تكون أكثر انفتاحاً على آراء الآخرين. ابحث عن توازن بين المنطق والتواصل.",
+                    low: "حاول تطوير قدرتك على التفكير النقدي والتحليل. اطرح الأسئلة لفهم كيفية عمل الأشياء. تدرب على إيجاد الأنماط المنطقية."
+                }
+            },
+            {
+                name: "Te",
+                arabicName: "التفكير الانبساطي (Te)",
+                pattern: "وظيفة الحكم",
+                characteristics: "يركز على الكفاءة والفعالية، ينظم العمليات والأنظمة، يتخذ قرارات موضوعية، موجه نحو تحقيق الأهداف، يحب إنجاز المهام، يهتم بالنتائج الملموسة، يفضل الوضوح والخطوات العملية، يضع أنظمة خارجية.",
+                strengths: ["الكفاءة والفعالية", "التنظيم والتخطيط", "القيادة واتخاذ القرارات", "القدرة على تحقيق الأهداف"],
+                challenges: ["قد يبدو قاسياً أو غير مراعٍ للمشاعر", "التركيز الزائد على النتائج يقلل من المرونة", "صعوبة في تقبل اللامنطقية", "قد يهمل الجانب البشري في العمل"],
+                advice: {
+                    high: "خصص وقتاً للتفكير العميق قبل العمل. استمع لوجهات نظر الآخرين فقد تضيف قيمة. تذكر أن الكفاءة ليست دائماً هي الأهم في كل المواقف، والمشاعر تلعب دوراً.",
+                    balanced: "استمر في تحقيق أهدافك بكفاءة، وحاول أيضاً أن تكون أكثر مرونة. ابحث عن توازن بين الإنجاز والتعاون مع الآخرين.",
+                    low: "حاول تطوير مهاراتك التنظيمية والتخطيطية. ركز على تحقيق أهداف ملموسة. تدرب على اتخاذ قرارات عملية وموضوعية."
+                }
+            }
+        ];
 
-  <!-- دمج الأسئلة والدوال والمنطق في ملف واحد -->
-  <script>
-    // هنا يندمج كود questions.js
-    const originalQuestions = [ /* ... كل الأسئلة كاملة ... */ ];
+        const personalityTypes = [
+            // INFPs and ISFPs (Fi-dom)
+            { type: "INFP", stack: ["Fi", "Ne", "Si", "Te", "Ni", "Fe", "Ti", "Se"], advice: "نمط الوسيط. مثالي، مبدع، ولديك قيم عميقة. تعلم كيفية التعبير عن قيمك بوضوح للآخرين دون التنازل عنها، وحاول تطبيق أفكارك على أرض الواقع." },
+            { type: "ISFP", stack: ["Fi", "Se", "Ni", "Te", "Fe", "Si", "Ne", "Ti"], advice: "نمط المغامر. هادئ، فني، ويقدر اللحظة. ابحث عن طرق لتنظيم حياتك وتحقيق أهدافك بفعالية، وحاول استكشاف أفكار أوسع." },
 
-    // هنا يندمج كود functions.js
-    const cognitiveFunctionsData = [ /* ... كل الوظائف الإدراكية ... */ ];
+            // ENFPs and ENTPs (Ne-dom)
+            { type: "ENFP", stack: ["Ne", "Fi", "Te", "Si", "Ni", "Fe", "Ti", "Se"], advice: "نمط الملهم. متفائل، مبدع، ولديك قيم قوية. ركز على إنجاز بعض أفكارك العظيمة ولا تشتت نفسك، وحاول الانتباه للتفاصيل والالتزامات." },
+            { type: "ENTP", stack: ["Ne", "Ti", "Fe", "Si", "Ni", "Te", "Fi", "Se"], advice: "نمط المبتكر. لديك شغف بالأفكار الجديدة وقدرة تحليلية. حاول أن تلتزم بالمشاريع وتطور مهاراتك الاجتماعية، ولا تتجاهل مشاعرك أو مشاعر الآخرين." },
 
-    // هنا يندمج كود logic.js + إصلاح XNTX
-    function determineMBTI(results) {
-      let E = results.E || 0, I = results.I || 0;
-      let N = results.Ne + results.Ni;
-      let S = results.Se + results.Si;
-      let T = results.Te + results.Ti;
-      let F = results.Fe + results.Fi;
-      let J = results.Te + results.Fe + results.Ni + results.Si;
-      let P = results.Ti + results.Fi + results.Ne + results.Se;
+            // INTJs and INFJs (Ni-dom)
+            { type: "INTJ", stack: ["Ni", "Te", "Fi", "Se", "Ne", "Ti", "Fe", "Si"], advice: "نمط المفكر الاستراتيجي. لديك رؤية عميقة وقدرة على وضع خطط فعالة. اعمل على تطوير جانبك العاطفي والتواصل بوضوح، وحاول أن تكون أكثر مرونة مع الظروف المفاجئة." },
+            { type: "INFJ", stack: ["Ni", "Fe", "Ti", "Se", "Ne", "Fi", "Te", "Si"], advice: "نمط المحامي/المستشار. تتمتع ببصيرة ثاقبة وتعاطف كبير. اهتم باحتياجاتك الشخصية ولا تفرط في مساعدة الآخرين، وحاول أن تكون أكثر مرونة في تحليلاتك." },
+            
+            // ISTJs and ISFJs (Si-dom)
+            { type: "ISTJ", stack: ["Si", "Te", "Fi", "Ne", "Se", "Ti", "Fe", "Ni"], advice: "نمط اللوجستي. منظم، عملي، وموثوق به. قدّر قيمة المرونة وتطوير العلاقات العاطفية، وكن منفتحاً على الأفكار الجديدة وغير التقليدية." },
+            { type: "ISFJ", stack: ["Si", "Fe", "Ti", "Ne", "Se", "Fi", "Te", "Ni"], advice: "نمط المدافع. دقيق، مسؤول، ويهتم بالآخرين. كن منفتحاً على التغيير ولا تبالغ في التمسك بالروتين، وحاول تطوير منطقك الداخلي." },
 
-      const type = [
-        E >= I ? "E" : "I",
-        N >= S ? "N" : "S",
-        T >= F ? "T" : "F",
-        J >= P ? "J" : "P",
-      ].join("");
+            // ESTJs and ESFJs (Te/Fe-dom, S-aux)
+            { type: "ESTJ", stack: ["Te", "Si", "Ne", "Fi", "Ti", "Se", "Ni", "Fe"], advice: "نمط المدير التنفيذي. كفؤ، مسؤول، ومنظم. حاول أن تكون أكثر انفتاحاً على التغيير والأفكار الجديدة، واستمع إلى قيمك الداخلية." },
+            { type: "ESFJ", stack: ["Fe", "Si", "Ne", "Ti", "Fi", "Se", "Ni", "Te"], advice: "نمط المعيل. اجتماعي، منظم، وداعم. كن منفتحاً على الأفكار الجديدة ولا تلتزم بالتقاليد الجامدة، وحاول تطوير قدرتك على التفكير المنطقي المستقل." },
 
-      // منع ظهور XNTX أو غيره، إذا في تعادل واضح نعطي أقرب نمط
-      return type.includes("X") ? "ENFP" : type;
-    }
+            // ENTJs and ENFJs (Te/Fe-dom, N-aux)
+            { type: "ENTJ", stack: ["Te", "Ni", "Se", "Fi", "Ti", "Ne", "Si", "Fe"], advice: "نمط القائد. حاسم، منظم، ولديك رؤية واضحة. كن أكثر مرونة واستمع إلى وجهات نظر الآخرين ومشاعرهم، وحاول استكشاف الجانب الحسي من الحياة." },
+            { type: "ENFJ", stack: ["Fe", "Ni", "Se", "Ti", "Fi", "Ne", "Si", "Te"], advice: "نمط المعلم. كاريزمي، متعاطف، ولديك رؤية. لا تضع احتياجات الآخرين فوق احتياجاتك، وتعلم تحديد أولوياتك، وحاول تطوير تفكيرك المنطقي." },
 
-    // هنا يندمج كود main.js (عرض الأسئلة، الحفظ التلقائي، التفاعل، التحليل)
-    // تخزين وتفاعل المستخدم ونتائجه عبر localStorage + تحسين واجهة المشاركة
-    // ... الكود الكامل هنا ...
-  </script>
+            // ISTPs and ESTPs (Ti/Se-dom)
+            { type: "ISTP", stack: ["Ti", "Se", "Ni", "Fe", "Te", "Si", "Ne", "Fi"], advice: "نمط الحرفي. منطقي، عملي، وملاحظ. ركز على فهم مشاعرك ومشاع الآخرين لتطوير علاقاتك، وحاول التفكير في النتائج طويلة الأمد." },
+            { type: "ESTP", stack: ["Se", "Ti", "Fe", "Ni", "Si", "Te", "Fi", "Ne"], advice: "نمط المروج. جريء، عملي، وملاحظ. ركز على التفكير المسبق وتطوير رؤياك للمستقبل، ولا تتجاهل مشاعر الآخرين أو الخاصة بك." },
+            
+            // INTPs (Ti-dom)
+            { type: "INTP", stack: ["Ti", "Ne", "Si", "Fe", "Te", "Ni", "Se", "Fi"], advice: "نمط المنطقي. مستقل، محلل، ومبتكر. حاول أن تطبق أفكارك وتتواصل بفعالية مع الآخرين، ولا تتجاهل الجانب العاطفي في العلاقات." },
+            
+            // ESFPs (Se-dom)
+            { type: "ESFP", stack: ["Se", "Fi", "Te", "Ni", "Si", "Fe", "Ti", "Ne"], advice: "نمط المؤدي. حيوي، عفوي، ومحب للمتعة. وازن بين الاستمتاع باللحظة والتفكير في النتائج طويلة الأمد، وكن أكثر وعياً بقيمك الشخصية." }
+        ];
+
+        let questions = []; // This will hold the shuffled questions
+        let currentQuestionIndex = 0;
+        let userAnswers = []; // Array of arrays, e.g., [[0,1], [2], []]
+        let scores = { Ni: 0, Ne: 0, Si: 0, Se: 0, Fi: 0, Fe: 0, Ti: 0, Te: 0, E: 0, I: 0, J: 0, P: 0 }; // Added E, I, J, P scores
+        let lastCalculatedType = null; // Store the last calculated type
+        let lastCalculatedAdvice = null; // Store the last calculated advice
+
+        const MAX_ANSWERS_PER_QUESTION = 2;
+        const WEBSITE_URL = "https://reaheu.github.io/mbti-test/"; // Added website URL
+        const TIKTOK_ACCOUNT = "https://www.tiktok.com/@reatwiy?_t=ZS-8xfyr92oGP9&_r=1"; // Added TikTok URL
+
+
+        // --- عناصر الواجهة ---
+        const startQuizBtn = document.getElementById('start-quiz-btn');
+        const resumeQuizBtn = document.getElementById('resume-quiz-btn');
+        const viewLastResultsBtn = document.getElementById('view-last-results-btn');
+        const preQuizInfo = document.getElementById('pre-quiz-info');
+        const quizSection = document.getElementById('quiz-section');
+        const progressBar = document.getElementById('progress-bar');
+        const progressText = document.getElementById('progress-text');
+        const questionsContainer = document.getElementById('questions-container');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const resultsSection = document.getElementById('results-section');
+        const typeResult = document.getElementById('type-result');
+        const finalTypeName = document.getElementById('final-type-name');
+        const typeAdvice = document.getElementById('type-advice');
+        const dominantFunctionsResults = document.getElementById('dominant-functions-results');
+        const rankedFunctionsBody = document.getElementById('ranked-functions-body');
+        const cognitiveFunctionsBody = document.getElementById('cognitive-functions-body');
+        const restartQuizBtn = document.getElementById('restart-quiz-btn');
+        const printResultsBtn = document.getElementById('print-results-btn');
+        const downloadResultsBtn = document.getElementById('download-results-btn');
+        const shareWhatsappBtn = document.getElementById('share-whatsapp-btn');
+        const shareTwitterBtn = document.getElementById('share-twitter-btn');
+        const shareFacebookBtn = document.getElementById('share-facebook-btn');
+        
+        // Update footer TikTok link
+        document.querySelector('footer .social-media a').href = TIKTOK_ACCOUNT;
+
+
+        // --- وظائف المساعدة ---
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]]; // Swap elements
+            }
+            return array;
+        }
+
+        // Helper to extract MBTI letters from a type string
+        function getMbtiLetters(type) {
+            if (!type || type.length !== 4) return null;
+            return {
+                P1: type[0], // E/I
+                P2: type[1], // N/S
+                P3: type[2], // T/F
+                P4: type[3]  // J/P
+            };
+        }
+
+        // --- وظائف حفظ واستعادة البيانات ---
+        function saveState() {
+            localStorage.setItem('quizCurrentQuestionIndex', currentQuestionIndex);
+            localStorage.setItem('quizUserAnswers', JSON.stringify(userAnswers));
+            localStorage.setItem('quizShuffledQuestionsOrder', JSON.stringify(questions.map(q => originalQuestions.indexOf(q)))); // Save original indices
+            localStorage.setItem('quizScores', JSON.stringify(scores));
+            if (lastCalculatedType) { // Only save if calculation finished
+                localStorage.setItem('quizLastType', lastCalculatedType);
+                localStorage.setItem('quizLastAdvice', lastCalculatedAdvice);
+            }
+        }
+
+        function loadState() {
+            const savedIndex = localStorage.getItem('quizCurrentQuestionIndex');
+            const savedAnswers = localStorage.getItem('quizUserAnswers');
+            const savedOrder = localStorage.getItem('quizShuffledQuestionsOrder');
+            const savedScores = localStorage.getItem('quizScores');
+            const savedType = localStorage.getItem('quizLastType');
+            const savedAdvice = localStorage.getItem('quizLastAdvice');
+
+            if (savedIndex && savedAnswers && savedOrder) {
+                currentQuestionIndex = parseInt(savedIndex);
+                userAnswers = JSON.parse(savedAnswers);
+                const orderIndices = JSON.parse(savedOrder);
+                questions = orderIndices.map(idx => originalQuestions[idx]); // Reconstruct shuffled questions
+                scores = savedScores ? JSON.parse(savedScores) : { Ni: 0, Ne: 0, Si: 0, Se: 0, Fi: 0, Fe: 0, Ti: 0, Te: 0, E: 0, I: 0, J: 0, P: 0 }; // Ensure all score keys exist
+                
+                // If user finished, show option to view results
+                if (currentQuestionIndex >= questions.length && savedType) {
+                    lastCalculatedType = savedType;
+                    lastCalculatedAdvice = savedAdvice;
+                    startQuizBtn.style.display = 'none';
+                    resumeQuizBtn.style.display = 'none';
+                    viewLastResultsBtn.style.display = 'block';
+                    // Update pre-quiz-info with dynamic links for last results or new quiz
+                    preQuizInfo.innerHTML = `<span class="icon">✨</span><p><strong>مرحباً بك!</strong> يبدو أنك أكملت الاختبار سابقاً. يمكنك <a href="#" id="view-resume-link">عرض نتائجك الأخيرة</a> أو <a href="#" id="start-new-link">بدء اختبار جديد</a>.</p>`;
+                    document.getElementById('view-resume-link').addEventListener('click', (e) => { e.preventDefault(); showResultsFromSaved(); });
+                    document.getElementById('start-new-link').addEventListener('click', (e) => { e.preventDefault(); startNewQuiz(); });
+                } else if (currentQuestionIndex > 0 || userAnswers.some(a => a.length > 0)) {
+                    // If progress exists but not finished
+                    startQuizBtn.style.display = 'none';
+                    resumeQuizBtn.style.display = 'block';
+                }
+            } else {
+                 startQuizBtn.style.display = 'block'; // No saved state, show start button
+            }
+        }
+
+        function clearState() {
+            localStorage.removeItem('quizCurrentQuestionIndex');
+            localStorage.removeItem('quizUserAnswers');
+            localStorage.removeItem('quizShuffledQuestionsOrder');
+            localStorage.removeItem('quizScores');
+            localStorage.removeItem('quizLastType');
+            localStorage.removeItem('quizLastAdvice');
+        }
+
+        // --- تهيئة البدء ---
+        document.addEventListener('DOMContentLoaded', () => {
+            populateFunctionsTable(); // ملء جدول الوظائف الإدراكية عند تحميل الصفحة
+            loadState(); // حاول تحميل حالة الاختبار
+            // التأكد من إخفاء الأقسام الصحيحة عند البداية
+            quizSection.style.display = 'none';
+            resultsSection.style.display = 'none';
+        });
+
+        startQuizBtn.addEventListener('click', startNewQuiz);
+        resumeQuizBtn.addEventListener('click', resumeQuiz);
+        viewLastResultsBtn.addEventListener('click', showResultsFromSaved);
+
+        function startNewQuiz() {
+            clearState(); // Clear any previous state
+            questions = shuffleArray([...originalQuestions]); // Shuffle questions for a new test
+            currentQuestionIndex = 0;
+            userAnswers = Array.from({length: questions.length}, () => []);
+            scores = { Ni: 0, Ne: 0, Si: 0, Se: 0, Fi: 0, Fe: 0, Ti: 0, Te: 0, E: 0, I: 0, J: 0, P: 0 }; // Reset all scores
+            lastCalculatedType = null;
+            lastCalculatedAdvice = null;
+
+            // Ensure correct sections are displayed/hidden
+            preQuizInfo.style.display = 'block'; // Show intro info again
+            preQuizInfo.innerHTML = `<span class="icon">💡</span>
+                <div>
+                    <p><strong>مرحبًا بك في اختبار الوظائف الإدراكية!</strong></p>
+                    <p>يهدف هذا الاختبار إلى مساعدتك في فهم الوظائف الإدراكية التي تستخدمها بشكل طبيعي.</p>
+                    <p><strong>تنبيه هام:</strong></p>
+                    <ul>
+                        <li><strong>الإجابات الصادقة:</strong> أجب على الأسئلة بصدق تام، واختر الإجابة التي تعبر عنك أكثر في معظم المواقف، وليس ما تتمنى أن تكون عليه.</li>
+                        <li><strong>خيارات متعددة:</strong> يمكنك اختيار <strong>إجابة واحدة أو إجابتين كحد أقصى</strong> لكل سؤال إذا كنت تشعر أن كلاهما يعبر عنك.</li>
+                        <li><strong>لا يوجد إجابات صحيحة أو خاطئة:</strong> جميع الإجابات مقبولة، والهدف هو فهمك لذاتك.</li>
+                        <li><strong>كل إجابة تفرق:</strong> تذكر أن كل إجابة تفرق وتؤثر بشكل مباشر على النتائج النهائية ودقة تحديد وظائفك الإدراكية ونمط شخصيتك.</li>
+                        <li><strong>مدة الاختبار:</strong> قد يستغرق الاختبار بعض الوقت، لذا تأكد أن لديك متسعًا من الوقت والتركيز.</li>
+                    </ul>
+                </div>`; // Reset info text
+
+            startQuizBtn.style.display = 'block'; // Show original start button
+            resumeQuizBtn.style.display = 'none'; // Hide resume
+            viewLastResultsBtn.style.display = 'none'; // Hide view last results
+
+            quizSection.style.display = 'none'; // Hide quiz section
+            resultsSection.style.display = 'none'; // Hide results section
+            // The user needs to click 'Start Quiz' again to proceed to questions
+            saveState(); // Save initial state (empty)
+        }
+
+
+        function resumeQuiz() {
+            preQuizInfo.style.display = 'none';
+            startQuizBtn.style.display = 'none';
+            resumeQuizBtn.style.display = 'none';
+            viewLastResultsBtn.style.display = 'none';
+            quizSection.style.display = 'block';
+            displayQuestion();
+            updateProgressBar();
+        }
+
+        function showResultsFromSaved() {
+            preQuizInfo.style.display = 'none';
+            startQuizBtn.style.display = 'none';
+            resumeQuizBtn.style.display = 'none';
+            viewLastResultsBtn.style.display = 'none';
+            quizSection.style.display = 'none';
+            resultsSection.style.display = 'block';
+            
+            // Populate results from saved state
+            if (lastCalculatedType && lastCalculatedAdvice) {
+                finalTypeName.textContent = lastCalculatedType;
+                typeAdvice.textContent = lastCalculatedAdvice;
+            } else { // Recalculate if for some reason not saved fully
+                calculateAndDisplayResults(false); // Don't hide/show sections again
+            }
+            displayDominantFunctions();
+            displayAllFunctionsRanked();
+        }
+
+
+        prevBtn.addEventListener('click', () => {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                displayQuestion();
+                saveState();
+            }
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (userAnswers[currentQuestionIndex].length === 0) {
+                alert("الرجاء اختيار إجابة واحدة على الأقل للمتابعة.");
+                return;
+            }
+
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                displayQuestion();
+                saveState();
+            } else {
+                calculateAndDisplayResults(true); // True to trigger full display logic
+                saveState(); // Save final results
+            }
+        });
+
+        restartQuizBtn.addEventListener('click', () => {
+            const confirmRestart = confirm("تحذير: عند إعادة الاختبار، ستتغير جميع إجاباتك السابقة وستحتاج إلى الإجابة من جديد. هل أنت متأكد أنك تريد المتابعة؟");
+            if (confirmRestart) {
+                startNewQuiz(); // This now correctly resets the UI
+            }
+        });
+
+        printResultsBtn.addEventListener('click', () => {
+            window.print();
+        });
+
+        downloadResultsBtn.addEventListener('click', () => {
+            const filename = "نتائج_اختبار_الوظائف_الإدراكية.txt";
+            let content = `نمط شخصيتك: ${finalTypeName.textContent}\n\n`;
+            content += `ملخص النمط: ${typeAdvice.textContent}\n\n`;
+            
+            content += "الوظائف الإدراكية المهيمنة:\n";
+            const dominantElements = dominantFunctionsResults.querySelectorAll('.result-item span');
+            dominantElements.forEach(el => {
+                content += `${el.textContent}\n`;
+            });
+            content += "\n";
+
+            content += "ترتيب جميع الوظائف الإدراكية:\n\n";
+            const rankedRows = rankedFunctionsBody.querySelectorAll('tr');
+            rankedRows.forEach(row => {
+                const cells = row.querySelectorAll('td');
+                if (cells.length > 0) {
+                    content += `الوظيفة: ${cells[0].textContent}, النقاط: ${cells[1].textContent}\n`;
+                    content += `  المميزات: ${cells[2].textContent.replace(/• /g, '').replace(/<br>/g, '; ')}\n`;
+                    content += `  التحديات: ${cells[3].textContent.replace(/• /g, '').replace(/<br>/g, '; ')}\n`;
+                    content += `  نصيحة: ${cells[4].textContent.replace(/\n/g, ' ')}\n\n`;
+                }
+            });
+
+            const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        });
+
+        shareWhatsappBtn.addEventListener('click', () => {
+            const text = encodeURIComponent(`لقد اكتشفت نمط شخصيتي المحتمل في اختبار الوظائف الإدراكية! نمطي هو: ${finalTypeName.textContent}.\n\nاكتشف نمطك هنا: ${WEBSITE_URL}`);
+            window.open(`https://wa.me/?text=${text}`, '_blank');
+        });
+
+        shareTwitterBtn.addEventListener('click', () => {
+            const text = encodeURIComponent(`لقد اكتشفت نمط شخصيتي المحتمل في اختبار الوظائف الإدراكية! نمطي هو: ${finalTypeName.textContent}. #اختبار_شخصية #MBTI`);
+            const url = encodeURIComponent(WEBSITE_URL);
+            window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank');
+        });
+
+        shareFacebookBtn.addEventListener('click', () => {
+            const url = encodeURIComponent(WEBSITE_URL);
+            window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${encodeURIComponent(`لقد اكتشفت نمط شخصيتي المحتمل في اختبار الوظائف الإدراكية! نمطي هو: ${finalTypeName.textContent}.`)}`, '_blank');
+        });
+
+        // --- وظائف عرض الأسئلة والتقدم ---
+        function displayQuestion() {
+            questionsContainer.innerHTML = '';
+            const questionData = questions[currentQuestionIndex];
+
+            const questionCard = document.createElement('div');
+            questionCard.className = 'question-card';
+            questionCard.innerHTML = `<p>${currentQuestionIndex + 1}. ${questionData.question}</p><div class="options"></div>`;
+
+            const optionsDiv = questionCard.querySelector('.options');
+            questionData.options.forEach((option, index) => {
+                const label = document.createElement('label');
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.name = `question${currentQuestionIndex}`;
+                checkbox.value = index;
+                checkbox.checked = userAnswers[currentQuestionIndex] && userAnswers[currentQuestionIndex].includes(index);
+
+                checkbox.addEventListener('change', (event) => {
+                    const selectedIndex = parseInt(event.target.value);
+                    let currentSelected = userAnswers[currentQuestionIndex] || []; // Ensure it's an array
+
+                    if (event.target.checked) {
+                        if (currentSelected.length < MAX_ANSWERS_PER_QUESTION) {
+                            currentSelected.push(selectedIndex);
+                        } else {
+                            event.target.checked = false;
+                            alert(`يمكنك اختيار إجابتين كحد أقصى لكل سؤال. لقد اخترت بالفعل ${MAX_ANSWERS_PER_QUESTION}.`);
+                        }
+                    } else {
+                        currentSelected = currentSelected.filter(item => item !== selectedIndex);
+                    }
+                    userAnswers[currentQuestionIndex] = currentSelected; // Update the array
+                    saveState(); // Save state after each option change
+                });
+
+                label.appendChild(checkbox);
+                label.appendChild(document.createElement('span')).textContent = option.text;
+                optionsDiv.appendChild(label);
+            });
+
+            questionsContainer.appendChild(questionCard);
+            updateNavigationButtons();
+            updateProgressBar();
+        }
+
+        function updateNavigationButtons() {
+            prevBtn.disabled = (currentQuestionIndex === 0);
+            nextBtn.textContent = (currentQuestionIndex === questions.length - 1) ? 'انهاء الاختبار' : 'التالي';
+        }
+
+        function updateProgressBar() {
+            const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
+            progressBar.style.width = `${progress}%`;
+            progressText.textContent = `السؤال ${currentQuestionIndex + 1} من ${questions.length}`;
+        }
+
+        // --- وظائف حساب وعرض النتائج ---
+        function calculateAndDisplayResults(shouldHideQuizSection) {
+            const unansweredQuestionsCount = userAnswers.filter(answer => answer.length === 0).length;
+            if (unansweredQuestionsCount > 0) {
+                alert(`لم يتم الإجابة على ${unansweredQuestionsCount} سؤال. يرجى إكمال جميع الأسئلة قبل إنهاء الاختبار.`);
+                currentQuestionIndex = userAnswers.findIndex(answer => answer.length === 0);
+                displayQuestion();
+                return;
+            }
+
+            // Reset scores before recalculating
+            for (const func in scores) {
+                scores[func] = 0;
+            }
+
+            // Calculate scores
+            userAnswers.forEach((selectedOptionsIndices, qIndex) => {
+                selectedOptionsIndices.forEach(optionIndex => {
+                    // Make sure qIndex is valid and questions array has the item
+                    if (questions[qIndex] && questions[qIndex].options[optionIndex]) {
+                        const selectedOption = questions[qIndex].options[optionIndex];
+                        for (const func in selectedOption.impact) {
+                            scores[func] += selectedOption.impact[func];
+                        }
+                    }
+                });
+            });
+
+            if (shouldHideQuizSection) {
+                quizSection.style.display = 'none';
+                resultsSection.style.display = 'block';
+            }
+            
+            inferAndDisplayPersonalityType();
+            displayDominantFunctions();
+            displayAllFunctionsRanked();
+        }
+
+        function inferAndDisplayPersonalityType() {
+            const functionScores = Object.entries(scores).filter(([key]) => !['E', 'I', 'J', 'P'].includes(key))
+                                            .map(([name, score]) => ({ name, score }))
+                                            .sort((a, b) => b.score - a.score);
+
+            if (functionScores.length === 0 || functionScores[0].score === 0) {
+                finalTypeName.textContent = "غير محدد";
+                typeAdvice.textContent = "لم يتم جمع بيانات كافية لتحديد النمط.";
+                lastCalculatedType = finalTypeName.textContent;
+                lastCalculatedAdvice = typeAdvice.textContent;
+                return;
+            }
+
+            // Determine E/I
+            let P1 = scores.E >= scores.I ? 'E' : 'I';
+            // If scores are equal or no strong preference, default to Extrovert for more social types, Introvert for more analytical
+            if (scores.E === scores.I) {
+                P1 = 'X'; // Indicate no clear preference, or use logic based on dominant function
+                // For simplicity, let's pick E if scores are tied for now, or based on the dominant function's orientation
+                const dominantFunc = functionScores[0].name;
+                if (dominantFunc.endsWith('e')) P1 = 'E';
+                else if (dominantFunc.endsWith('i')) P1 = 'I';
+            }
+
+            // Determine J/P
+            let P4 = scores.J >= scores.P ? 'J' : 'P';
+             if (scores.J === scores.P) {
+                P4 = 'X'; // Indicate no clear preference
+                // If functions Te/Fe or Ti/Fi are dominant, lean J (judging function)
+                const domFuncPattern = cognitiveFunctionsData.find(f => f.name === functionScores[0].name)?.pattern;
+                if (domFuncPattern === "وظيفة الحكم") P4 = 'J';
+                else if (domFuncPattern === "وظيفة الإدراك") P4 = 'P';
+            }
+
+            // Determine S/N and T/F from dominant perceiving and judging functions
+            let perceivingFuncs = functionScores.filter(f => ['Ni', 'Ne', 'Si', 'Se'].includes(f.name));
+            let judgingFuncs = functionScores.filter(f => ['Fi', 'Fe', 'Ti', 'Te'].includes(f.name));
+
+            let P2 = ''; // S or N
+            let P3 = ''; // T or F
+
+            // Try to derive S/N from dominant perceiving function
+            if (perceivingFuncs.length > 0) {
+                if (perceivingFuncs[0].name.includes('N')) P2 = 'N';
+                else if (perceivingFuncs[0].name.includes('S')) P2 = 'S';
+            } else { // Fallback if no perceiving functions scored (unlikely but for robustness)
+                P2 = (scores.Ne + scores.Ni) >= (scores.Se + scores.Si) ? 'N' : 'S';
+            }
+
+            // Try to derive T/F from dominant judging function
+            if (judgingFuncs.length > 0) {
+                if (judgingFuncs[0].name.includes('T')) P3 = 'T';
+                else if (judgingFuncs[0].name.includes('F')) P3 = 'F';
+            } else { // Fallback
+                P3 = (scores.Te + scores.Ti) >= (scores.Fe + scores.Fi) ? 'T' : 'F';
+            }
+
+            let calculatedType = `${P1}${P2}${P3}${P4}`;
+            
+            // Refine J/P based on dominant and auxiliary function orientation
+            // For I_J types, the dominant function is Introverted (Ni, Si, Fi, Ti)
+            // For I_P types, the dominant function is Introverted (Ni, Si, Fi, Ti)
+            // For E_J types, the dominant function is Extroverted (Ne, Se, Fe, Te)
+            // For E_P types, the dominant function is Extroverted (Ne, Se, Fe, Te)
+            // MBTI letter J/P indicates the orientation of the *first extroverted* judging/perceiving function
+            // This is complex for a simple test. For simplicity, we used direct J/P scores.
+            // Let's rely on the best matching stack for J/P if direct scores are ambiguous.
+
+            let potentialMatches = [];
+            const stackWeights = [100, 50, 20, 10, 5, 2, 1, 0.5]; // Weight for each position in the stack (up to 8 functions)
+
+            personalityTypes.forEach(typeData => {
+                let matchScore = 0;
+                let matchedFunctions = [];
+
+                functionScores.forEach(userFuncScore => {
+                    const funcIndexInStack = typeData.stack.indexOf(userFuncScore.name);
+                    if (funcIndexInStack !== -1) { // If user's function is in this type's stack
+                        matchScore += userFuncScore.score * (stackWeights[funcIndexInStack] / 100); // Scale score by weight
+                        matchedFunctions.push(userFuncScore.name);
+                    }
+                });
+
+                // Also give a bonus for matching the overall E/I and J/P preference derived
+                const typeLetters = getMbtiLetters(typeData.type);
+                if (typeLetters.P1 === P1) matchScore += 10;
+                if (typeLetters.P4 === P4) matchScore += 10;
+                if (typeLetters.P2 === P2) matchScore += 10;
+                if (typeLetters.P3 === P3) matchScore += 10;
+                
+                // Add a penalty if the *highest scored function* doesn't match the type's dominant
+                if (functionScores[0].name !== typeData.stack[0]) {
+                    matchScore -= 20; // Significant penalty
+                }
+                // Add a penalty if the *second highest scored function* doesn't match the type's auxiliary
+                if (functionScores.length > 1 && functionScores[1].name !== typeData.stack[1]) {
+                     matchScore -= 10; // Smaller penalty
+                }
+
+
+                potentialMatches.push({ type: typeData.type, advice: typeData.advice, score: matchScore, stack: typeData.stack });
+            });
+
+            potentialMatches.sort((a, b) => b.score - a.score);
+
+            const best = potentialMatches[0];
+            const secondBest = potentialMatches.length > 1 ? potentialMatches[1] : null;
+
+            if (best && best.score > 0) {
+                const singleBestThresholdRatio = 0.85; // Increased threshold for a clear winner
+
+                if (!secondBest || secondBest.score < (best.score * singleBestThresholdRatio)) {
+                    finalTypeName.textContent = best.type;
+                    typeAdvice.textContent = best.advice;
+                } else {
+                    const bestLetters = getMbtiLetters(best.type);
+                    const secondLetters = getMbtiLetters(secondBest.type);
+                    
+                    let commonParts = [];
+                    if (bestLetters.P1 === secondLetters.P1) commonParts.push(bestLetters.P1); else commonParts.push('X');
+                    if (bestLetters.P2 === secondLetters.P2) commonParts.push(bestLetters.P2); else commonParts.push('X');
+                    if (bestLetters.P3 === secondLetters.P3) commonParts.push(bestLetters.P3); else commonParts.push('X');
+                    if (bestLetters.P4 === secondLetters.P4) commonParts.push(bestLetters.P4); else commonParts.push('X');
+
+                    const commonTypePrefix = commonParts.join('');
+
+                    finalTypeName.textContent = `نمط ${commonTypePrefix} المحتمل (قد تكون ${best.type} أو ${secondBest.type})`;
+                    typeAdvice.textContent = `بناءً على نتائجك، قد تكون إما ${best.type} أو ${secondBest.type}، حيث توجد تقاربات كبيرة في وظائفك الإدراكية. \n\n**${best.type}:** ${best.advice} \n\n**${secondBest.type}:** ${secondBest.advice}`;
+                }
+            } else {
+                finalTypeName.textContent = "غير محدد بدقة";
+                typeAdvice.textContent = "بناءً على إجاباتك، لم نستطع تحديد نمط شخصية محدد بوضوح. قد يكون لديك مزيج فريد من الوظائف أو تحتاج لمزيد من الاستكشاف.";
+            }
+
+            lastCalculatedType = finalTypeName.textContent;
+            lastCalculatedAdvice = typeAdvice.textContent;
+        }
+
+
+        function displayDominantFunctions() {
+            dominantFunctionsResults.innerHTML = '<h3>الوظائف الإدراكية المهيمنة:</h3>';
+
+            const sortedFunctions = Object.entries(scores).filter(([key]) => !['E', 'I', 'J', 'P'].includes(key))
+                                        .map(([name, score]) => {
+                                            const funcData = cognitiveFunctionsData.find(f => f.name === name);
+                                            return {
+                                                name: funcData ? funcData.arabicName : name,
+                                                score: score,
+                                                originalName: name,
+                                                pattern: funcData ? funcData.pattern : ''
+                                            };
+                                        }).sort((a, b) => b.score - a.score);
+
+            const displayedDominant = sortedFunctions.slice(0, 4); // Display top 4 functions
+
+            displayedDominant.forEach((func, index) => {
+                const item = document.createElement('div');
+                item.className = 'result-item';
+                let role = '';
+                if (index === 0) role = 'المهيمنة';
+                else if (index === 1) role = 'المساعدة';
+                else if (index === 2) role = 'الثالثة';
+                else if (index === 3) role = 'الدنيا (المتأرجحة)';
+
+                item.innerHTML = `
+                    <strong>الوظيفة ${role}:</strong>
+                    <span>${func.name} (${func.score} نقطة)</span>
+                `;
+                dominantFunctionsResults.appendChild(item);
+            });
+            
+            displayedDominant.forEach(func => {
+                const funcData = cognitiveFunctionsData.find(f => f.name === func.originalName);
+                if (funcData) {
+                    const adviceDiv = document.createElement('div');
+                    adviceDiv.className = 'function-advice-card';
+                    adviceDiv.innerHTML = `<h3>نصيحة لوظيفة ${funcData.arabicName}:</h3>`;
+                    
+                    let levelAdvice = funcData.advice.balanced; 
+
+                    // Adjusted max possible score logic based on new question structure
+                    const maxPossibleScorePerFunction = questions.length * MAX_ANSWERS_PER_QUESTION * 2; 
+                    const highThreshold = maxPossibleScorePerFunction * 0.40; // Reduced threshold slightly
+                    const lowThreshold = maxPossibleScorePerFunction * 0.10; // Increased low threshold to be more inclusive
+
+                    if (func.score >= highThreshold) {
+                        levelAdvice = funcData.advice.high;
+                    } else if (func.score <= lowThreshold) {
+                        levelAdvice = funcData.advice.low;
+                    }
+                    adviceDiv.innerHTML += `<p>${levelAdvice}</p>`;
+
+                    dominantFunctionsResults.appendChild(adviceDiv);
+                }
+            });
+        }
+
+        function displayAllFunctionsRanked() {
+            rankedFunctionsBody.innerHTML = '';
+
+            const sortedFunctions = Object.entries(scores).filter(([key]) => !['E', 'I', 'J', 'P'].includes(key))
+                                        .map(([name, score]) => {
+                                            const funcData = cognitiveFunctionsData.find(f => f.name === name);
+                                            return {
+                                                name: funcData ? funcData.arabicName : name,
+                                                score: score,
+                                                strengths: funcData ? funcData.strengths : [],
+                                                challenges: funcData ? funcData.challenges : [],
+                                                originalName: name
+                                            };
+                                        }).sort((a, b) => b.score - a.score);
+
+            sortedFunctions.forEach(func => {
+                const row = document.createElement('tr');
+                
+                const maxPossibleScorePerFunction = questions.length * MAX_ANSWERS_PER_QUESTION * 2; 
+                const highThreshold = maxPossibleScorePerFunction * 0.40; 
+                const lowThreshold = maxPossibleScorePerFunction * 0.10;
+                
+                let adviceText = "لا توجد نصيحة محددة.";
+                const funcData = cognitiveFunctionsData.find(f => f.name === func.originalName);
+                if (funcData) {
+                    if (func.score >= highThreshold) {
+                        adviceText = funcData.advice.high;
+                    } else if (func.score <= lowThreshold) {
+                        adviceText = funcData.advice.low;
+                    } else {
+                        adviceText = funcData.advice.balanced;
+                    }
+                }
+
+                row.innerHTML = `
+                    <td>${func.name}</td>
+                    <td>${func.score}</td>
+                    <td>${func.strengths.map(s => `• ${s}`).join('<br>')}</td>
+                    <td>${func.challenges.map(c => `• ${c}`).join('<br>')}</td>
+                    <td>${adviceText}</td>
+                `;
+                rankedFunctionsBody.appendChild(row);
+            });
+        }
+
+        function populateFunctionsTable() {
+            cognitiveFunctionsBody.innerHTML = '';
+
+            cognitiveFunctionsData.forEach(func => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${func.arabicName}</td>
+                    <td>${func.pattern}</td>
+                    <td>${func.characteristics}</td>
+                    <td>${func.strengths.map(s => `• ${s}`).join('<br>')}</td>
+                    <td>${func.challenges.map(c => `• ${c}`).join('<br>')}</td>
+                    <td>${func.advice.high}<br><br>${func.advice.balanced}<br><br>${func.advice.low}</td>
+                `;
+                cognitiveFunctionsBody.appendChild(row);
+            });
+        }
+    </script>
 </body>
 </html>
