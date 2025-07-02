@@ -582,7 +582,7 @@
         </p>
         <div class="social-media">
             <p><strong>تابعنا:</strong></p>
-            <a href="https://www.tiktok.com/@yourtiktokaccount" target="_blank">حساب تيك توك (ضع حسابك هنا)</a>
+            <a href="https://www.tiktok.com/@reatwiy?_t=ZS-8xfyr92oGP9&_r=1" target="_blank">حساب تيك توك</a>
             </div>
     </footer>
 
@@ -1066,6 +1066,9 @@
         let lastCalculatedAdvice = null; // Store the last calculated advice
 
         const MAX_ANSWERS_PER_QUESTION = 2;
+        const WEBSITE_URL = "https://reaheu.github.io/mbti-test/"; // Added website URL
+        const TIKTOK_ACCOUNT = "https://www.tiktok.com/@reatwiy?_t=ZS-8xfyr92oGP9&_r=1"; // Added TikTok URL
+
 
         // --- عناصر الواجهة ---
         const startQuizBtn = document.getElementById('start-quiz-btn');
@@ -1091,6 +1094,9 @@
         const shareWhatsappBtn = document.getElementById('share-whatsapp-btn');
         const shareTwitterBtn = document.getElementById('share-twitter-btn');
         const shareFacebookBtn = document.getElementById('share-facebook-btn');
+        
+        // Update footer TikTok link
+        document.querySelector('footer .social-media a').href = TIKTOK_ACCOUNT;
 
 
         // --- وظائف المساعدة ---
@@ -1299,20 +1305,18 @@
         });
 
         shareWhatsappBtn.addEventListener('click', () => {
-            const text = encodeURIComponent(`لقد اكتشفت نمط شخصيتي المحتمل في اختبار الوظائف الإدراكية! نمطي هو: ${finalTypeName.textContent}.\n\nاكتشف نمطك هنا: [رابط موقعك هنا إذا كنت ستستضيفه]`);
+            const text = encodeURIComponent(`لقد اكتشفت نمط شخصيتي المحتمل في اختبار الوظائف الإدراكية! نمطي هو: ${finalTypeName.textContent}.\n\nاكتشف نمطك هنا: ${WEBSITE_URL}`);
             window.open(`https://wa.me/?text=${text}`, '_blank');
         });
 
         shareTwitterBtn.addEventListener('click', () => {
             const text = encodeURIComponent(`لقد اكتشفت نمط شخصيتي المحتمل في اختبار الوظائف الإدراكية! نمطي هو: ${finalTypeName.textContent}. #اختبار_شخصية #MBTI`);
-            const url = encodeURIComponent("[رابط موقعك هنا إذا كنت ستستضيفه]"); // Replace with your actual URL
+            const url = encodeURIComponent(WEBSITE_URL);
             window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank');
         });
 
         shareFacebookBtn.addEventListener('click', () => {
-            const url = encodeURIComponent("[رابط موقعك هنا إذا كنت ستستضيفه]"); // Replace with your actual URL
-            // Facebook share often requires a configured app or direct URL to the page
-            // This will open a generic share dialog
+            const url = encodeURIComponent(WEBSITE_URL);
             window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${encodeURIComponent(`لقد اكتشفت نمط شخصيتي المحتمل في اختبار الوظائف الإدراكية! نمطي هو: ${finalTypeName.textContent}.`)}`, '_blank');
         });
 
