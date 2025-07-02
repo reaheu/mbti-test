@@ -27,7 +27,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            min-height: 100vh; /* Ensure body takes full height */
+            min-height: 100vh;
         }
 
         .container {
@@ -74,54 +74,80 @@
             border-radius: var(--border-radius);
             font-weight: bold;
             display: flex;
-            align-items: flex-start; /* Align icon and text at top */
+            align-items: flex-start;
             gap: 10px;
         }
 
         .alert ul {
             margin: 0;
-            padding-right: 20px; /* For Arabic list styling */
+            padding-right: 20px;
             list-style-type: disc;
         }
         .alert li {
             margin-bottom: 5px;
         }
 
-
         .alert.info {
-            background-color: #e0f7fa; /* Light cyan */
-            color: #00796b; /* Dark cyan */
+            background-color: #e0f7fa;
+            color: #00796b;
             border: 1px solid #00bcd4;
         }
 
         .alert.warning {
-            background-color: #fff3e0; /* Light orange */
-            color: #ef6c00; /* Dark orange */
+            background-color: #fff3e0;
+            color: #ef6c00;
             border: 1px solid #ff9800;
         }
 
         .alert.error {
-            background-color: #ffebee; /* Light red */
-            color: #d32f2f; /* Dark red */
+            background-color: #ffebee;
+            color: #d32f2f;
             border: 1px solid #f44336;
         }
 
         .alert .icon {
             font-size: 1.5em;
-            flex-shrink: 0; /* Prevent icon from shrinking */
+            flex-shrink: 0;
         }
 
         /* ----- قسم الاختبار ----- */
         #quiz-section {
-            display: none; /* سيتم إظهاره بالـ JavaScript */
+            display: none;
         }
 
-        .progress-indicator {
-            text-align: center;
+        /* Progress Bar */
+        .progress-container {
+            width: 100%;
+            background-color: var(--light-grey);
+            border-radius: 5px;
             margin-bottom: 20px;
-            font-size: 1.1em;
+            height: 25px;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden; /* Ensure progress-bar does not overflow */
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background-color: var(--primary-color);
+            border-radius: 5px;
+            text-align: center;
+            line-height: 25px;
+            color: white;
+            transition: width 0.4s ease-in-out;
+            position: absolute;
+            right: 0; /* Align to the right for RTL */
+        }
+
+        .progress-text {
+            position: absolute;
+            width: 100%;
+            text-align: center;
             color: var(--dark-grey);
             font-weight: bold;
+            z-index: 1; /* Ensure text is above bar */
         }
 
         .question-card {
@@ -154,20 +180,20 @@
             cursor: pointer;
             transition: all 0.3s ease;
             border: 1px solid var(--light-grey);
-            display: flex; /* For better alignment of checkbox and text */
+            display: flex;
             align-items: center;
         }
 
         .options label:hover {
-            background-color: #e8f5e9; /* Light green on hover */
+            background-color: #e8f5e9;
             border-color: var(--primary-color);
             transform: translateX(5px);
         }
 
         .options input[type="checkbox"] {
-            margin-left: 10px; /* Space between checkbox and text */
+            margin-left: 10px;
             transform: scale(1.2);
-            accent-color: var(--primary-color); /* Color the checkbox */
+            accent-color: var(--primary-color);
         }
         
         .options input[type="checkbox"]:checked + span {
@@ -179,7 +205,7 @@
             display: flex;
             justify-content: space-between;
             margin-top: 30px;
-            flex-direction: row-reverse; /* Swap places for buttons */
+            flex-direction: row-reverse;
         }
 
         .btn {
@@ -196,7 +222,7 @@
         }
 
         .btn:hover {
-            background-color: #43a047; /* Darker primary */
+            background-color: #43a047;
             transform: translateY(-2px);
         }
 
@@ -210,12 +236,12 @@
         }
 
         .btn.secondary:hover {
-            background-color: #ffb300; /* Darker secondary */
+            background-color: #ffb300;
         }
 
         /* ----- قسم النتائج ----- */
         #results-section {
-            display: none; /* سيتم إظهاره بالـ JavaScript */
+            display: none;
             text-align: center;
         }
 
@@ -242,12 +268,12 @@
 
         .function-advice-card {
             background-color: #e8f5e9;
-            border-right: 5px solid var(--primary-color); /* Changed to right for RTL */
+            border-right: 5px solid var(--primary-color);
             padding: 15px;
             margin-top: 15px;
             border-radius: var(--border-radius);
             text-align: right;
-            margin-bottom: 20px; /* Add margin to separate cards */
+            margin-bottom: 20px;
         }
 
         .function-advice-card h3 {
@@ -271,7 +297,7 @@
 
         /* Style for the type result */
         #type-result {
-            background-color: #ffe0b2; /* Light orange for type */
+            background-color: #ffe0b2;
             border-right: 5px solid #ff9800;
             padding: 20px;
             margin-bottom: 30px;
@@ -316,7 +342,7 @@
             padding: 12px 15px;
             border: 1px solid #dddddd;
             text-align: right;
-            vertical-align: top; /* Align content to the top */
+            vertical-align: top;
         }
 
         .styled-table tbody tr {
@@ -336,21 +362,39 @@
             color: var(--primary-color);
         }
 
-        /* زر إعادة الاختبار */
-        #restart-quiz-btn-container {
+        /* زر إعادة الاختبار / مشاركة / طباعة */
+        .results-actions {
+            display: flex;
+            flex-wrap: wrap; /* Allow buttons to wrap on smaller screens */
+            justify-content: center;
+            gap: 15px; /* Space between buttons */
+            margin-top: 30px;
+            margin-bottom: 40px;
+        }
+
+        .results-actions .btn {
+            min-width: 150px; /* Ensure buttons have a minimum width */
             text-align: center;
-            margin-top: 40px;
-            margin-bottom: 40px; /* Space before footer */
         }
 
-        #restart-quiz-btn {
-            background-color: #f44336; /* أحمر */
-            margin-top: 20px;
-        }
+        .btn.print-btn { background-color: #2196F3; } /* Blue */
+        .btn.print-btn:hover { background-color: #1976D2; }
 
-        #restart-quiz-btn:hover {
-            background-color: #d32f2f; /* أحمر أغمق */
-        }
+        .btn.download-btn { background-color: #607D8B; } /* Grey-blue */
+        .btn.download-btn:hover { background-color: #455A64; }
+
+        .btn.share-btn { background-color: #795548; } /* Brown - generic share */
+        .btn.share-btn:hover { background-color: #5D4037; }
+
+        /* Specific social media colors */
+        .btn.whatsapp-share { background-color: #25D366; }
+        .btn.whatsapp-share:hover { background-color: #1DA851; }
+
+        .btn.twitter-share { background-color: #1DA1F2; }
+        .btn.twitter-share:hover { background-color: #0C85D0; }
+
+        .btn.facebook-share { background-color: #1877F2; }
+        .btn.facebook-share:hover { background-color: #166EE0; }
 
         /* Footer */
         footer {
@@ -358,7 +402,7 @@
             max-width: 900px;
             text-align: center;
             padding: 20px;
-            margin-top: auto; /* Push footer to bottom */
+            margin-top: auto;
             border-top: 1px solid var(--light-grey);
             color: var(--dark-grey);
             font-size: 0.9em;
@@ -411,12 +455,14 @@
                 font-size: 1em;
             }
             .navigation-buttons {
-                flex-direction: column-reverse; /* Keep previous next for stacking */
+                flex-direction: column-reverse;
                 gap: 15px;
             }
-            /* Adjust button order for small screens too */
             .navigation-buttons #next-btn { order: 1; }
             .navigation-buttons #prev-btn { order: 2; }
+            .results-actions {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
@@ -444,10 +490,16 @@
         </div>
 
         <button id="start-quiz-btn" class="btn" style="display: block; margin: 0 auto 30px;">ابدأ الاختبار</button>
+        <button id="resume-quiz-btn" class="btn secondary" style="display: none; margin: 0 auto 30px;">استئناف الاختبار</button>
+        <button id="view-last-results-btn" class="btn secondary" style="display: none; margin: 0 auto 30px;">عرض آخر النتائج</button>
+
 
         <div id="quiz-section">
             <h2 class="section-title">ابدأ اختبارك الآن</h2>
-            <div class="progress-indicator" id="progress-indicator">السؤال 1 من XX</div>
+            <div class="progress-container">
+                <div class="progress-bar" id="progress-bar"></div>
+                <div class="progress-text" id="progress-text">السؤال 1 من XX</div>
+            </div>
             <div id="questions-container">
                 </div>
             <div class="navigation-buttons">
@@ -488,6 +540,15 @@
                         </tbody>
                 </table>
             </div>
+            
+            <div class="results-actions">
+                <button id="restart-quiz-btn" class="btn error">بدء اختبار جديد</button>
+                <button id="print-results-btn" class="btn print-btn">طباعة النتائج</button>
+                <button id="download-results-btn" class="btn download-btn">تحميل النتائج</button>
+                <button id="share-whatsapp-btn" class="btn whatsapp-share">مشاركة واتساب</button>
+                <button id="share-twitter-btn" class="btn twitter-share">مشاركة تويتر</button>
+                <button id="share-facebook-btn" class="btn facebook-share">مشاركة فيسبوك</button>
+            </div>
         </div>
 
         <div id="functions-table-section">
@@ -511,11 +572,6 @@
                     </tbody>
             </table>
         </div>
-
-        <div id="restart-quiz-btn-container">
-            <button id="restart-quiz-btn" class="btn error" style="display: none;">إعادة الاختبار</button>
-        </div>
-
     </div>
 
     <footer>
@@ -525,14 +581,14 @@
             النتائج هي تقديرية ولا يجب أن تحل محل الاستشارة المتخصصة.
         </p>
         <div class="social-media">
-            <p><strong> لمعلومات اكثر :</strong></p>
-            <a href="https://www.tiktok.com/@reatwiy?_t=ZS-8xfyr92oGP9_r=1" target="_blank"> @reatwiy</a>
+            <p><strong>تابعنا:</strong></p>
+            <a href="https://www.tiktok.com/@yourtiktokaccount" target="_blank">حساب تيك توك (ضع حسابك هنا)</a>
             </div>
     </footer>
 
     <script>
         // --- بيانات الأسئلة والوظائف الإدراكية ---
-        const questions = [
+        const originalQuestions = [ // Changed to originalQuestions as we will shuffle it
             {
                 question: "عند التخطيط لمشروع كبير، ما هي أولوياتي؟",
                 options: [
@@ -620,7 +676,7 @@
                     { text: "أفكر في كيفية تأثيرها على صورتي أو علاقاتي بالآخرين وجو المجموعة.", impact: { Fe: 2, Fi: 1 } },
                     { text: "أقيمها بناءً على قيمي الشخصية وما إذا كانت تتوافق مع مبادئي الأساسية.", impact: { Fi: 2, Fe: 1 } },
                     { text: "أركز على الخطوات العملية الملموسة التي أحتاجها لتحسين أدائي بناءً عليها.", impact: { Te: 2, Se: 1 } },
-                    { text: "أرى فيها فرصة لتطوير فهمي للموقف من زوايا مختلفة وأعمق.", impact: { Ni: 2, Ne: 1 } }
+                    { text: "أبحث عن رؤية أعمق للموقف من زوايا مختلفة.", impact: { Ni: 2, Ne: 1 } }
                 ]
             },
             {
@@ -778,8 +834,8 @@
                 options: [
                     { text: "الصدق والأصالة، والتعبير عن مشاعري وقيمي الحقيقية.", impact: { Fi: 2, Fe: -1 } },
                     { text: "التواصل الواضح والمنطقي، وحل المشكلات بناءً على الحقائق.", impact: { Ti: 2, Te: 1 } },
-                    { text: "الاهتمام بالآخرين، والسعي لتحقيق الانسجام والسعادة للجميع.", impact: { Fe: 2, Fi: -1 } },
-                    { text: "التجارب المشتركة والمغامرات المثيرة التي نخوضها معًا.", impact: { Se: 2, Ne: 1 } },
+                    { text: "الانسجام العاطفي والدعم المتبادل الذي يخلق بيئة مريحة.", impact: { Fe: 2, Fi: 1 } },
+                    { text: "التجارب المشتركة والمغامرات المثيرة التي تجعل الحياة ممتعة.", impact: { Se: 2, Ne: 1 } },
                     { text: "الولاء والثقة، والاستناد إلى تاريخنا المشترك.", impact: { Si: 2, Fi: 1 } }
                 ]
             },
@@ -983,50 +1039,42 @@
             }
         ];
 
-        // --- بيانات الأنماط MBTI ونصائحها (مع إضافة تسلسل الوظائف الكامل لكل نمط) ---
         const personalityTypes = [
-            // Ni Dominant
             { type: "INTJ", stack: ["Ni", "Te", "Fi", "Se"], advice: "نمط المفكر الاستراتيجي. لديك رؤية عميقة وقدرة على وضع خطط فعالة. اعمل على تطوير جانبك العاطفي والتواصل بوضوح." },
             { type: "INFJ", stack: ["Ni", "Fe", "Ti", "Se"], advice: "نمط المحامي/المستشار. تتمتع ببصيرة ثاقبة وتعاطف كبير. اهتم باحتياجاتك الشخصية ولا تفرط في مساعدة الآخرين." },
-            // Ne Dominant
             { type: "ENFP", stack: ["Ne", "Fi", "Te", "Si"], advice: "نمط الملهم. متفائل، مبدع، ولديك قيم قوية. ركز على إنجاز بعض أفكارك العظيمة ولا تشتت نفسك." },
             { type: "ENTP", stack: ["Ne", "Ti", "Fe", "Si"], advice: "نمط المبتكر. لديك شغف بالأفكار الجديدة وقدرة تحليلية. حاول أن تلتزم بالمشاريع وتطور مهاراتك الاجتماعية." },
-            // Si Dominant
             { type: "ISFJ", stack: ["Si", "Fe", "Ti", "Ne"], advice: "نمط المدافع. دقيق، مسؤول، ويهتم بالآخرين. كن منفتحاً على التغيير ولا تبالغ في التمسك بالروتين." },
             { type: "ISTJ", stack: ["Si", "Te", "Fi", "Ne"], advice: "نمط اللوجستي. منظم، عملي، وموثوق به. قدّر قيمة المرونة وتطوير العلاقات العاطفية." },
-            // Se Dominant
-            { type: "ESFP", stack: ["Se", "Fi", "Te", "Ni"], advice: "نمط المؤدي. حيوي، عفوي، ومحب للمتعة.وازن بين الاستمتاع باللحظة والتفكير في النتائج طويلة الأمد." },
+            { type: "ESFP", stack: ["Se", "Fi", "Te", "Ni"], advice: "نمط المؤدي. حيوي، عفوي، ومحب للمتعة. وازن بين الاستمتاع باللحظة والتفكير في النتائج طويلة الأمد." },
             { type: "ESTP", stack: ["Se", "Ti", "Fe", "Ni"], advice: "نمط المروج. جريء، عملي، وملاحظ. ركز على التفكير المسبق وتطوير رؤياك للمستقبل." },
-            // Fi Dominant
             { type: "INFP", stack: ["Fi", "Ne", "Si", "Te"], advice: "نمط الوسيط. مثالي، مبدع، ولديك قيم عميقة. تعلم كيفية التعبير عن قيمك بوضوح للآخرين دون التنازل عنها." },
             { type: "ISFP", stack: ["Fi", "Se", "Ni", "Te"], advice: "نمط المغامر. هادئ، فني، ويقدر اللحظة. ابحث عن طرق لتنظيم حياتك وتحقيق أهدافك بفعالية." },
-            // Fe Dominant
             { type: "ENFJ", stack: ["Fe", "Ni", "Se", "Ti"], advice: "نمط المعلم. كاريزمي، متعاطف، ولديك رؤية. لا تضع احتياجات الآخرين فوق احتياجاتك، وتعلم تحديد أولوياتك." },
             { type: "ESFJ", stack: ["Fe", "Si", "Ne", "Ti"], advice: "نمط المعيل. اجتماعي، منظم، وداعم. كن منفتحاً على الأفكار الجديدة ولا تلتزم بالتقاليد الجامدة." },
-            // Ti Dominant
             { type: "INTP", stack: ["Ti", "Ne", "Si", "Fe"], advice: "نمط المنطقي. مستقل، محلل، ومبتكر. حاول أن تطبق أفكارك وتتواصل بفعالية مع الآخرين." },
             { type: "ISTP", stack: ["Ti", "Se", "Ni", "Fe"], advice: "نمط الحرفي. منطقي، عملي، وملاحظ. ركز على فهم مشاعرك ومشاع الآخرين لتطوير علاقاتك." },
-            // Te Dominant
             { type: "ENTJ", stack: ["Te", "Ni", "Se", "Fi"], advice: "نمط القائد. حاسم، منظم، ولديك رؤية واضحة. كن أكثر مرونة واستمع إلى وجهات نظر الآخرين ومشاعرهم." },
             { type: "ESTJ", stack: ["Te", "Si", "Ne", "Fi"], advice: "نمط المدير التنفيذي. كفؤ، مسؤول، ومنظم. حاول أن تكون أكثر انفتاحاً على التغيير والأفكار الجديدة." }
         ];
 
-
+        let questions = []; // This will hold the shuffled questions
         let currentQuestionIndex = 0;
-        // الإصلاح: تهيئة كل عنصر في userAnswers بمصفوفة فارغة منفصلة
-        let userAnswers = Array.from({length: questions.length}, () => []); 
-        let scores = {
-            Ni: 0, Ne: 0, Si: 0, Se: 0,
-            Fi: 0, Fe: 0, Ti: 0, Te: 0
-        };
+        let userAnswers = []; // Array of arrays, e.g., [[0,1], [2], []]
+        let scores = { Ni: 0, Ne: 0, Si: 0, Se: 0, Fi: 0, Fe: 0, Ti: 0, Te: 0 };
+        let lastCalculatedType = null; // Store the last calculated type
+        let lastCalculatedAdvice = null; // Store the last calculated advice
 
-        const MAX_ANSWERS_PER_QUESTION = 2; // الحد الأقصى للإجابات لكل سؤال
+        const MAX_ANSWERS_PER_QUESTION = 2;
 
         // --- عناصر الواجهة ---
         const startQuizBtn = document.getElementById('start-quiz-btn');
+        const resumeQuizBtn = document.getElementById('resume-quiz-btn');
+        const viewLastResultsBtn = document.getElementById('view-last-results-btn');
         const preQuizInfo = document.getElementById('pre-quiz-info');
         const quizSection = document.getElementById('quiz-section');
-        const progressIndicator = document.getElementById('progress-indicator');
+        const progressBar = document.getElementById('progress-bar');
+        const progressText = document.getElementById('progress-text');
         const questionsContainer = document.getElementById('questions-container');
         const prevBtn = document.getElementById('prev-btn');
         const nextBtn = document.getElementById('next-btn');
@@ -1037,36 +1085,160 @@
         const dominantFunctionsResults = document.getElementById('dominant-functions-results');
         const rankedFunctionsBody = document.getElementById('ranked-functions-body');
         const cognitiveFunctionsBody = document.getElementById('cognitive-functions-body');
-        const restartQuizBtnContainer = document.getElementById('restart-quiz-btn-container');
         const restartQuizBtn = document.getElementById('restart-quiz-btn');
+        const printResultsBtn = document.getElementById('print-results-btn');
+        const downloadResultsBtn = document.getElementById('download-results-btn');
+        const shareWhatsappBtn = document.getElementById('share-whatsapp-btn');
+        const shareTwitterBtn = document.getElementById('share-twitter-btn');
+        const shareFacebookBtn = document.getElementById('share-facebook-btn');
+
+
+        // --- وظائف المساعدة ---
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]]; // Swap elements
+            }
+            return array;
+        }
+
+        // Helper to extract MBTI letters from a type string
+        function getMbtiLetters(type) {
+            if (!type || type.length !== 4) return null;
+            return {
+                P1: type[0], // I/E
+                P2: type[1], // N/S
+                P3: type[2], // T/F
+                P4: type[3]  // J/P
+            };
+        }
+
+        // --- وظائف حفظ واستعادة البيانات ---
+        function saveState() {
+            localStorage.setItem('quizCurrentQuestionIndex', currentQuestionIndex);
+            localStorage.setItem('quizUserAnswers', JSON.stringify(userAnswers));
+            localStorage.setItem('quizShuffledQuestionsOrder', JSON.stringify(questions.map(q => originalQuestions.indexOf(q)))); // Save original indices
+            localStorage.setItem('quizScores', JSON.stringify(scores));
+            if (lastCalculatedType) { // Only save if calculation finished
+                localStorage.setItem('quizLastType', lastCalculatedType);
+                localStorage.setItem('quizLastAdvice', lastCalculatedAdvice);
+            }
+        }
+
+        function loadState() {
+            const savedIndex = localStorage.getItem('quizCurrentQuestionIndex');
+            const savedAnswers = localStorage.getItem('quizUserAnswers');
+            const savedOrder = localStorage.getItem('quizShuffledQuestionsOrder');
+            const savedScores = localStorage.getItem('quizScores');
+            const savedType = localStorage.getItem('quizLastType');
+            const savedAdvice = localStorage.getItem('quizLastAdvice');
+
+            if (savedIndex && savedAnswers && savedOrder) {
+                currentQuestionIndex = parseInt(savedIndex);
+                userAnswers = JSON.parse(savedAnswers);
+                const orderIndices = JSON.parse(savedOrder);
+                questions = orderIndices.map(idx => originalQuestions[idx]); // Reconstruct shuffled questions
+                scores = savedScores ? JSON.parse(savedScores) : scores;
+
+                // If user finished, show option to view results
+                if (currentQuestionIndex >= questions.length && savedType) {
+                    lastCalculatedType = savedType;
+                    lastCalculatedAdvice = savedAdvice;
+                    startQuizBtn.style.display = 'none';
+                    resumeQuizBtn.style.display = 'none';
+                    viewLastResultsBtn.style.display = 'block';
+                    preQuizInfo.innerHTML = `<span class="icon">✨</span><p><strong>مرحباً بك!</strong> يبدو أنك أكملت الاختبار سابقاً. يمكنك <a href="#" id="view-resume-link">عرض نتائجك الأخيرة</a> أو <a href="#" id="start-new-link">بدء اختبار جديد</a>.</p>`;
+                    document.getElementById('view-resume-link').addEventListener('click', (e) => { e.preventDefault(); showResultsFromSaved(); });
+                    document.getElementById('start-new-link').addEventListener('click', (e) => { e.preventDefault(); startNewQuiz(); });
+                } else if (currentQuestionIndex > 0 || userAnswers.some(a => a.length > 0)) {
+                    // If progress exists but not finished
+                    startQuizBtn.style.display = 'none';
+                    resumeQuizBtn.style.display = 'block';
+                }
+            } else {
+                 startQuizBtn.style.display = 'block'; // No saved state, show start button
+            }
+        }
+
+        function clearState() {
+            localStorage.removeItem('quizCurrentQuestionIndex');
+            localStorage.removeItem('quizUserAnswers');
+            localStorage.removeItem('quizShuffledQuestionsOrder');
+            localStorage.removeItem('quizScores');
+            localStorage.removeItem('quizLastType');
+            localStorage.removeItem('quizLastAdvice');
+        }
 
         // --- تهيئة البدء ---
         document.addEventListener('DOMContentLoaded', () => {
             populateFunctionsTable(); // ملء جدول الوظائف الإدراكية عند تحميل الصفحة
+            loadState(); // حاول تحميل حالة الاختبار
             // التأكد من إخفاء الأقسام الصحيحة عند البداية
             quizSection.style.display = 'none';
             resultsSection.style.display = 'none';
-            restartQuizBtn.style.display = 'none';
-            restartQuizBtnContainer.style.display = 'none'; // Ensure container is also hidden
-            updateProgressIndicator(); // تحديث مؤشر التقدم الأولي
         });
 
-        startQuizBtn.addEventListener('click', () => {
+        startQuizBtn.addEventListener('click', startNewQuiz);
+        resumeQuizBtn.addEventListener('click', resumeQuiz);
+        viewLastResultsBtn.addEventListener('click', showResultsFromSaved);
+
+        function startNewQuiz() {
+            clearState(); // Clear any previous state
+            questions = shuffleArray([...originalQuestions]); // Shuffle questions for a new test
+            currentQuestionIndex = 0;
+            userAnswers = Array.from({length: questions.length}, () => []);
+            scores = { Ni: 0, Ne: 0, Si: 0, Se: 0, Fi: 0, Fe: 0, Ti: 0, Te: 0 };
+            lastCalculatedType = null;
+            lastCalculatedAdvice = null;
+
             preQuizInfo.style.display = 'none';
             startQuizBtn.style.display = 'none';
+            resumeQuizBtn.style.display = 'none';
+            viewLastResultsBtn.style.display = 'none';
             quizSection.style.display = 'block';
             displayQuestion();
-        });
+            saveState(); // Save initial state
+        }
+
+        function resumeQuiz() {
+            preQuizInfo.style.display = 'none';
+            startQuizBtn.style.display = 'none';
+            resumeQuizBtn.style.display = 'none';
+            viewLastResultsBtn.style.display = 'none';
+            quizSection.style.display = 'block';
+            displayQuestion();
+            updateProgressBar();
+        }
+
+        function showResultsFromSaved() {
+            preQuizInfo.style.display = 'none';
+            startQuizBtn.style.display = 'none';
+            resumeQuizBtn.style.display = 'none';
+            viewLastResultsBtn.style.display = 'none';
+            quizSection.style.display = 'none';
+            resultsSection.style.display = 'block';
+            
+            // Populate results from saved state
+            if (lastCalculatedType && lastCalculatedAdvice) {
+                finalTypeName.textContent = lastCalculatedType;
+                typeAdvice.textContent = lastCalculatedAdvice;
+            } else { // Recalculate if for some reason not saved fully
+                calculateAndDisplayResults(false); // Don't hide/show sections again
+            }
+            displayDominantFunctions();
+            displayAllFunctionsRanked();
+        }
+
 
         prevBtn.addEventListener('click', () => {
             if (currentQuestionIndex > 0) {
                 currentQuestionIndex--;
                 displayQuestion();
+                saveState();
             }
         });
 
         nextBtn.addEventListener('click', () => {
-            // التحقق من أن المستخدم قد اختار إجابة واحدة على الأقل
             if (userAnswers[currentQuestionIndex].length === 0) {
                 alert("الرجاء اختيار إجابة واحدة على الأقل للمتابعة.");
                 return;
@@ -1075,21 +1247,78 @@
             if (currentQuestionIndex < questions.length - 1) {
                 currentQuestionIndex++;
                 displayQuestion();
+                saveState();
             } else {
-                calculateAndDisplayResults();
+                calculateAndDisplayResults(true); // True to trigger full display logic
+                saveState(); // Save final results
             }
         });
 
         restartQuizBtn.addEventListener('click', () => {
             const confirmRestart = confirm("تحذير: عند إعادة الاختبار، ستتغير جميع إجاباتك السابقة وستحتاج إلى الإجابة من جديد. هل أنت متأكد أنك تريد المتابعة؟");
             if (confirmRestart) {
-                resetQuiz();
+                startNewQuiz();
             }
+        });
+
+        printResultsBtn.addEventListener('click', () => {
+            window.print();
+        });
+
+        downloadResultsBtn.addEventListener('click', () => {
+            const filename = "نتائج_اختبار_الوظائف_الإدراكية.txt";
+            let content = `نمط شخصيتك: ${finalTypeName.textContent}\n\n`;
+            content += `ملخص النمط: ${typeAdvice.textContent}\n\n`;
+            
+            content += "الوظائف الإدراكية المهيمنة:\n";
+            const dominantElements = dominantFunctionsResults.querySelectorAll('.result-item span');
+            dominantElements.forEach(el => {
+                content += `${el.textContent}\n`;
+            });
+            content += "\n";
+
+            content += "ترتيب جميع الوظائف الإدراكية:\n\n";
+            const rankedRows = rankedFunctionsBody.querySelectorAll('tr');
+            rankedRows.forEach(row => {
+                const cells = row.querySelectorAll('td');
+                if (cells.length > 0) {
+                    content += `الوظيفة: ${cells[0].textContent}, النقاط: ${cells[1].textContent}\n`;
+                    content += `  المميزات: ${cells[2].textContent.replace(/• /g, '').replace(/<br>/g, '; ')}\n`;
+                    content += `  التحديات: ${cells[3].textContent.replace(/• /g, '').replace(/<br>/g, '; ')}\n`;
+                    content += `  نصيحة: ${cells[4].textContent.replace(/\n/g, ' ')}\n\n`;
+                }
+            });
+
+            const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        });
+
+        shareWhatsappBtn.addEventListener('click', () => {
+            const text = encodeURIComponent(`لقد اكتشفت نمط شخصيتي المحتمل في اختبار الوظائف الإدراكية! نمطي هو: ${finalTypeName.textContent}.\n\nاكتشف نمطك هنا: [رابط موقعك هنا إذا كنت ستستضيفه]`);
+            window.open(`https://wa.me/?text=${text}`, '_blank');
+        });
+
+        shareTwitterBtn.addEventListener('click', () => {
+            const text = encodeURIComponent(`لقد اكتشفت نمط شخصيتي المحتمل في اختبار الوظائف الإدراكية! نمطي هو: ${finalTypeName.textContent}. #اختبار_شخصية #MBTI`);
+            const url = encodeURIComponent("[رابط موقعك هنا إذا كنت ستستضيفه]"); // Replace with your actual URL
+            window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank');
+        });
+
+        shareFacebookBtn.addEventListener('click', () => {
+            const url = encodeURIComponent("[رابط موقعك هنا إذا كنت ستستضيفه]"); // Replace with your actual URL
+            // Facebook share often requires a configured app or direct URL to the page
+            // This will open a generic share dialog
+            window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${encodeURIComponent(`لقد اكتشفت نمط شخصيتي المحتمل في اختبار الوظائف الإدراكية! نمطي هو: ${finalTypeName.textContent}.`)}`, '_blank');
         });
 
         // --- وظائف عرض الأسئلة والتقدم ---
         function displayQuestion() {
-            questionsContainer.innerHTML = ''; // مسح السؤال السابق
+            questionsContainer.innerHTML = '';
             const questionData = questions[currentQuestionIndex];
 
             const questionCard = document.createElement('div');
@@ -1103,23 +1332,24 @@
                 checkbox.type = 'checkbox';
                 checkbox.name = `question${currentQuestionIndex}`;
                 checkbox.value = index;
-                checkbox.checked = userAnswers[currentQuestionIndex].includes(index); // التحقق مما إذا كان الخيار محدداً مسبقاً
+                checkbox.checked = userAnswers[currentQuestionIndex] && userAnswers[currentQuestionIndex].includes(index);
 
                 checkbox.addEventListener('change', (event) => {
                     const selectedIndex = parseInt(event.target.value);
-                    let currentSelected = userAnswers[currentQuestionIndex];
+                    let currentSelected = userAnswers[currentQuestionIndex] || []; // Ensure it's an array
 
                     if (event.target.checked) {
                         if (currentSelected.length < MAX_ANSWERS_PER_QUESTION) {
                             currentSelected.push(selectedIndex);
                         } else {
-                            event.target.checked = false; // منع التحديد إذا تجاوز الحد الأقصى
+                            event.target.checked = false;
                             alert(`يمكنك اختيار إجابتين كحد أقصى لكل سؤال. لقد اخترت بالفعل ${MAX_ANSWERS_PER_QUESTION}.`);
                         }
                     } else {
-                        // Remove the deselected item
-                        userAnswers[currentQuestionIndex] = currentSelected.filter(item => item !== selectedIndex);
+                        currentSelected = currentSelected.filter(item => item !== selectedIndex);
                     }
+                    userAnswers[currentQuestionIndex] = currentSelected; // Update the array
+                    saveState(); // Save state after each option change
                 });
 
                 label.appendChild(checkbox);
@@ -1129,7 +1359,7 @@
 
             questionsContainer.appendChild(questionCard);
             updateNavigationButtons();
-            updateProgressIndicator();
+            updateProgressBar();
         }
 
         function updateNavigationButtons() {
@@ -1137,57 +1367,48 @@
             nextBtn.textContent = (currentQuestionIndex === questions.length - 1) ? 'انهاء الاختبار' : 'التالي';
         }
 
-        function updateProgressIndicator() {
-            progressIndicator.textContent = `السؤال ${currentQuestionIndex + 1} من ${questions.length}`;
+        function updateProgressBar() {
+            const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
+            progressBar.style.width = `${progress}%`;
+            progressText.textContent = `السؤال ${currentQuestionIndex + 1} من ${questions.length}`;
         }
 
         // --- وظائف حساب وعرض النتائج ---
-        function calculateAndDisplayResults() {
-            // التحقق من أن جميع الأسئلة تم الإجابة عليها (إجابة واحدة على الأقل لكل سؤال)
+        function calculateAndDisplayResults(shouldHideQuizSection) {
             const unansweredQuestionsCount = userAnswers.filter(answer => answer.length === 0).length;
             if (unansweredQuestionsCount > 0) {
                 alert(`لم يتم الإجابة على ${unansweredQuestionsCount} سؤال. يرجى إكمال جميع الأسئلة قبل إنهاء الاختبار.`);
-                // العودة إلى أول سؤال لم يتم الإجابة عليه
                 currentQuestionIndex = userAnswers.findIndex(answer => answer.length === 0);
                 displayQuestion();
                 return;
             }
 
-            // إعادة تعيين النقاط قبل إعادة الحساب
+            // Reset scores before recalculating
             for (const func in scores) {
                 scores[func] = 0;
             }
 
-            // حساب النقاط
+            // Calculate scores
             userAnswers.forEach((selectedOptionsIndices, qIndex) => {
                 selectedOptionsIndices.forEach(optionIndex => {
-                    const selectedOption = questions[qIndex].options[optionIndex];
-                    for (const func in selectedOption.impact) {
-                        scores[func] += selectedOption.impact[func];
+                    // Make sure qIndex is valid and questions array has the item
+                    if (questions[qIndex] && questions[qIndex].options[optionIndex]) {
+                        const selectedOption = questions[qIndex].options[optionIndex];
+                        for (const func in selectedOption.impact) {
+                            scores[func] += selectedOption.impact[func];
+                        }
                     }
                 });
             });
 
-            // إخفاء قسم الاختبار، وإظهار قسم النتائج
-            quizSection.style.display = 'none';
-            resultsSection.style.display = 'block';
-            restartQuizBtn.style.display = 'block';
-            restartQuizBtnContainer.style.display = 'block'; // Show restart button container
-
-            inferAndDisplayPersonalityType(); // استنتاج وعرض النمط
+            if (shouldHideQuizSection) {
+                quizSection.style.display = 'none';
+                resultsSection.style.display = 'block';
+            }
+            
+            inferAndDisplayPersonalityType();
             displayDominantFunctions();
             displayAllFunctionsRanked();
-        }
-
-        // Helper to extract MBTI letters from a type string (e.g., "INTJ" -> {P1:'I', P2:'N', P3:'T', P4:'J'})
-        function getMbtiLetters(type) {
-            if (!type || type.length !== 4) return null;
-            return {
-                P1: type[0], // I/E
-                P2: type[1], // N/S
-                P3: type[2], // T/F
-                P4: type[3]  // J/P
-            };
         }
 
         function inferAndDisplayPersonalityType() {
@@ -1197,60 +1418,53 @@
             if (sortedFunctions.length === 0 || sortedFunctions[0].score === 0) {
                 finalTypeName.textContent = "غير محدد";
                 typeAdvice.textContent = "لم يتم جمع بيانات كافية لتحديد النمط.";
+                lastCalculatedType = finalTypeName.textContent;
+                lastCalculatedAdvice = typeAdvice.textContent;
                 return;
             }
 
-            // Top functions from user's scores
             const userTopFunctions = sortedFunctions.slice(0, 4).map(f => f.name);
 
-            let potentialMatches = []; // To store types and their scores
+            let potentialMatches = [];
 
             personalityTypes.forEach(typeData => {
                 let currentMatchScore = 0;
-                // Weights for functions based on their position in the theoretical stack
-                const positionWeights = [100, 50, 20, 10]; // 1st, 2nd, 3rd, 4th function in stack
+                const positionWeights = [100, 50, 20, 10]; // Weights for functions in type's stack
 
                 userTopFunctions.forEach((userFunc, userIdx) => {
                     const funcIndexInStack = typeData.stack.indexOf(userFunc);
-                    if (funcIndexInStack !== -1 && funcIndexInStack < 4) { // Only consider top 4 functions in type's stack
+                    if (funcIndexInStack !== -1 && funcIndexInStack < 4) {
                         currentMatchScore += positionWeights[funcIndexInStack];
                     }
                 });
                 potentialMatches.push({ type: typeData.type, advice: typeData.advice, score: currentMatchScore });
             });
 
-            // Sort potential matches by score descending
             potentialMatches.sort((a, b) => b.score - a.score);
 
             const best = potentialMatches[0];
             const secondBest = potentialMatches.length > 1 ? potentialMatches[1] : null;
 
             if (best && best.score > 0) {
-                // Threshold for considering a single best type vs. two close types
-                // If secondBest's score is less than X% of the best's score, consider 'best' as the single primary.
-                const singleBestThresholdRatio = 0.75; // If second best is less than 75% of best score, it's not "close enough"
+                const singleBestThresholdRatio = 0.75; 
 
                 if (!secondBest || secondBest.score < (best.score * singleBestThresholdRatio)) {
-                    // Display only the best type
                     finalTypeName.textContent = best.type;
                     typeAdvice.textContent = best.advice;
                 } else {
-                    // Two types are close. Check if they differ only by I/E.
                     const bestLetters = getMbtiLetters(best.type);
                     const secondLetters = getMbtiLetters(secondBest.type);
 
                     if (bestLetters && secondLetters &&
-                        bestLetters.P2 === secondLetters.P2 && // N/S is same
-                        bestLetters.P3 === secondLetters.P3 && // T/F is same
-                        bestLetters.P4 === secondLetters.P4 && // J/P is same
-                        bestLetters.P1 !== secondLetters.P1) { // Only I/E is different
+                        bestLetters.P2 === secondLetters.P2 &&
+                        bestLetters.P3 === secondLetters.P3 &&
+                        bestLetters.P4 === secondLetters.P4 &&
+                        bestLetters.P1 !== secondLetters.P1) {
                         
-                        // They differ only by I/E (e.g., INTJ and ENTJ -> xNTJ)
                         const commonTypePart = `${bestLetters.P2}${bestLetters.P3}${bestLetters.P4}`;
                         finalTypeName.textContent = `نمط x${commonTypePart} المحتمل (قد تكون ${best.type} أو ${secondBest.type})`;
                         typeAdvice.textContent = `بناءً على نتائجك، قد تكون إما ${best.type} أو ${secondBest.type}. كلا النمطين يشتركان في نفس الوظائف الإدراكية الرئيسية ولكن يختلفان في تفضيل الانطواء/الانبساط. \n\n${best.advice} \n\nوقد تكون قريباً أيضاً من نمط ${secondBest.type}: ${secondBest.advice.split(': ')[1] || secondBest.advice}`;
                     } else {
-                        // Two close types, but not just I/E difference, or more complex scenario
                         finalTypeName.textContent = `${best.type} أو ${secondBest.type}`;
                         typeAdvice.textContent = `${best.advice} \n\nوقد تكون قريباً أيضاً من نمط ${secondBest.type}: ${secondBest.advice.split(': ')[1] || secondBest.advice}`;
                     }
@@ -1259,6 +1473,9 @@
                 finalTypeName.textContent = "غير محدد بدقة";
                 typeAdvice.textContent = "بناءً على إجاباتك، لم نستطع تحديد نمط شخصية محدد بوضوح. قد يكون لديك مزيج فريد من الوظائف أو تحتاج لمزيد من الاستكشاف.";
             }
+
+            lastCalculatedType = finalTypeName.textContent;
+            lastCalculatedAdvice = typeAdvice.textContent;
         }
 
 
@@ -1270,12 +1487,11 @@
                 return {
                     name: funcData ? funcData.arabicName : name,
                     score: score,
-                    originalName: name, // Keep original name for direct lookup
+                    originalName: name,
                     pattern: funcData ? funcData.pattern : ''
                 };
             }).sort((a, b) => b.score - a.score);
 
-            // Display the top 2 functions
             const displayedDominant = sortedFunctions.slice(0, 2); 
 
             displayedDominant.forEach((func, index) => {
@@ -1288,7 +1504,6 @@
                 dominantFunctionsResults.appendChild(item);
             });
             
-            // Add general advice cards for the top dominant functions
             displayedDominant.forEach(func => {
                 const funcData = cognitiveFunctionsData.find(f => f.name === func.originalName);
                 if (funcData) {
@@ -1296,14 +1511,11 @@
                     adviceDiv.className = 'function-advice-card';
                     adviceDiv.innerHTML = `<h3>نصيحة لوظيفة ${funcData.arabicName}:</h3>`;
                     
-                    let levelAdvice = funcData.advice.balanced; // Default to balanced
+                    let levelAdvice = funcData.advice.balanced; 
 
-                    // Determine score level (simplified thresholds, adjust as needed)
-                    // Max possible score for a function (approx): 2 * num_questions * 2 (max impact)
-                    // Max score approx = 33 questions * 2 (max answers) * 2 (max impact per answer) = 132
-                    const maxPossibleScore = questions.length * MAX_ANSWERS_PER_QUESTION * 2; // Assuming max impact of 2
-                    const highThreshold = maxPossibleScore * 0.45; // e.g., 45% of max
-                    const lowThreshold = maxPossibleScore * 0.15;  // e.g., 15% of max
+                    const maxPossibleScorePerFunction = questions.length * MAX_ANSWERS_PER_QUESTION * 2; // Assuming max impact of 2
+                    const highThreshold = maxPossibleScorePerFunction * 0.45;
+                    const lowThreshold = maxPossibleScorePerFunction * 0.15;
 
                     if (func.score >= highThreshold) {
                         levelAdvice = funcData.advice.high;
@@ -1317,9 +1529,8 @@
             });
         }
 
-
         function displayAllFunctionsRanked() {
-            rankedFunctionsBody.innerHTML = ''; // مسح النتائج السابقة
+            rankedFunctionsBody.innerHTML = '';
 
             const sortedFunctions = Object.entries(scores).map(([name, score]) => {
                 const funcData = cognitiveFunctionsData.find(f => f.name === name);
@@ -1328,17 +1539,16 @@
                     score: score,
                     strengths: funcData ? funcData.strengths : [],
                     challenges: funcData ? funcData.challenges : [],
-                    originalName: name // For level-specific advice
+                    originalName: name
                 };
-            }).sort((a, b) => b.score - a.score); // الترتيب حسب النقاط تنازلياً
+            }).sort((a, b) => b.score - a.score);
 
             sortedFunctions.forEach(func => {
                 const row = document.createElement('tr');
                 
-                // Determine score level for advice
-                const maxPossibleScore = questions.length * MAX_ANSWERS_PER_QUESTION * 2; 
-                const highThreshold = maxPossibleScore * 0.45; 
-                const lowThreshold = maxPossibleScore * 0.15;
+                const maxPossibleScorePerFunction = questions.length * MAX_ANSWERS_PER_QUESTION * 2; 
+                const highThreshold = maxPossibleScorePerFunction * 0.45; 
+                const lowThreshold = maxPossibleScorePerFunction * 0.15;
                 
                 let adviceText = "لا توجد نصيحة محددة.";
                 const funcData = cognitiveFunctionsData.find(f => f.name === func.originalName);
@@ -1364,7 +1574,7 @@
         }
 
         function populateFunctionsTable() {
-            cognitiveFunctionsBody.innerHTML = ''; // مسح المحتوى السابق
+            cognitiveFunctionsBody.innerHTML = '';
 
             cognitiveFunctionsData.forEach(func => {
                 const row = document.createElement('tr');
@@ -1379,31 +1589,6 @@
                 cognitiveFunctionsBody.appendChild(row);
             });
         }
-
-        // --- وظيفة إعادة الاختبار ---
-        function resetQuiz() {
-            currentQuestionIndex = 0;
-            // إعادة تعيين userAnswers بشكل صحيح بمصفوفات منفصلة
-            userAnswers = Array.from({length: questions.length}, () => []); 
-            for (const func in scores) {
-                scores[func] = 0;
-            }
-
-            resultsSection.style.display = 'none';
-            preQuizInfo.style.display = 'block';
-            startQuizBtn.style.display = 'block';
-            quizSection.style.display = 'none';
-            restartQuizBtn.style.display = 'none';
-            restartQuizBtnContainer.style.display = 'none';
-            questionsContainer.innerHTML = '';
-            dominantFunctionsResults.innerHTML = '';
-            rankedFunctionsBody.innerHTML = '';
-            typeResult.style.display = 'block'; // Make sure it's visible if results are shown again
-            finalTypeName.textContent = ""; // Clear previous type name
-            typeAdvice.textContent = ""; // Clear previous advice
-            updateProgressIndicator(); // Reset progress indicator text
-        }
-
     </script>
 </body>
 </html>
